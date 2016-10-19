@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.bertrobotics.bertscout.MainActivity">
+    <item
+        android:id="@+id/north_shore"
+        android:orderInCategory="101"
+        android:title="@string/north_shore" />
+    <item
+        android:title="@string/pine_tree"
+        android:orderInCategory="102"
+        android:id="@+id/pine_tree" />
+    <item
+        android:title="@string/sync_data"
+        android:orderInCategory="103"
+        android:id="@+id/sync_data" />
+</menu>
