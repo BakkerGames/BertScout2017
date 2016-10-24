@@ -1,39 +1,47 @@
 package com.bertrobotics.bertscout2017;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.test.espresso.core.deps.guava.base.Charsets;
 import android.support.test.espresso.core.deps.guava.io.CharStreams;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.zip.Inflater;
 
 public class MainActivity extends AppCompatActivity {
+
+    StandScoutingFragment mStandScoutingFragment;
+    PitScoutingFragment mPitScoutingFragment;
+    StatisticsFragment mStatisticsFragment;
+
+    View mRootView;
+
+    public DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mRootView = findViewById(R.id.main_layout);
+
+        mStatisticsFragment = new StatisticsFragment();
+        mStandScoutingFragment = new StandScoutingFragment(mStatisticsFragment);
+        mPitScoutingFragment = new PitScoutingFragment(mStatisticsFragment);
+
+        dbHelper = new DBHelper(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Stand Scouting"));
@@ -83,69 +99,243 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        StandScouting standScouting = new StandScouting();
+        switch (id) {
+            case R.id.north_shore:
+                setTitle("North Shore");
 
-        View standScoutingView = (View) findViewById(R.id.stand_scouting);
+                mStandScoutingFragment.buildMatchSpinner("north_shore");
+                mStandScoutingFragment.buildTeamSpinner("north_shore");
 
-        if (id == R.id.north_shore) {
-            setTitle("North Shore");
+                mStatisticsFragment.populateList();
+                break;
+            case R.id.pine_tree:
+                setTitle("Pine Tree");
 
-            TextView event = (TextView) standScoutingView.findViewById(R.id.event);
-            event.setText("north_shore");
+                mStandScoutingFragment.buildMatchSpinner("pine_tree");
+                mStandScoutingFragment.buildTeamSpinner("pine_tree");
 
-            standScouting.buildMatchSpinner("north_shore", standScoutingView);
-            standScouting.buildTeamSpinner("north_shore", standScoutingView);
-
-            return true;
-        } else if (id == R.id.pine_tree) {
-            setTitle("Pine Tree");
-
-            TextView event = (TextView) standScoutingView.findViewById(R.id.event);
-            event.setText("pine_tree");
-
-            standScouting.buildMatchSpinner("pine_tree", standScoutingView);
-            standScouting.buildTeamSpinner("pine_tree", standScoutingView);
-
-            return true;
-        } else if (id == R.id.sync_data) {
-//            ProgressDialog progress = new ProgressDialog(this);
-//            progress.setTitle("Saving");
-//            progress.setMessage("Please wait...");
-//            progress.show();
-
-            DBHelper dbHelper = new DBHelper(this);
-
-            JSONArray results = dbHelper.getData();
-
-            Toast.makeText(this, String.valueOf(results.length()), Toast.LENGTH_SHORT).show();
-
-            View statsView = (View) findViewById(R.id.statistics);
-
-            JSONArray data = dbHelper.getData();
-
-            ArrayList<String> teams = new ArrayList<String>();
-
-            for (int i = 0; i < data.length(); i++) {
-                try {
-                    String team = data.getJSONObject(i).getString("team");
-                    teams.add(team);
-
-                } catch (JSONException e) {
-
-                }
-            }
-
-            ListView listView = (ListView) statsView.findViewById(R.id.data_listview);
-            ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1, teams);
-
-            listView.setAdapter(listAdapter);
-
-
-//            progress.dismiss();
-
+                mStatisticsFragment.populateList();
+                break;
+            case R.id.sync_data:
+                openSyncDataDialog(mRootView);
+                break;
+            case R.id.clear_data:
+                openClearDataDialog(mRootView);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class PagerAdapter extends FragmentStatePagerAdapter {
+        int mNumOfTabs;
+
+        public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+            super(fm);
+            this.mNumOfTabs = NumOfTabs;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            switch (position) {
+                case 0:
+                    return mStandScoutingFragment;
+                case 1:
+                    return mPitScoutingFragment;
+                case 2:
+                    return mStatisticsFragment;
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return mNumOfTabs;
+        }
+    }
+
+    public void openSyncDataDialog(final View view){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Sync data for " + getTitle() + "?");
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                AsyncTaskSyncData syncData = new AsyncTaskSyncData(view.getContext());
+                syncData.execute();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private class AsyncTaskSyncData extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progress;
+
+        private AsyncTaskSyncData(Context context) {
+            progress = new ProgressDialog(context);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String results;
+
+            try {
+                String urlString = "http://76.179.97.182/getData.php?event=" + getTitle().toString().replace(" ", "%20");
+
+                // Do your long operations here and return the result
+                URL url = new URL(urlString);
+
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+                results = CharStreams.toString(new InputStreamReader(
+                        in, Charsets.UTF_8));
+
+                JSONArray remoteData = new JSONArray(results);
+
+                for (int i = 0; i < remoteData.length(); i++) {
+                    JSONObject row = remoteData.getJSONObject(i);
+                    dbHelper.insertStandScouting(row.getString("event"), row.getInt("match_no"),
+                            row.getInt("team"), row.getInt("auto_high"), row.getInt("auto_low"),
+                            row.getInt("auto_cross"), row.getInt("tele_high"), row.getInt("tele_low"),
+                            row.getInt("tele_cross"), row.getInt("endgame"));
+                }
+
+                JSONArray localData = dbHelper.getData(getTitle().toString());
+
+                String insertResult;
+
+                for (int i = 0; i < localData.length(); i++) {
+                    JSONObject row = localData.getJSONObject(i);
+
+                    try {
+                        String insertString = "http://76.179.97.182/insertData.php?" +
+                                "event=" + row.getString("event").replace(" ", "%20") +
+                                "&match_no=" + row.getInt("match_no") +
+                                "&team=" + row.getInt("team") +
+                                "&auto_high=" + row.getInt("auto_high") +
+                                "&auto_low=" + row.getInt("auto_low") +
+                                "&auto_cross=" + row.getInt("auto_cross") +
+                                "&tele_high=" + row.getInt("tele_high") +
+                                "&tele_low=" + row.getInt("tele_low") +
+                                "&tele_cross=" + row.getInt("tele_cross") +
+                                "&endgame=" + row.getInt("endgame");
+
+                        // Do your long operations here and return the result
+
+                        URL insertUrl = new URL(insertString);
+
+                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
+
+                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
+
+                        insertResult = CharStreams.toString(new InputStreamReader(
+                                insertIn, Charsets.UTF_8));
+
+                    } catch (Exception e) {
+                        return "Error";
+                    }
+                }
+            } catch (Exception e) {
+                return "Error";
+            }
+
+            return "Success";
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            progress.setTitle("Syncing");
+            progress.setMessage("Please wait...");
+            progress.show();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            mStatisticsFragment.populateList();
+
+            progress.dismiss();
+
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void openClearDataDialog(final View view){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Clear all data?");
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                AsyncTaskClearData clearData = new AsyncTaskClearData(view.getContext());
+                clearData.execute();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private class AsyncTaskClearData extends AsyncTask<String, Void, String> {
+
+        ProgressDialog progress;
+
+        private AsyncTaskClearData(Context context) {
+            progress = new ProgressDialog(context);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progress.setTitle("Saving");
+            progress.setMessage("Please wait...");
+            progress.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                dbHelper.deleteStandScouting();
+
+            } catch (Exception e) {
+                return "Failure";
+            }
+
+            return "Success";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            mStatisticsFragment.populateList();
+
+            progress.dismiss();
+
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+        }
     }
 }

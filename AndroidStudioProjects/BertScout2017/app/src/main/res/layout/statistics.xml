@@ -6,23 +6,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context="com.bertrobotics.bertscout2017.Statistics">
+    tools:context="com.bertrobotics.bertscout2017.StatisticsFragment">
+
+    <TextView
+        android:text="Sort By:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textSize="32sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
         android:id="@+id/data_listview"
-        android:layout_marginTop="300dp" />
-
-    <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="112dp"
-        android:layout_marginTop="122dp"
-        android:id="@+id/testView"
-        android:textSize="30sp" />
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="20dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sort_spinner"
+        android:minHeight="40dp"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="125dp"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="7dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sort_order_spinner"
+        android:layout_marginLeft="500dp"
+        android:layout_alignTop="@+id/sort_spinner"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/sort_spinner" />
+
 </RelativeLayout>

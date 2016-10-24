@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
 
-    tools:context="com.bertrobotics.bertscout2017.StandScouting">
+    tools:context="com.bertrobotics.bertscout2017.StandScoutingFragment">
 
     <TextView
         android:id="@+id/info_text"
@@ -78,13 +78,13 @@
         android:text="-"
         android:layout_height="wrap_content"
         android:id="@+id/auto_low_goal_minus_btn"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:width="20dp"
         android:layout_width="wrap_content"
         android:minHeight="52dp"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_alignBaseline="@+id/auto_low_goal_label"
@@ -115,13 +115,13 @@
         android:text="-"
         android:layout_height="wrap_content"
         android:id="@+id/teleop_high_goal_minus_btn"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:width="20dp"
         android:layout_width="wrap_content"
         android:minHeight="52dp"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_below="@+id/teleop_label"
@@ -197,9 +197,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/auto_high_goal_plus_btn"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:minHeight="52dp"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_marginStart="21dp"
@@ -207,43 +207,31 @@
         android:layout_alignBottom="@+id/auto_high_goal_minus_btn"
         android:layout_toEndOf="@+id/auto_high_goal_text" />
 
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_high_goal_text"
-        android:textSize="30sp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="25dp"
-        android:layout_above="@+id/auto_low_goal_minus_btn"
-        android:layout_toEndOf="@+id/auto_low_goal_minus_btn"
-        android:layout_marginBottom="15dp" />
-
     <Button
-        android:text="+"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/auto_low_goal_plus_btn"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:minHeight="52dp"
-        android:textSize="16sp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_alignBaseline="@+id/auto_low_goal_minus_btn"
         android:layout_alignBottom="@+id/auto_low_goal_minus_btn"
-        android:layout_alignStart="@+id/auto_high_goal_plus_btn" />
+        android:layout_alignStart="@+id/auto_high_goal_plus_btn"
+        android:text="+"
+        android:textSize="32sp" />
 
     <Button
         android:text="-"
         android:layout_height="wrap_content"
         android:id="@+id/teleop_crossings_minus_btn"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:paddingLeft="3dp"
         android:paddingRight="3dp"
         android:width="20dp"
         android:layout_width="wrap_content"
         android:minHeight="52dp"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_alignBaseline="@+id/teleop_crossings_label"
@@ -265,9 +253,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/teleop_high_goal_plus_btn"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:minHeight="52dp"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_alignBaseline="@+id/teleop_high_goal_minus_btn"
@@ -279,57 +267,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/teleop_crossings_plus_btn"
-        android:minWidth="50dp"
+        android:minWidth="54dp"
         android:minHeight="52dp"
-        android:textSize="16sp"
+        android:textSize="32sp"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_alignBaseline="@+id/teleop_crossings_minus_btn"
         android:layout_alignBottom="@+id/teleop_crossings_minus_btn"
         android:layout_alignStart="@+id/teleop_low_goal_plus_btn" />
-
-    <Button
-        android:text="-"
-        android:layout_height="wrap_content"
-        android:id="@+id/auto_high_goal_minus_btn"
-        android:textSize="16sp"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:width="20dp"
-        android:layout_width="wrap_content"
-        android:minHeight="52dp"
-        android:minWidth="50dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:layout_above="@+id/auto_low_goal_minus_btn"
-        android:layout_alignStart="@+id/team_spinner"
-        android:layout_marginBottom="8dp" />
-
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/teleop_crossings_text"
-        android:textSize="30sp"
-        android:layout_above="@+id/endgame_spinner"
-        android:layout_alignStart="@+id/teleop_low_goal_text"
-        android:layout_marginBottom="10dp" />
-
-    <Button
-        android:text="-"
-        android:layout_height="wrap_content"
-        android:id="@+id/teleop_low_goal_minus_btn"
-        android:textSize="16sp"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp"
-        android:width="20dp"
-        android:layout_width="wrap_content"
-        android:minHeight="52dp"
-        android:minWidth="50dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:layout_above="@+id/teleop_crossings_minus_btn"
-        android:layout_alignStart="@+id/teleop_high_goal_minus_btn" />
 
     <TextView
         android:text="0"
@@ -339,30 +284,7 @@
         android:textSize="30sp"
         android:layout_above="@+id/defense_spinner"
         android:layout_toStartOf="@+id/auto_high_goal_plus_btn"
-        android:layout_marginBottom="5dp" />
-
-    <TextView
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/teleop_low_goal_text"
-        android:textSize="30sp"
-        android:layout_above="@+id/teleop_crossings_minus_btn"
-        android:layout_alignStart="@+id/teleop_high_goal_text"
-        android:layout_marginBottom="5dp" />
-
-    <Button
-        android:text="+"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/teleop_low_goal_plus_btn"
-        android:minWidth="50dp"
-        android:minHeight="52dp"
-        android:textSize="16sp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:layout_above="@+id/teleop_crossings_plus_btn"
-        android:layout_alignStart="@+id/teleop_high_goal_plus_btn" />
+        android:layout_marginBottom="8dp" />
 
     <TextView
         android:text="Match"
@@ -396,13 +318,82 @@
         android:layout_below="@+id/defense_spinner"
         android:layout_alignStart="@+id/auto_defense_label" />
 
+    <Button
+        android:text="-"
+        android:layout_height="wrap_content"
+        android:id="@+id/auto_high_goal_minus_btn"
+        android:textSize="32sp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:width="20dp"
+        android:layout_width="wrap_content"
+        android:minHeight="52dp"
+        android:minWidth="54dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:layout_below="@+id/auto_label"
+        android:layout_alignStart="@+id/team_spinner" />
+
     <TextView
+        android:text="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/save_btn"
-        android:layout_alignEnd="@+id/teleop_crossings_text"
-        android:id="@+id/event"
-        android:visibility="invisible"
-        android:text="north_shore" />
+        android:id="@+id/auto_high_goal_text"
+        android:textSize="30sp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="25dp"
+        android:layout_alignBaseline="@+id/auto_high_goal_plus_btn"
+        android:layout_alignBottom="@+id/auto_high_goal_plus_btn"
+        android:layout_toEndOf="@+id/auto_high_goal_minus_btn" />
+
+    <Button
+        android:text="-"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_low_goal_minus_btn"
+        android:textSize="32sp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:width="20dp"
+        android:layout_width="wrap_content"
+        android:minHeight="52dp"
+        android:minWidth="54dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:layout_below="@+id/teleop_high_goal_minus_btn"
+        android:layout_alignStart="@+id/teleop_high_goal_minus_btn" />
+
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_crossings_text"
+        android:textSize="30sp"
+        android:layout_alignBottom="@+id/teleop_crossings_plus_btn"
+        android:layout_alignTop="@+id/teleop_crossings_label"
+        android:layout_alignStart="@+id/teleop_low_goal_text" />
+
+    <Button
+        android:text="+"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_low_goal_plus_btn"
+        android:minWidth="54dp"
+        android:minHeight="52dp"
+        android:textSize="32sp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:elevation="1dp"
+        android:layout_alignBaseline="@+id/teleop_low_goal_text"
+        android:layout_alignBottom="@+id/teleop_low_goal_text"
+        android:layout_alignStart="@+id/teleop_high_goal_plus_btn" />
+
+    <TextView
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/teleop_low_goal_text"
+        android:textSize="30sp"
+        android:layout_above="@+id/teleop_crossings_plus_btn"
+        android:layout_alignStart="@+id/teleop_high_goal_text" />
 
 </RelativeLayout>

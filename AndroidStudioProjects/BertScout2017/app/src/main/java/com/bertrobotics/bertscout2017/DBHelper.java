@@ -30,7 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "CREATE TABLE stand_scouting " +
-                        "(event text, match_no text, team text, " +
+                        "(event text, match_no integer, team integer, " +
                         "auto_high integer, auto_low integer, auto_cross integer, tele_high integer, " +
                         "tele_low integer, tele_cross integer, endgame integer, " +
                         "PRIMARY KEY (event, match_no, team))"
@@ -44,11 +44,11 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public JSONArray getData(){
+    public JSONArray getData(String pEvent){
         JSONArray resultSet = new JSONArray();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor results =  db.rawQuery("select * from stand_scouting", null);
+        Cursor results =  db.rawQuery("SELECT * FROM stand_scouting WHERE event = '" + pEvent + "'", null);
         results.moveToFirst();
 
         while (results.isAfterLast() == false) {
@@ -61,7 +61,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         if(results.getString(i) != null) {
                             rowObject.put(results.getColumnName(i) ,  results.getString(i) );
                         } else {
-                            rowObject.put( results.getColumnName(i) ,  "" );
+                            rowObject.put(results.getColumnName(i) ,  "" );
                         }
                     } catch( Exception e ) {
 
@@ -83,7 +83,38 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean insertStandScouting (String event, String match_no, String team, Integer auto_high,
+    public boolean insertStandScouting (String event, Integer match_no, Integer team, Integer auto_high,
+                                        Integer auto_low, Integer auto_cross, Integer tele_high,
+                                        Integer tele_low, Integer tele_cross, Integer endgame)
+    {
+        SQLiteDatabase dbr = this.getReadableDatabase();
+        Cursor results =  dbr.rawQuery("SELECT * FROM stand_scouting WHERE event = '" + event +
+                "' AND match_no = " + match_no + " AND team = " + team, null);
+
+        results.moveToFirst();
+
+        if (results.getCount() == 1) {
+            updateStandScouting(event, match_no, team, auto_high, auto_low, auto_cross, tele_high,
+                    tele_low, tele_cross, endgame);
+        } else {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("event", event);
+            contentValues.put("match_no", match_no);
+            contentValues.put("team", team);
+            contentValues.put("auto_high", auto_high);
+            contentValues.put("auto_low", auto_low);
+            contentValues.put("auto_cross", auto_cross);
+            contentValues.put("tele_high", tele_high);
+            contentValues.put("tele_low", tele_low);
+            contentValues.put("tele_cross", tele_cross);
+            contentValues.put("endgame", endgame);
+            db.insert("stand_scouting", null, contentValues);
+        }
+        return true;
+    }
+
+    public boolean updateStandScouting (String event, Integer match_no, Integer team, Integer auto_high,
                                         Integer auto_low, Integer auto_cross, Integer tele_high,
                                         Integer tele_low, Integer tele_cross, Integer endgame)
     {
@@ -99,34 +130,15 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("tele_low", tele_low);
         contentValues.put("tele_cross", tele_cross);
         contentValues.put("endgame", endgame);
-        db.insert("stand_scouting", null, contentValues);
+        db.update("stand_scouting", contentValues, "event = ? and match_no = ? and team = ?",
+                new String[] {event, match_no.toString(), team.toString()});
         return true;
     }
 
-    public boolean updateStandScouting (String event, String match_no, String team, Integer auto_high,
-                                        Integer auto_low, Integer auto_cross, Integer tele_high,
-                                        Integer tele_low, Integer tele_cross, Integer endgame)
+    public Integer deleteStandScouting ()
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("event", event);
-        contentValues.put("match_no", match_no);
-        contentValues.put("team", team);
-        contentValues.put("auto_high", auto_high);
-        contentValues.put("auto_low", auto_low);
-        contentValues.put("auto_cross", auto_cross);
-        contentValues.put("tele_high", tele_high);
-        contentValues.put("tele_low", tele_low);
-        contentValues.put("tele_cross", tele_cross);
-        contentValues.put("endgame", endgame);
-        db.update("stand_scouting", contentValues, "event = ? and match_no = ? and team = ?", new String[] {event, match_no, team});
-        return true;
-    }
 
-    public Integer deleteStandScouting (String event, String match_no, String team)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("stand_scouting",
-                "event = ? and match_no = ? and team = ?", new String[] {event, match_no, team});
+        return db.delete("stand_scouting", null, null);
     }
 }
