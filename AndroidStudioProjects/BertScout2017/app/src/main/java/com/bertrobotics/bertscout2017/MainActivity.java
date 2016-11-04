@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
                 mStandScoutingFragment.buildMatchSpinner("north_shore");
                 mStandScoutingFragment.buildTeamSpinner("north_shore");
 
+                mPitScoutingFragment.buildTeamSpinner("north_shore");
+
                 mStatisticsFragment.populateList();
                 break;
             case R.id.pine_tree:
@@ -113,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
                 mStandScoutingFragment.buildMatchSpinner("pine_tree");
                 mStandScoutingFragment.buildTeamSpinner("pine_tree");
+
+                mPitScoutingFragment.buildTeamSpinner("pine_tree");
 
                 mStatisticsFragment.populateList();
                 break;

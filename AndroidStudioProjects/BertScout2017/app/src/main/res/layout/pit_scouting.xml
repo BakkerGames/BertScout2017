@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pit_scouting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
 
     tools:context="com.bertrobotics.bertscout2017.PitScoutingFragment">
+
+    <TextView
+        android:text="Team"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/team_label"
+        android:textSize="36sp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginTop="0dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/team_spinner"
+        android:textSize="30sp"
+        android:minHeight="40sp"
+        android:layout_marginStart="300sp"
+        android:layout_alignParentEnd="false"
+        android:layout_alignTop="@+id/team_label" />
 
 </RelativeLayout>

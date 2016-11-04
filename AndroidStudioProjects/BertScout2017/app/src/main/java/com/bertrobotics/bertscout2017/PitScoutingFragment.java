@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -35,7 +36,30 @@ public class PitScoutingFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.pit_scouting, container, false);
         dbHelper = new DBHelper(mRootView.getContext());
 
+        buildTeamSpinner("north_shore");
+
         return mRootView;
+    }
+
+    public void buildTeamSpinner(String event) {
+        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
+
+        Integer teamList = null;
+
+        if (event.equals("north_shore")) {
+            teamList = R.array.north_shore_teams;
+        } else if (event.equals("pine_tree")) {
+            teamList = R.array.pine_tree_teams;
+        }
+
+        if (teamList != null) {
+            ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(mRootView.getContext(),
+                    teamList, R.layout.spinner_item);
+            dataAdapter.setDropDownViewResource(R.layout.spinner_item);
+            teamSpinner.setAdapter(dataAdapter);
+        } else {
+            teamSpinner.setAdapter(null);
+        }
     }
 
     private class AsyncTaskDeleteData extends AsyncTask<String, Void, String> {
