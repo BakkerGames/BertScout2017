@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -36,6 +37,19 @@ public class PitScoutingFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.pit_scouting, container, false);
         dbHelper = new DBHelper(mRootView.getContext());
 
+        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
+        teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                clearScreen();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         buildTeamSpinner("north_shore");
 
         return mRootView;
@@ -60,6 +74,10 @@ public class PitScoutingFragment extends Fragment {
         } else {
             teamSpinner.setAdapter(null);
         }
+    }
+
+    public void clearScreen() {
+
     }
 
     private class AsyncTaskDeleteData extends AsyncTask<String, Void, String> {

@@ -32,4 +32,44 @@
         android:layout_alignParentEnd="false"
         android:layout_alignTop="@+id/team_label" />
 
+    <CheckBox
+        android:text="Score Low?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_score_low_check"
+        android:textAppearance="@style/CustomTextStyle"
+        android:layout_below="@+id/team_label"
+        android:layout_alignStart="@+id/team_label"
+        android:layout_marginTop="30dp" />
+
+    <CheckBox
+        android:text="Score High?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_score_high_check"
+        android:textAppearance="@style/CustomTextStyle"
+        android:layout_below="@+id/pit_score_low_check"
+        android:layout_alignStart="@+id/pit_score_low_check"
+        android:layout_marginTop="14dp" />
+
+    <CheckBox
+        android:text="Can Climb?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_can_climb_check"
+        android:textAppearance="@style/CustomTextStyle"
+        android:layout_alignBaseline="@+id/pit_score_high_check"
+        android:layout_alignBottom="@+id/pit_score_high_check"
+        android:layout_alignParentEnd="true" />
+
+    <CheckBox
+        android:text="Can Block?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_can_block_check"
+        android:textAppearance="@style/CustomTextStyle"
+        android:layout_alignBaseline="@+id/pit_score_low_check"
+        android:layout_alignBottom="@+id/pit_score_low_check"
+        android:layout_alignStart="@+id/pit_can_climb_check" />
+
 </RelativeLayout>
