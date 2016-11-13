@@ -38,10 +38,13 @@ public class PitScoutingFragment extends Fragment {
 
         final Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
         teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                clearScreen();
+
                 currPitInfoIndex = -1;
+                clearScreen();
+
                 int teamNumber = Integer.parseInt((String) teamSpinner.getSelectedItem());
                 for (int i = 0; i < currPitInfoArray.length(); i++) {
                     try {
@@ -53,6 +56,7 @@ public class PitScoutingFragment extends Fragment {
                     } catch (JSONException e) {
                     }
                 }
+
                 if (currPitInfoIndex < 0) {
                     currTeam = new JSONObject();
                     try {
@@ -67,7 +71,9 @@ public class PitScoutingFragment extends Fragment {
                     } catch (JSONException e) {
                     }
                 }
+
                 showPitInfo();
+
             }
 
             @Override
@@ -79,11 +85,13 @@ public class PitScoutingFragment extends Fragment {
         scoreLowCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            try {
-                currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, scoreLowCheckBox.isChecked());
-                currPitInfoArray.put(currPitInfoIndex, currTeam);
-            } catch (JSONException e) {
-            }
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, scoreLowCheckBox.isChecked());
+                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                    } catch (JSONException e) {
+                    }
+                }
             }
         });
 
@@ -91,10 +99,12 @@ public class PitScoutingFragment extends Fragment {
         scoreHighCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, scoreHighCheckBox.isChecked());
-                    currPitInfoArray.put(currPitInfoIndex, currTeam);
-                } catch (JSONException e) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, scoreHighCheckBox.isChecked());
+                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                    } catch (JSONException e) {
+                    }
                 }
             }
         });
@@ -103,10 +113,12 @@ public class PitScoutingFragment extends Fragment {
         canBlockCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, canBlockCheckBox.isChecked());
-                    currPitInfoArray.put(currPitInfoIndex, currTeam);
-                } catch (JSONException e) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, canBlockCheckBox.isChecked());
+                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                    } catch (JSONException e) {
+                    }
                 }
             }
         });
@@ -115,10 +127,12 @@ public class PitScoutingFragment extends Fragment {
         canClimbCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                try {
-                    currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, canClimbCheckBox.isChecked());
-                    currPitInfoArray.put(currPitInfoIndex, currTeam);
-                } catch (JSONException e) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, canClimbCheckBox.isChecked());
+                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                    } catch (JSONException e) {
+                    }
                 }
             }
         });
@@ -132,41 +146,27 @@ public class PitScoutingFragment extends Fragment {
         try {
 
             CheckBox canScoreLowCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_score_low_check);
-            if (currTeam.getInt(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW) == 0) {
-                canScoreLowCheckBox.setChecked(false);
-            } else {
-                canScoreLowCheckBox.setChecked(true);
-            }
+            canScoreLowCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW));
 
             CheckBox canScoreHighCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_score_high_check);
-            if (currTeam.getInt(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH) == 0) {
-                canScoreHighCheckBox.setChecked(false);
-            } else {
-                canScoreHighCheckBox.setChecked(true);
-            }
+            canScoreHighCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH));
 
             CheckBox canBlockCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_can_block_check);
-            if (currTeam.getInt(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK) == 0) {
-                canBlockCheckBox.setChecked(false);
-            } else {
-                canBlockCheckBox.setChecked(true);
-            }
+            canBlockCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK));
 
             CheckBox canClimbCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_can_climb_check);
-            if (currTeam.getInt(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK) == 0) {
-                canClimbCheckBox.setChecked(false);
-            } else {
-                canClimbCheckBox.setChecked(true);
-            }
+            canClimbCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB));
 
         } catch (JSONException e) {
         }
     }
 
     public void buildTeamSpinner(String event) {
-        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
 
+        currEvent = event;
         Integer teamList = null;
+
+        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
 
         if (event.equals("north_shore")) {
             teamList = R.array.north_shore_teams;
@@ -175,18 +175,15 @@ public class PitScoutingFragment extends Fragment {
         }
 
         if (teamList != null) {
+            currPitInfoArray = dbHelper.getDataAllPit(currEvent);
             ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(mRootView.getContext(),
                     teamList, R.layout.spinner_item);
             dataAdapter.setDropDownViewResource(R.layout.spinner_item);
             teamSpinner.setAdapter(dataAdapter);
         } else {
+            currPitInfoArray = new JSONArray();
             teamSpinner.setAdapter(null);
         }
-
-        // Handle in-memory information
-
-        currEvent = event;
-        currPitInfoArray = dbHelper.getDataAllPit(currEvent);
 
     }
 
