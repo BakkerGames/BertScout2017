@@ -9,24 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
-
-import java.util.ArrayList;
 
 public class PitScoutingFragment extends Fragment {
 
     public View mRootView;
     public DBHelper dbHelper;
+
+    public String currEvent;
+    public JSONArray currPitInfo;
 
     StatisticsFragment mStatisticsFragment;
 
@@ -45,6 +41,7 @@ public class PitScoutingFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 clearScreen();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -106,6 +103,12 @@ public class PitScoutingFragment extends Fragment {
         } else {
             teamSpinner.setAdapter(null);
         }
+
+        // Handle in-memory information
+
+//        currEvent = event;
+//        currPitInfo = dbHelper.getDataAllPit(currEvent);
+
     }
 
     public void clearScreen() {
