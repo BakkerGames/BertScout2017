@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -19,7 +18,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "bert_scout.db";
     public static final String STAND_SCOUTING_TABLE_NAME = "stand_scouting";
-    public static final String PIT_SCOUTING_TABLE_NAME = "pit_scouting";
 
     private HashMap hp;
 
@@ -38,33 +36,14 @@ public class DBHelper extends SQLiteOpenHelper {
                         "tele_low integer, tele_cross integer, endgame integer, " +
                         "PRIMARY KEY (event, match_no, team))"
         );
-        db.execSQL(
-                "CREATE TABLE " + PIT_SCOUTING_TABLE_NAME + " (" +
-                        "event text" +
-                        ", team integer" +
-                        ", autonomousModes integer" +
-                        ", autonomousInfo text" +
-                        ", preferredStarting text" +
-                        ", canScoreLow integer" +
-                        ", canScoreHigh integer" +
-                        ", canClimb integer" +
-                        ", canBlock integer" +
-                        ", height integer" +
-                        ", weight integer" +
-                        ", speed integer" +
-                        ", motors integer" +
-                        ", wheels integer" +
-                        ", wheelType text" +
-                        ", PRIMARY KEY (event, team)" +
-                ")"
-        );
+        db.execSQL(DBContract.TablePitInfo.SQL_QUERY_CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS stand_scouting");
-        db.execSQL("DROP TABLE IF EXISTS " + PIT_SCOUTING_TABLE_NAME);
+        db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
         onCreate(db);
     }
 
@@ -166,20 +145,18 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.delete("stand_scouting", null, null);
     }
 
+    //
     // Pit Scouting
+    //
 
-    public static final int CURSOR_COLUMN_TYPE_NULL = 0;
-    public static final int CURSOR_COLUMN_TYPE_INTEGER = 1;
-    public static final int CURSOR_COLUMN_TYPE_FLOAT = 2;
-    public static final int CURSOR_COLUMN_TYPE_STRING = 3;
-    public static final int CURSOR_COLUMN_TYPE_BLOB = 4;
-
-    public JSONArray getDataPit(String pEvent) {
+    public JSONArray getDataAllPit(String pEvent) {
         JSONArray resultSet = new JSONArray();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor results = db.rawQuery("SELECT * FROM " + PIT_SCOUTING_TABLE_NAME +
-                " WHERE event = '" + pEvent + "'", null);
+        Cursor results = db.rawQuery(
+                "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
+                " WHERE event = '" + pEvent + "'" +
+                "", null);
         results.moveToFirst();
 
         while (results.isAfterLast() == false) {
@@ -188,19 +165,27 @@ public class DBHelper extends SQLiteOpenHelper {
 
             for (int i = 0; i < totalColumn; i++) {
                 if (results.getColumnName(i) != null) {
-                    switch (results.getType(i)) {
-                        case CURSOR_COLUMN_TYPE_STRING:
-                            try {
-                                rowObject.put(results.getColumnName(i), results.getString(i));
-                            } catch (Exception e) {
-                            }
-                            break;
-                        case CURSOR_COLUMN_TYPE_INTEGER:
-                            try {
+                    try {
+                        switch (results.getColumnName(i)) {
+                            case DBContract.TablePitInfo._ID:
+                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
                                 rowObject.put(results.getColumnName(i), results.getInt(i));
-                            } catch (Exception e) {
-                            }
-                            break;
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
+                                rowObject.put(results.getColumnName(i), results.getString(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
+                                if (results.getInt(i) == 0) {
+                                    rowObject.put(results.getColumnName(i), false);
+                                } else {
+                                    rowObject.put(results.getColumnName(i), true);
+                                }
+                                break;
+                        }
+                    } catch (JSONException e) {
                     }
                 }
             }
@@ -212,15 +197,19 @@ public class DBHelper extends SQLiteOpenHelper {
         return resultSet;
     }
 
-    public JSONObject getDataPit(int pEvent, int pMatch, int pTeam)
+    public JSONObject getDataPit(String pEvent, int pTeam)
     {
         JSONObject rowObject = new JSONObject();
 
         if (!Objects.equals(pEvent, "") && !Objects.equals(pTeam, ""))
         {
             SQLiteDatabase db = this.getReadableDatabase();
-            Cursor results =  db.rawQuery("SELECT * FROM stand_scouting WHERE event = '" + pEvent +
-                    "' AND match_no = " + pMatch + " AND team = " + pTeam, null);
+            Cursor results = db.rawQuery(
+                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
+                            " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
+                            " AND " + DBContract.TablePitInfo.COLUMN_NAME_TEAM + " = " + pTeam +
+                            " ORDER BY " + DBContract.TablePitInfo.COLUMN_NAME_TEAM +
+                    "", null);
             results.moveToFirst();
 
             int totalColumn = results.getColumnCount();
@@ -228,13 +217,26 @@ public class DBHelper extends SQLiteOpenHelper {
             for (int i = 0; i < totalColumn; i++) {
                 if (results.getColumnName(i) != null) {
                     try {
-                        if (results.getString(i) != null) {
-                            rowObject.put(results.getColumnName(i), results.getString(i));
-                        } else {
-                            rowObject.put(results.getColumnName(i), "");
+                        switch (results.getColumnName(i)) {
+                            case DBContract.TablePitInfo._ID:
+                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
+                                rowObject.put(results.getColumnName(i), results.getInt(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
+                                rowObject.put(results.getColumnName(i), results.getString(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
+                                if (results.getInt(i) == 0) {
+                                    rowObject.put(results.getColumnName(i), false);
+                                } else {
+                                    rowObject.put(results.getColumnName(i), true);
+                                }
+                                break;
                         }
                     } catch (JSONException e) {
-
                     }
                 }
             }
