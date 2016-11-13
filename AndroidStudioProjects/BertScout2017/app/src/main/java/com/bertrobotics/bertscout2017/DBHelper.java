@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.json.JSONArray;
@@ -245,6 +246,69 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return rowObject;
+    }
+
+    public boolean updatePitInfo(JSONObject pitInfo) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        try {
+
+            contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_EVENT, pitInfo.getString(DBContract.TablePitInfo.COLUMN_NAME_EVENT));
+            contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_TEAM, pitInfo.getInt(DBContract.TablePitInfo.COLUMN_NAME_TEAM));
+
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, 0);
+            }
+
+            if (pitInfo.has(DBContract.TablePitInfo._ID)) {
+
+                db.update(
+                        DBContract.TablePitInfo.TABLE_NAME,
+                        contentValues,
+                        "_id = ?",
+                        new String[] {String.valueOf(pitInfo.getInt(DBContract.TablePitInfo._ID))}
+                );
+                return true;
+
+            } else {
+
+                long newID = db.insert(
+                        DBContract.TablePitInfo.TABLE_NAME,
+                        null,
+                        contentValues
+                );
+                if (newID > 0) {
+                    pitInfo.put(DBContract.TablePitInfo._ID, newID);
+                    return true;
+                }
+
+            }
+
+        } catch (JSONException e) {
+            return false;
+        }
+
+        return true;
+
     }
 
 }

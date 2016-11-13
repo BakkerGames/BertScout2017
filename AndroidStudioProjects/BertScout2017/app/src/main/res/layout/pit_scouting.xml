@@ -23,14 +23,14 @@
         android:layout_marginTop="0dp" />
 
     <Spinner
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/team_spinner"
         android:textSize="30sp"
         android:minHeight="40sp"
-        android:layout_marginStart="300sp"
-        android:layout_alignParentEnd="false"
-        android:layout_alignTop="@+id/team_label" />
+        android:layout_above="@+id/pit_score_low_check"
+        android:layout_alignEnd="@+id/pit_can_climb_check"
+        android:layout_alignStart="@+id/pit_can_block_check" />
 
     <CheckBox
         android:text="Score Low?"
@@ -40,7 +40,10 @@
         android:textAppearance="@style/CustomTextStyle"
         android:layout_below="@+id/team_label"
         android:layout_alignStart="@+id/team_label"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textSize="30sp" />
 
     <CheckBox
         android:text="Score High?"
@@ -50,7 +53,10 @@
         android:textAppearance="@style/CustomTextStyle"
         android:layout_below="@+id/pit_score_low_check"
         android:layout_alignStart="@+id/pit_score_low_check"
-        android:layout_marginTop="14dp" />
+        android:layout_marginTop="14dp"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textSize="30sp" />
 
     <CheckBox
         android:text="Can Climb?"
@@ -60,7 +66,11 @@
         android:textAppearance="@style/CustomTextStyle"
         android:layout_alignBaseline="@+id/pit_score_high_check"
         android:layout_alignBottom="@+id/pit_score_high_check"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textSize="30sp" />
 
     <CheckBox
         android:text="Can Block?"
@@ -68,8 +78,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/pit_can_block_check"
         android:textAppearance="@style/CustomTextStyle"
-        android:layout_alignBaseline="@+id/pit_score_low_check"
-        android:layout_alignBottom="@+id/pit_score_low_check"
-        android:layout_alignStart="@+id/pit_can_climb_check" />
+        android:layout_above="@+id/pit_score_high_check"
+        android:layout_alignStart="@+id/pit_can_climb_check"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textSize="30sp" />
 
 </RelativeLayout>

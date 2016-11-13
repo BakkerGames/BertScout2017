@@ -87,8 +87,10 @@ public class PitScoutingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, scoreLowCheckBox.isChecked());
-                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW) != scoreLowCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, scoreLowCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
                     } catch (JSONException e) {
                     }
                 }
@@ -101,8 +103,10 @@ public class PitScoutingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, scoreHighCheckBox.isChecked());
-                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH) != scoreHighCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, scoreHighCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
                     } catch (JSONException e) {
                     }
                 }
@@ -115,8 +119,10 @@ public class PitScoutingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, canBlockCheckBox.isChecked());
-                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK) != canBlockCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, canBlockCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
                     } catch (JSONException e) {
                     }
                 }
@@ -129,8 +135,10 @@ public class PitScoutingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, canClimbCheckBox.isChecked());
-                        currPitInfoArray.put(currPitInfoIndex, currTeam);
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB) != canClimbCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, canClimbCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
                     } catch (JSONException e) {
                     }
                 }
