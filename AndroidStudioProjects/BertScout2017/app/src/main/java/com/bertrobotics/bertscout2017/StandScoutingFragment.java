@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import android.os.AsyncTask;
@@ -14,6 +15,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 public class StandScoutingFragment extends Fragment {
 
@@ -33,56 +37,56 @@ public class StandScoutingFragment extends Fragment {
 
         dbHelper = new DBHelper(mRootView.getContext());
 
-        Button saveBtn = (Button) mRootView.findViewById(R.id.save_btn);
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                AsyncTaskURL apacheInsert = new AsyncTaskURL();
-//                apacheInsert.execute();
-
-                Spinner matchSpinner = (Spinner) mRootView.findViewById(R.id.match_spinner);
-                Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
-                Spinner defenseSpinner = (Spinner) mRootView.findViewById(R.id.defense_spinner);
-                Spinner endgameSpinner = (Spinner) mRootView.findViewById(R.id.endgame_spinner);
-                TextView autoHighGoalText = (TextView) mRootView.findViewById(R.id.auto_high_goal_text);
-                TextView autoLowGoalText = (TextView) mRootView.findViewById(R.id.auto_low_goal_text);
-                TextView teleopHighGoalText = (TextView) mRootView.findViewById(R.id.teleop_high_goal_text);
-                TextView teleopLowGoalText = (TextView) mRootView.findViewById(R.id.teleop_low_goal_text);
-                TextView teleopCrossingsText = (TextView) mRootView.findViewById(R.id.teleop_crossings_text);
-
-                String event = getActivity().getTitle().toString();
-                Integer match_no = Integer.parseInt(matchSpinner.getSelectedItem().toString());
-                Integer team = Integer.parseInt(teamSpinner.getSelectedItem().toString());
-                Integer autoHighGoal = Integer.parseInt(autoHighGoalText.getText().toString());
-                Integer autoLowGoal = Integer.parseInt(autoLowGoalText.getText().toString());
-                Integer defense;
-                Integer teleopHighGoal = Integer.parseInt(teleopHighGoalText.getText().toString());
-                Integer teleopLowGoal = Integer.parseInt(teleopLowGoalText.getText().toString());
-                Integer teleopCrossings = Integer.parseInt(teleopCrossingsText.getText().toString());
-                Integer endgame;
-
-                if (defenseSpinner.getSelectedItem().toString().equals("Reach")) {
-                    defense = 2;
-                } else if (defenseSpinner.getSelectedItem().toString().equals("Cross")) {
-                    defense = 10;
-                } else {
-                    defense = 0;
-                }
-
-                if (endgameSpinner.getSelectedItem().toString().equals("Challenge")) {
-                    endgame = 5;
-                } else if (endgameSpinner.getSelectedItem().toString().equals("Scale")) {
-                    endgame = 15;
-                } else {
-                    endgame = 0;
-                }
-
-                AsyncTaskSaveData insertData = new AsyncTaskSaveData(mRootView, event, match_no,
-                        team, autoHighGoal, autoLowGoal, defense, teleopHighGoal, teleopLowGoal,
-                        teleopCrossings, endgame);
-                insertData.execute();
-            }
-        });
+//        Button saveBtn = (Button) mRootView.findViewById(R.id.save_btn);
+//        saveBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                AsyncTaskURL apacheInsert = new AsyncTaskURL();
+////                apacheInsert.execute();
+//
+//                Spinner matchSpinner = (Spinner) mRootView.findViewById(R.id.match_spinner);
+//                Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
+//                Spinner defenseSpinner = (Spinner) mRootView.findViewById(R.id.defense_spinner);
+//                Spinner endgameSpinner = (Spinner) mRootView.findViewById(R.id.endgame_spinner);
+//                TextView autoHighGoalText = (TextView) mRootView.findViewById(R.id.auto_high_goal_text);
+//                TextView autoLowGoalText = (TextView) mRootView.findViewById(R.id.auto_low_goal_text);
+//                TextView teleopHighGoalText = (TextView) mRootView.findViewById(R.id.teleop_high_goal_text);
+//                TextView teleopLowGoalText = (TextView) mRootView.findViewById(R.id.teleop_low_goal_text);
+//                TextView teleopCrossingsText = (TextView) mRootView.findViewById(R.id.teleop_crossings_text);
+//
+//                String event = getActivity().getTitle().toString();
+//                Integer match_no = Integer.parseInt(matchSpinner.getSelectedItem().toString());
+//                Integer team = Integer.parseInt(teamSpinner.getSelectedItem().toString());
+//                Integer autoHighGoal = Integer.parseInt(autoHighGoalText.getText().toString());
+//                Integer autoLowGoal = Integer.parseInt(autoLowGoalText.getText().toString());
+//                Integer defense;
+//                Integer teleopHighGoal = Integer.parseInt(teleopHighGoalText.getText().toString());
+//                Integer teleopLowGoal = Integer.parseInt(teleopLowGoalText.getText().toString());
+//                Integer teleopCrossings = Integer.parseInt(teleopCrossingsText.getText().toString());
+//                Integer endgame;
+//
+//                if (defenseSpinner.getSelectedItem().toString().equals("Reach")) {
+//                    defense = 2;
+//                } else if (defenseSpinner.getSelectedItem().toString().equals("Cross")) {
+//                    defense = 10;
+//                } else {
+//                    defense = 0;
+//                }
+//
+//                if (endgameSpinner.getSelectedItem().toString().equals("Challenge")) {
+//                    endgame = 5;
+//                } else if (endgameSpinner.getSelectedItem().toString().equals("Scale")) {
+//                    endgame = 15;
+//                } else {
+//                    endgame = 0;
+//                }
+//
+//                AsyncTaskSaveData insertData = new AsyncTaskSaveData(mRootView, event, match_no,
+//                        team, autoHighGoal, autoLowGoal, defense, teleopHighGoal, teleopLowGoal,
+//                        teleopCrossings, endgame);
+//                insertData.execute();
+//            }
+//        });
 
         Button autoHighGoalMinusBtn = (Button) mRootView.findViewById(R.id.auto_high_goal_minus_btn);
         autoHighGoalMinusBtn.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +99,8 @@ public class StandScoutingFragment extends Fragment {
                     autoHighGoalInt--;
                     autoHighGoalText.setText(Integer.toString(autoHighGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -109,6 +115,8 @@ public class StandScoutingFragment extends Fragment {
                     autoHighGoalInt++;
                     autoHighGoalText.setText(Integer.toString(autoHighGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -123,6 +131,8 @@ public class StandScoutingFragment extends Fragment {
                     autoLowGoalInt--;
                     autoLowGoalText.setText(Integer.toString(autoLowGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -137,6 +147,8 @@ public class StandScoutingFragment extends Fragment {
                     autoLowGoalInt++;
                     autoLowGoalText.setText(Integer.toString(autoLowGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -151,6 +163,8 @@ public class StandScoutingFragment extends Fragment {
                     teleopHighGoalInt--;
                     teleopHighGoalText.setText(Integer.toString(teleopHighGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -165,6 +179,8 @@ public class StandScoutingFragment extends Fragment {
                     teleopHighGoalInt++;
                     teleopHighGoalText.setText(Integer.toString(teleopHighGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -179,6 +195,8 @@ public class StandScoutingFragment extends Fragment {
                     teleopLowGoalInt--;
                     teleopLowGoalText.setText(Integer.toString(teleopLowGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -193,6 +211,8 @@ public class StandScoutingFragment extends Fragment {
                     teleopLowGoalInt++;
                     teleopLowGoalText.setText(Integer.toString(teleopLowGoalInt));
                 }
+
+                saveData();
             }
         });
 
@@ -207,6 +227,8 @@ public class StandScoutingFragment extends Fragment {
                     teleopCrossingsInt--;
                     teleopCrossingsText.setText(Integer.toString(teleopCrossingsInt));
                 }
+
+                saveData();
             }
         });
 
@@ -221,6 +243,8 @@ public class StandScoutingFragment extends Fragment {
                     teleopCrossingsInt++;
                     teleopCrossingsText.setText(Integer.toString(teleopCrossingsInt));
                 }
+
+                saveData();
             }
         });
 
@@ -228,7 +252,7 @@ public class StandScoutingFragment extends Fragment {
         matchSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                clearScreen();
+                loadScreen();
             }
 
             @Override
@@ -241,7 +265,7 @@ public class StandScoutingFragment extends Fragment {
         teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                clearScreen();
+                loadScreen();
             }
 
             @Override
@@ -250,10 +274,49 @@ public class StandScoutingFragment extends Fragment {
             }
         });
 
+        Spinner defenseSpinner = (Spinner) mRootView.findViewById(R.id.defense_spinner);
+        defenseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                saveData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        Spinner endgameSpinner = (Spinner) mRootView.findViewById(R.id.endgame_spinner);
+        endgameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                saveData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        EditText commentEditText = (EditText) mRootView.findViewById(R.id.comments_text);
+        commentEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus == false) {
+                    saveData();
+                }
+            }
+        });
+
         buildMatchSpinner("north_shore");
         buildTeamSpinner("north_shore");
+
         buildDefenseSpinner();
         buildEndgameSpinner();
+
+        loadScreen();
 
         return mRootView;
     }
@@ -302,27 +365,125 @@ public class StandScoutingFragment extends Fragment {
         endgameSpinner.setAdapter(dataAdapter);
     }
 
-    public void clearScreen() {
+    public void loadScreen() {
+        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
+        Integer team = Integer.parseInt(teamSpinner.getSelectedItem().toString());
+
+        Spinner matchSpinner = (Spinner) mRootView.findViewById(R.id.match_spinner);
+        Integer match_no = Integer.parseInt(matchSpinner.getSelectedItem().toString());
+
         Spinner defenseSpinner = (Spinner) mRootView.findViewById(R.id.defense_spinner);
-        defenseSpinner.setSelection(0);
-
         Spinner endgameSpinner = (Spinner) mRootView.findViewById(R.id.endgame_spinner);
-        endgameSpinner.setSelection(0);
-
         TextView autoHighGoalText = (TextView) mRootView.findViewById(R.id.auto_high_goal_text);
-        autoHighGoalText.setText("0");
-
         TextView autoLowGoalText = (TextView) mRootView.findViewById(R.id.auto_low_goal_text);
-        autoLowGoalText.setText("0");
-
         TextView teleopHighGoalText = (TextView) mRootView.findViewById(R.id.teleop_high_goal_text);
-        teleopHighGoalText.setText("0");
-
         TextView teleopLowGoalText = (TextView) mRootView.findViewById(R.id.teleop_low_goal_text);
-        teleopLowGoalText.setText("0");
-
         TextView teleopCrossingsText = (TextView) mRootView.findViewById(R.id.teleop_crossings_text);
-        teleopCrossingsText.setText("0");
+        TextView commentText = (TextView) mRootView.findViewById(R.id.comments_text);
+
+        String event = getActivity().getTitle().toString();
+        JSONArray data = dbHelper.getMatchData(event, match_no, team);
+
+        if (data.length() != 0) {
+            try {
+                autoHighGoalText.setText(data.getJSONObject(0).getString("auto_high"));
+                autoLowGoalText.setText(data.getJSONObject(0).getString("auto_low"));
+                teleopHighGoalText.setText(data.getJSONObject(0).getString("tele_high"));
+                teleopLowGoalText.setText(data.getJSONObject(0).getString("tele_low"));
+                teleopCrossingsText.setText(data.getJSONObject(0).getString("tele_cross"));
+
+                Integer autoCross = Integer.parseInt(data.getJSONObject(0).getString("auto_cross"));
+                switch(autoCross) {
+                    case 0:
+                        defenseSpinner.setSelection(0);
+                        break;
+                    case 2:
+                        defenseSpinner.setSelection(1);
+                        break;
+                    case 10:
+                        defenseSpinner.setSelection(2);
+                        break;
+                    default:
+                        defenseSpinner.setSelection(0);
+                        break;
+                }
+
+                Integer endgame = Integer.parseInt(data.getJSONObject(0).getString("endgame"));
+                switch(endgame) {
+                    case 0:
+                        endgameSpinner.setSelection(0);
+                        break;
+                    case 5:
+                        endgameSpinner.setSelection(1);
+                        break;
+                    case 15:
+                        endgameSpinner.setSelection(2);
+                        break;
+                    default:
+                        endgameSpinner.setSelection(0);
+                        break;
+                }
+
+                commentText.setText(data.getJSONObject(0).getString("comment"));
+            } catch (JSONException e) {
+
+            }
+        } else {
+            autoHighGoalText.setText("0");
+            autoLowGoalText.setText("0");
+            defenseSpinner.setSelection(0);
+            teleopHighGoalText.setText("0");
+            teleopLowGoalText.setText("0");
+            teleopCrossingsText.setText("0");
+            endgameSpinner.setSelection(0);
+            commentText.setText("");
+        }
+    }
+
+    public void saveData() {
+        Spinner matchSpinner = (Spinner) mRootView.findViewById(R.id.match_spinner);
+        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
+        Spinner defenseSpinner = (Spinner) mRootView.findViewById(R.id.defense_spinner);
+        Spinner endgameSpinner = (Spinner) mRootView.findViewById(R.id.endgame_spinner);
+        TextView autoHighGoalText = (TextView) mRootView.findViewById(R.id.auto_high_goal_text);
+        TextView autoLowGoalText = (TextView) mRootView.findViewById(R.id.auto_low_goal_text);
+        TextView teleopHighGoalText = (TextView) mRootView.findViewById(R.id.teleop_high_goal_text);
+        TextView teleopLowGoalText = (TextView) mRootView.findViewById(R.id.teleop_low_goal_text);
+        TextView teleopCrossingsText = (TextView) mRootView.findViewById(R.id.teleop_crossings_text);
+        EditText commentText = (EditText) mRootView.findViewById(R.id.comments_text);
+
+        String event = getActivity().getTitle().toString();
+        Integer match_no = Integer.parseInt(matchSpinner.getSelectedItem().toString());
+        Integer team = Integer.parseInt(teamSpinner.getSelectedItem().toString());
+        Integer autoHighGoal = Integer.parseInt(autoHighGoalText.getText().toString());
+        Integer autoLowGoal = Integer.parseInt(autoLowGoalText.getText().toString());
+        Integer defense;
+        Integer teleopHighGoal = Integer.parseInt(teleopHighGoalText.getText().toString());
+        Integer teleopLowGoal = Integer.parseInt(teleopLowGoalText.getText().toString());
+        Integer teleopCrossings = Integer.parseInt(teleopCrossingsText.getText().toString());
+        Integer endgame;
+        String comment = commentText.getText().toString();
+
+        if (defenseSpinner.getSelectedItem().toString().equals("Reach")) {
+            defense = 2;
+        } else if (defenseSpinner.getSelectedItem().toString().equals("Cross")) {
+            defense = 10;
+        } else {
+            defense = 0;
+        }
+
+        if (endgameSpinner.getSelectedItem().toString().equals("Challenge")) {
+            endgame = 5;
+        } else if (endgameSpinner.getSelectedItem().toString().equals("Scale")) {
+            endgame = 15;
+        } else {
+            endgame = 0;
+        }
+
+        AsyncTaskSaveData insertData = new AsyncTaskSaveData(mRootView, event, match_no,
+                team, autoHighGoal, autoLowGoal, defense, teleopHighGoal, teleopLowGoal,
+                teleopCrossings, endgame, comment);
+        insertData.execute();
     }
 
     private class AsyncTaskSaveData extends AsyncTask<String, Void, String> {
@@ -336,6 +497,7 @@ public class StandScoutingFragment extends Fragment {
         Integer teleopLowGoal;
         Integer teleopCrossings;
         Integer endgame;
+        String comment;
 
         View rootView;
 
@@ -344,7 +506,7 @@ public class StandScoutingFragment extends Fragment {
         private AsyncTaskSaveData(View pRootView, String pEvent, Integer pMatch_no, Integer pTeam,
                                   Integer pAutoHighGoal, Integer pAutoLowGoal, Integer pDefense,
                                   Integer pTeleopHighGoal, Integer pTeleopLowGoal,
-                                  Integer pTeleopCrossings, Integer pEndgame) {
+                                  Integer pTeleopCrossings, Integer pEndgame, String pComment) {
 
             event = pEvent;
             match_no = pMatch_no;
@@ -356,6 +518,7 @@ public class StandScoutingFragment extends Fragment {
             teleopLowGoal = pTeleopLowGoal;
             teleopCrossings = pTeleopCrossings;
             endgame = pEndgame;
+            comment = pComment;
 
             rootView = pRootView;
 
@@ -373,7 +536,7 @@ public class StandScoutingFragment extends Fragment {
         protected String doInBackground(String... params) {
             try {
                 dbHelper.insertStandScouting(event, match_no, team, autoHighGoal, autoLowGoal,
-                        defense, teleopHighGoal, teleopLowGoal, teleopCrossings, endgame);
+                        defense, teleopHighGoal, teleopLowGoal, teleopCrossings, endgame, comment);
 
             } catch (Exception e) {
                 return "Failure";
@@ -388,7 +551,7 @@ public class StandScoutingFragment extends Fragment {
 
             progress.dismiss();
 
-            Toast.makeText(rootView.getContext(), result, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(rootView.getContext(), result, Toast.LENGTH_SHORT).show();
         }
     }
 }

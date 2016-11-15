@@ -1,5 +1,8 @@
 package com.bertrobotics.bertscout2017;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +30,7 @@ public class StatisticsFragment extends Fragment {
     public DBHelper dbHelper;
     ListView mListView;
     FragmentActivity mActivity;
+    TeamData[] sortedTeamData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +38,18 @@ public class StatisticsFragment extends Fragment {
         dbHelper = new DBHelper(mRootView.getContext());
 
         mListView = (ListView) mRootView.findViewById(R.id.data_listview);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+                Intent intent = new Intent(mRootView.getContext(), TeamDetails.class);
+                intent.putExtra("event", mActivity.getTitle().toString());
+                intent.putExtra("team", sortedTeamData[position].team);
+                startActivityForResult(intent, 1);
+            }
+        });
 
         mActivity = getActivity();
 
@@ -166,7 +184,7 @@ public class StatisticsFragment extends Fragment {
             }
         }
 
-        TeamData[] sortedTeamData = new TeamData[lastIndex + 1];
+        sortedTeamData = new TeamData[lastIndex + 1];
 
         for (int i = 0; i <= lastIndex; i++) {
             sortedTeamData[i] = totalTeamData[i];
@@ -174,51 +192,104 @@ public class StatisticsFragment extends Fragment {
 
         Arrays.sort(sortedTeamData);
 
+        Integer teamSpacesLength;
+        String teamSpaces = "";
+
+        Integer spacesLength;
+        String spaces = "";
+
         for (int i = 0; i < sortedTeamData.length; i++) {
             if (totalTeamData[i] == null) {
                 break;
             }
 
-            teams.add(String.valueOf(i + 1) + ")  " + Integer.toString(sortedTeamData[i].team) +
-                    "  Avg Auto High: " + String.format("%.2f", (double) sortedTeamData[i].totalAutoHigh / (double) sortedTeamData[i].numMatches) +
-                    "  Avg Teleop High: " + String.format("%.2f", (double) sortedTeamData[i].totalTeleopHigh / (double) sortedTeamData[i].numMatches) +
-                    "  Total Matches: " + String.valueOf(sortedTeamData[i].numMatches));
+            teamSpacesLength = (2 - String.valueOf(i + 1).length()) * 2;
 
+            teamSpaces = "";
+
+            for (int j = 0; j < teamSpacesLength; j++) {
+                teamSpaces += " ";
+            }
+
+            spacesLength = (4 - String.valueOf(sortedTeamData[i].team).length()) * 2;
+
+            spaces = "";
+
+            for (int j = 0; j < spacesLength; j++) {
+                spaces += " ";
+            }
+
+            teams.add(String.valueOf(i + 1) + ")  " + teamSpaces + Integer.toString(sortedTeamData[i].team) + spaces +
+                    "                                                                                 " +
+                    "   Matches Played: " + String.valueOf(sortedTeamData[i].numMatches) +
+                    "\n\nAAH: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoHigh / (double) sortedTeamData[i].numMatches) +
+                    "   AAL: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoLow / (double) sortedTeamData[i].numMatches) +
+                    "   AAC: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoCrossing / (double) sortedTeamData[i].numMatches) +
+                    "   ATH: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopHigh / (double) sortedTeamData[i].numMatches) +
+                    "   ATL: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopLow / (double) sortedTeamData[i].numMatches) +
+                    "   ATC: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopCrossing / (double) sortedTeamData[i].numMatches) +
+                    "   ATE: " + String.format("%.1f", (double) sortedTeamData[i].totalEndgame / (double) sortedTeamData[i].numMatches));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mRootView.getContext(),
                 android.R.layout.simple_list_item_1, teams);
 
         mListView.setAdapter(adapter);
+
+//        mListView.setAdapter(new StatisticsAdapter(getActivity(), totalTeamData));
     }
 
-    public class StatisticsAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return 0;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-
-            }
-
-
-            return convertView;
-        }
-    }
+//    public class StatisticsAdapter extends BaseAdapter {
+//
+//        Context context;
+//        TeamData[] totalTeamData;
+//        private LayoutInflater inflater;
+//
+//        public StatisticsAdapter(Activity context, TeamData[] td) {
+//            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            totalTeamData = td;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return 0;
+//        }
+//
+//        @Override
+//        public Object getItem(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(final int position, View convertView, ViewGroup parent) {
+////            if (convertView == null) {
+////
+////            }
+//
+//            View rowView = inflater.inflate(R.layout.stat_list_item, null);
+//
+//            TextView item = (TextView) rowView.findViewById(R.id.item_no);
+//            item.setText(String.valueOf(position));
+//
+//            TextView team_no = (TextView) rowView.findViewById(R.id.team_no);
+//            team_no.setText(String.valueOf(totalTeamData[position].team));
+//
+//            rowView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // TODO Auto-generated method stub
+//                    Toast.makeText(context, "You Clicked " + position, Toast.LENGTH_LONG).show();
+//                }
+//            });
+//
+//            return rowView;
+//        }
+//    }
 
     public class TeamData implements Comparable<TeamData> {
         public StatisticsFragment statisticsFragment;

@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -21,6 +22,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -32,6 +35,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.Inflater;
+
+import static android.net.Uri.encode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -127,6 +132,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.getTabAt(0).select();
+
+        Integer match_no = data.getIntExtra("match_no", 0);
+        Integer team = data.getIntExtra("team", 0);
+
+        Spinner teamSpinner = (Spinner) findViewById(R.id.team_spinner);
+        teamSpinner.setSelection(((ArrayAdapter) teamSpinner.getAdapter()).getPosition(team.toString()));
+
+        Spinner matchSpinner = (Spinner) findViewById(R.id.match_spinner);
+        matchSpinner.setSelection(((ArrayAdapter) matchSpinner.getAdapter()).getPosition(match_no.toString()));
+
+        mStandScoutingFragment.loadScreen();
+    }
+
     public class PagerAdapter extends FragmentStatePagerAdapter {
         int mNumOfTabs;
 
@@ -211,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                     dbHelper.insertStandScouting(row.getString("event"), row.getInt("match_no"),
                             row.getInt("team"), row.getInt("auto_high"), row.getInt("auto_low"),
                             row.getInt("auto_cross"), row.getInt("tele_high"), row.getInt("tele_low"),
-                            row.getInt("tele_cross"), row.getInt("endgame"));
+                            row.getInt("tele_cross"), row.getInt("endgame"), row.getString("comment"));
                 }
 
                 JSONArray localData = dbHelper.getData(getTitle().toString());
@@ -223,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
                     try {
                         String insertString = "http://76.179.97.182/insertData.php?" +
-                                "event=" + row.getString("event").replace(" ", "%20") +
+                                "event=" + encode(row.getString("event")) +
                                 "&match_no=" + row.getInt("match_no") +
                                 "&team=" + row.getInt("team") +
                                 "&auto_high=" + row.getInt("auto_high") +
@@ -232,7 +256,8 @@ public class MainActivity extends AppCompatActivity {
                                 "&tele_high=" + row.getInt("tele_high") +
                                 "&tele_low=" + row.getInt("tele_low") +
                                 "&tele_cross=" + row.getInt("tele_cross") +
-                                "&endgame=" + row.getInt("endgame");
+                                "&endgame=" + row.getInt("endgame") +
+                                "&comment=" + encode(row.getString("comment"));
 
                         // Do your long operations here and return the result
 

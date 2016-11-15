@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-
     tools:context="com.bertrobotics.bertscout2017.StatisticsFragment">
 
     <TextView
@@ -17,7 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true" />
 
     <ListView
         android:layout_width="wrap_content"
@@ -26,18 +26,20 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_alignParentLeft="true" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/sort_spinner"
-        android:minHeight="40dp"
+        android:minHeight="250dp"
         android:layout_alignBottom="@+id/textView"
         android:layout_alignParentStart="true"
         android:layout_marginRight="125dp"
         android:layout_marginLeft="175dp"
-        android:layout_marginTop="7dp" />
+        android:layout_marginTop="7dp"
+        android:layout_alignParentLeft="true" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -46,6 +48,7 @@
         android:layout_marginLeft="500dp"
         android:layout_alignTop="@+id/sort_spinner"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/sort_spinner" />
+        android:layout_alignBottom="@+id/sort_spinner"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>
