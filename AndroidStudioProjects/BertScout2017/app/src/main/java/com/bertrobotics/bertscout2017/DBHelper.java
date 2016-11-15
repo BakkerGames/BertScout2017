@@ -5,13 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -22,7 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context)
     {
-        super(context, DATABASE_NAME , null, 1);
+        super(context, DATABASE_NAME , null, 2);
     }
 
     @Override
@@ -35,12 +37,14 @@ public class DBHelper extends SQLiteOpenHelper {
                         "tele_low integer, tele_cross integer, endgame integer, " +
                         "PRIMARY KEY (event, match_no, team))"
         );
+        db.execSQL(DBContract.TablePitInfo.SQL_QUERY_CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
         db.execSQL("DROP TABLE IF EXISTS stand_scouting");
+        db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
         onCreate(db);
     }
 
@@ -141,4 +145,170 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return db.delete("stand_scouting", null, null);
     }
+
+    //
+    // Pit Scouting
+    //
+
+    public JSONArray getDataAllPit(String pEvent) {
+        JSONArray resultSet = new JSONArray();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor results = db.rawQuery(
+                "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
+                " WHERE event = '" + pEvent + "'" +
+                "", null);
+        results.moveToFirst();
+
+        while (results.isAfterLast() == false) {
+            int totalColumn = results.getColumnCount();
+            JSONObject rowObject = new JSONObject();
+
+            for (int i = 0; i < totalColumn; i++) {
+                if (results.getColumnName(i) != null) {
+                    try {
+                        switch (results.getColumnName(i)) {
+                            case DBContract.TablePitInfo._ID:
+                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
+                                rowObject.put(results.getColumnName(i), results.getInt(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
+                                rowObject.put(results.getColumnName(i), results.getString(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
+                                if (results.getInt(i) == 0) {
+                                    rowObject.put(results.getColumnName(i), false);
+                                } else {
+                                    rowObject.put(results.getColumnName(i), true);
+                                }
+                                break;
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+            resultSet.put(rowObject);
+            results.moveToNext();
+        }
+
+        results.close();
+        return resultSet;
+    }
+
+    public JSONObject getDataPit(String pEvent, int pTeam)
+    {
+        JSONObject rowObject = new JSONObject();
+
+        if (!Objects.equals(pEvent, "") && !Objects.equals(pTeam, ""))
+        {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor results = db.rawQuery(
+                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
+                            " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
+                            " AND " + DBContract.TablePitInfo.COLUMN_NAME_TEAM + " = " + pTeam +
+                            " ORDER BY " + DBContract.TablePitInfo.COLUMN_NAME_TEAM +
+                    "", null);
+            results.moveToFirst();
+
+            int totalColumn = results.getColumnCount();
+
+            for (int i = 0; i < totalColumn; i++) {
+                if (results.getColumnName(i) != null) {
+                    try {
+                        switch (results.getColumnName(i)) {
+                            case DBContract.TablePitInfo._ID:
+                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
+                                rowObject.put(results.getColumnName(i), results.getInt(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
+                                rowObject.put(results.getColumnName(i), results.getString(i));
+                                break;
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
+                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
+                                if (results.getInt(i) == 0) {
+                                    rowObject.put(results.getColumnName(i), false);
+                                } else {
+                                    rowObject.put(results.getColumnName(i), true);
+                                }
+                                break;
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+
+            results.close();
+        }
+
+        return rowObject;
+    }
+
+    public boolean updatePitInfo(JSONObject pitInfo) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        try {
+
+            contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_EVENT, pitInfo.getString(DBContract.TablePitInfo.COLUMN_NAME_EVENT));
+            contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_TEAM, pitInfo.getInt(DBContract.TablePitInfo.COLUMN_NAME_TEAM));
+
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, 0);
+            }
+
+            if (pitInfo.has(DBContract.TablePitInfo._ID)) {
+
+                db.update(
+                        DBContract.TablePitInfo.TABLE_NAME,
+                        contentValues,
+                        "_id = ?",
+                        new String[] {String.valueOf(pitInfo.getInt(DBContract.TablePitInfo._ID))}
+                );
+                return true;
+
+            } else {
+
+                long newID = db.insert(
+                        DBContract.TablePitInfo.TABLE_NAME,
+                        null,
+                        contentValues
+                );
+                if (newID > 0) {
+                    pitInfo.put(DBContract.TablePitInfo._ID, newID);
+                    return true;
+                }
+
+            }
+
+        } catch (JSONException e) {
+            return false;
+        }
+
+        return true;
+
+    }
+
 }
