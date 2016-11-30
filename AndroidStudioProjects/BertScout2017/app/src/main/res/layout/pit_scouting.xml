@@ -29,7 +29,9 @@
         android:textSize="30sp"
         android:minHeight="40sp"
         android:layout_above="@+id/pit_score_low_check"
+        android:layout_alignRight="@+id/pit_can_climb_check"
         android:layout_alignEnd="@+id/pit_can_climb_check"
+        android:layout_alignLeft="@+id/pit_can_block_check"
         android:layout_alignStart="@+id/pit_can_block_check" />
 
     <CheckBox
@@ -39,6 +41,7 @@
         android:id="@+id/pit_score_low_check"
         android:textAppearance="@style/CustomTextStyle"
         android:layout_below="@+id/team_label"
+        android:layout_alignLeft="@+id/team_label"
         android:layout_alignStart="@+id/team_label"
         android:layout_marginTop="30dp"
         android:fontFamily="sans-serif"
@@ -51,9 +54,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/pit_score_high_check"
         android:textAppearance="@style/CustomTextStyle"
+        android:layout_marginTop="11dp"
         android:layout_below="@+id/pit_score_low_check"
+        android:layout_alignLeft="@+id/pit_score_low_check"
         android:layout_alignStart="@+id/pit_score_low_check"
-        android:layout_marginTop="14dp"
+        android:fontFamily="sans-serif"
+        android:typeface="normal"
+        android:textSize="30sp" />
+
+    <CheckBox
+        android:text="Can Block?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_can_block_check"
+        android:textAppearance="@style/CustomTextStyle"
+        android:layout_above="@+id/pit_score_high_check"
+        android:layout_alignLeft="@+id/pit_can_climb_check"
+        android:layout_alignStart="@+id/pit_can_climb_check"
         android:fontFamily="sans-serif"
         android:typeface="normal"
         android:textSize="30sp" />
@@ -66,22 +83,88 @@
         android:textAppearance="@style/CustomTextStyle"
         android:layout_alignBaseline="@+id/pit_score_high_check"
         android:layout_alignBottom="@+id/pit_score_high_check"
+        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginRight="11dp"
         android:layout_marginEnd="11dp"
         android:fontFamily="sans-serif"
         android:typeface="normal"
         android:textSize="30sp" />
 
-    <CheckBox
-        android:text="Can Block?"
+    <TextView
+        android:text="Starting Positions:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pit_can_block_check"
+        android:layout_marginTop="11dp"
+        android:id="@+id/pit_start_position_label"
+        android:textSize="30sp"
+        android:layout_below="@+id/pit_score_high_check"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:text="Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_starting_left_check"
+        android:textSize="30sp"
+        android:layout_below="@+id/pit_start_position_label"
+        android:layout_alignLeft="@+id/pit_score_high_check"
+        android:layout_alignStart="@+id/pit_score_high_check" />
+
+    <CheckBox
+        android:text="Center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_starting_center_check"
+        android:textSize="30sp"
+        android:layout_below="@+id/pit_start_position_label"
+        android:layout_centerHorizontal="true" />
+
+    <CheckBox
+        android:text="Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_starting_right_check"
+        android:textSize="30sp"
+        android:layout_below="@+id/pit_start_position_label"
+        android:layout_alignRight="@+id/pit_can_climb_check"
+        android:layout_alignEnd="@+id/pit_can_climb_check" />
+
+    <CheckBox
+        android:text="Autonomous?"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_autonomous_check"
         android:textAppearance="@style/CustomTextStyle"
-        android:layout_above="@+id/pit_score_high_check"
-        android:layout_alignStart="@+id/pit_can_climb_check"
         android:fontFamily="sans-serif"
         android:typeface="normal"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:layout_below="@+id/pit_starting_left_check"
+        android:layout_alignLeft="@+id/pit_starting_left_check"
+        android:layout_alignStart="@+id/pit_starting_left_check"
+        android:layout_marginTop="11dp" />
+
+    <TextView
+        android:text="Comments:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_comments_label"
+        android:textSize="30sp"
+        android:layout_marginTop="11dp"
+        android:layout_below="@+id/pit_autonomous_check"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/pit_comments_text"
+        android:textSize="24sp"
+        android:inputType="textCapSentences|textMultiLine"
+        android:layout_below="@+id/pit_comments_label"
+        android:layout_alignLeft="@+id/pit_autonomous_check"
+        android:layout_alignStart="@+id/pit_autonomous_check"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
