@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.json.JSONArray;
@@ -13,13 +12,12 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "bert_scout.db";
     public static final String STAND_SCOUTING_TABLE_NAME = "stand_scouting";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     private HashMap hp;
 
@@ -50,6 +48,14 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
             onCreate(db);
             return;
+        }
+        if (oldVersion < 4)
+        {
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_START_LEFT);
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_START_CENTER);
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_START_RIGHT);
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_HAS_AUTONOMOUS);
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_PIT_COMMENT);
         }
     }
 
@@ -251,12 +257,17 @@ public class DBHelper extends SQLiteOpenHelper {
                                 rowObject.put(results.getColumnName(i), results.getInt(i));
                                 break;
                             case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
+                            case DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT:
                                 rowObject.put(results.getColumnName(i), results.getString(i));
                                 break;
                             case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
                             case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
                             case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
                             case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
+                            case DBContract.TablePitInfo.COLUMN_NAME_START_LEFT:
+                            case DBContract.TablePitInfo.COLUMN_NAME_START_CENTER:
+                            case DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT:
+                            case DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS:
                                 if (results.getInt(i) == 0) {
                                     rowObject.put(results.getColumnName(i), false);
                                 } else {
@@ -265,6 +276,7 @@ public class DBHelper extends SQLiteOpenHelper {
                                 break;
                         }
                     } catch (JSONException e) {
+                        return null;
                     }
                 }
             }
@@ -276,55 +288,60 @@ public class DBHelper extends SQLiteOpenHelper {
         return resultSet;
     }
 
-    public JSONObject getDataPit(String pEvent, int pTeam)
-    {
-        JSONObject rowObject = new JSONObject();
-
-        if (pEvent != "" && pTeam > 0)
-        {
-            SQLiteDatabase db = this.getReadableDatabase();
-            Cursor results = db.rawQuery(
-                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
-                            " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
-                            " AND " + DBContract.TablePitInfo.COLUMN_NAME_TEAM + " = " + pTeam +
-                            " ORDER BY " + DBContract.TablePitInfo.COLUMN_NAME_TEAM +
-                    "", null);
-            results.moveToFirst();
-
-            int totalColumn = results.getColumnCount();
-
-            for (int i = 0; i < totalColumn; i++) {
-                if (results.getColumnName(i) != null) {
-                    try {
-                        switch (results.getColumnName(i)) {
-                            case DBContract.TablePitInfo._ID:
-                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
-                                rowObject.put(results.getColumnName(i), results.getInt(i));
-                                break;
-                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
-                                rowObject.put(results.getColumnName(i), results.getString(i));
-                                break;
-                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
-                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
-                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
-                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
-                                if (results.getInt(i) == 0) {
-                                    rowObject.put(results.getColumnName(i), false);
-                                } else {
-                                    rowObject.put(results.getColumnName(i), true);
-                                }
-                                break;
-                        }
-                    } catch (JSONException e) {
-                    }
-                }
-            }
-
-            results.close();
-        }
-
-        return rowObject;
-    }
+//    public JSONObject getDataPit(String pEvent, int pTeam)
+//    {
+//        JSONObject rowObject = new JSONObject();
+//
+//        if (pEvent != "" && pTeam > 0)
+//        {
+//            SQLiteDatabase db = this.getReadableDatabase();
+//            Cursor results = db.rawQuery(
+//                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
+//                            " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
+//                            " AND " + DBContract.TablePitInfo.COLUMN_NAME_TEAM + " = " + pTeam +
+//                            " ORDER BY " + DBContract.TablePitInfo.COLUMN_NAME_TEAM +
+//                    "", null);
+//            results.moveToFirst();
+//
+//            int totalColumn = results.getColumnCount();
+//
+//            for (int i = 0; i < totalColumn; i++) {
+//                if (results.getColumnName(i) != null) {
+//                    try {
+//                        switch (results.getColumnName(i)) {
+//                            case DBContract.TablePitInfo._ID:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
+//                                rowObject.put(results.getColumnName(i), results.getInt(i));
+//                                break;
+//                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT:
+//                                rowObject.put(results.getColumnName(i), results.getString(i));
+//                                break;
+//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_START_LEFT:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_START_CENTER:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT:
+//                            case DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS:
+//                                if (results.getInt(i) == 0) {
+//                                    rowObject.put(results.getColumnName(i), false);
+//                                } else {
+//                                    rowObject.put(results.getColumnName(i), true);
+//                                }
+//                                break;
+//                        }
+//                    } catch (JSONException e) {
+//                    }
+//                }
+//            }
+//
+//            results.close();
+//        }
+//
+//        return rowObject;
+//    }
 
     public boolean updatePitInfo(JSONObject pitInfo) {
 
@@ -356,6 +373,29 @@ public class DBHelper extends SQLiteOpenHelper {
             } else {
                 contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, 0);
             }
+
+            // version 4
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT, 0);
+            }
+            if (pitInfo.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS)) {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS, 1);
+            } else {
+                contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS, 0);
+            }
+            contentValues.put(DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT, pitInfo.getString(DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT));
 
             if (pitInfo.has(DBContract.TablePitInfo._ID)) {
 

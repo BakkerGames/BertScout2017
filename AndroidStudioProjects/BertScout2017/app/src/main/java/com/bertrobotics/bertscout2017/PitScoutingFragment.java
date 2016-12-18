@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
@@ -66,6 +67,11 @@ public class PitScoutingFragment extends Fragment {
                         currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH, false);
                         currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK, false);
                         currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB, false);
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT, false);
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER, false);
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT, false);
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS, false);
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT, "");
                         currPitInfoArray.put(currTeam);
                         currPitInfoIndex = currPitInfoArray.length() - 1;
                     } catch (JSONException e) {
@@ -145,6 +151,84 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
+        final CheckBox startLeftCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_left_check);
+        startLeftCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT) != startLeftCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT, startLeftCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+        });
+
+        final CheckBox startCenterCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_center_check);
+        startCenterCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER) != startCenterCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER, startCenterCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+        });
+
+        final CheckBox startRightCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_right_check);
+        startRightCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT) != startRightCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT, startRightCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+        });
+
+        final CheckBox hasAutonomousCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_has_autonomous_check);
+        hasAutonomousCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS) != hasAutonomousCheckBox.isChecked()) {
+                            currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS, hasAutonomousCheckBox.isChecked());
+                            dbHelper.updatePitInfo(currTeam);
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+        });
+
+        final EditText pitCommentEditText = (EditText) mRootView.findViewById(R.id.pit_comments_text);
+        pitCommentEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    try {
+                        currTeam.put(DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT, pitCommentEditText.getText());
+                        dbHelper.updatePitInfo(currTeam);
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+        });
+
         buildTeamSpinner("north_shore");
 
         return mRootView;
@@ -164,6 +248,21 @@ public class PitScoutingFragment extends Fragment {
 
             CheckBox canClimbCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_can_climb_check);
             canClimbCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB));
+
+            CheckBox startLeftCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_left_check);
+            startLeftCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_LEFT));
+
+            CheckBox startCenterCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_center_check);
+            startCenterCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_CENTER));
+
+            CheckBox startRightCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_right_check);
+            startRightCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT));
+
+            CheckBox hasAutonomousCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_has_autonomous_check);
+            hasAutonomousCheckBox.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS));
+
+            EditText pitCommentEditText = (EditText) mRootView.findViewById(R.id.pit_comments_text);
+            pitCommentEditText.setText(currTeam.getString(DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT));
 
         } catch (JSONException e) {
         }
@@ -208,6 +307,21 @@ public class PitScoutingFragment extends Fragment {
 
         CheckBox canClimbCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_can_climb_check);
         canClimbCheckBox.setChecked(false);
+
+        CheckBox startLeftCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_left_check);
+        startLeftCheckBox.setChecked(false);
+
+        CheckBox startCenterCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_center_check);
+        startCenterCheckBox.setChecked(false);
+
+        CheckBox startRightCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_start_right_check);
+        startRightCheckBox.setChecked(false);
+
+        CheckBox hasAutonomousCheckBox = (CheckBox) mRootView.findViewById(R.id.pit_has_autonomous_check);
+        hasAutonomousCheckBox.setChecked(false);
+
+        EditText pitCommentEditText = (EditText) mRootView.findViewById(R.id.pit_comments_text);
+        pitCommentEditText.setText("");
 
     }
 
