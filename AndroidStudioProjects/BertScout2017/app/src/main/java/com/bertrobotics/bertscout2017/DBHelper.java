@@ -19,12 +19,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "bert_scout.db";
     public static final String STAND_SCOUTING_TABLE_NAME = "stand_scouting";
+    private static final int DATABASE_VERSION = 3;
 
     private HashMap hp;
 
     public DBHelper(Context context)
     {
-        super(context, DATABASE_NAME , null, 2);
+        super(context, DATABASE_NAME , null, DATABASE_VERSION);
     }
 
     @Override
@@ -43,9 +44,13 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS stand_scouting");
-        db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
-        onCreate(db);
+        if (oldVersion < 3)
+        {
+            db.execSQL("DROP TABLE IF EXISTS stand_scouting");
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
+            onCreate(db);
+            return;
+        }
     }
 
     public JSONArray getData(String pEvent){
@@ -78,7 +83,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         results.close();
+
         return resultSet;
+
     }
 
     public JSONArray getTeamData(String pEvent, Integer pTeam){
@@ -227,7 +234,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor results = db.rawQuery(
                 "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
-                " WHERE event = '" + pEvent + "'" +
+                " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
                 "", null);
         results.moveToFirst();
 
@@ -273,7 +280,7 @@ public class DBHelper extends SQLiteOpenHelper {
     {
         JSONObject rowObject = new JSONObject();
 
-        if (!Objects.equals(pEvent, "") && !Objects.equals(pTeam, ""))
+        if (pEvent != "" && pTeam > 0)
         {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor results = db.rawQuery(

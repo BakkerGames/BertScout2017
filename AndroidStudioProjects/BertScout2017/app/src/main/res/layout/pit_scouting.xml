@@ -102,35 +102,6 @@
         android:layout_centerHorizontal="true" />
 
     <CheckBox
-        android:text="Left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pit_starting_left_check"
-        android:textSize="30sp"
-        android:layout_below="@+id/pit_start_position_label"
-        android:layout_alignLeft="@+id/pit_score_high_check"
-        android:layout_alignStart="@+id/pit_score_high_check" />
-
-    <CheckBox
-        android:text="Center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pit_starting_center_check"
-        android:textSize="30sp"
-        android:layout_below="@+id/pit_start_position_label"
-        android:layout_centerHorizontal="true" />
-
-    <CheckBox
-        android:text="Right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/pit_starting_right_check"
-        android:textSize="30sp"
-        android:layout_below="@+id/pit_start_position_label"
-        android:layout_alignRight="@+id/pit_can_climb_check"
-        android:layout_alignEnd="@+id/pit_can_climb_check" />
-
-    <CheckBox
         android:text="Autonomous?"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -166,5 +137,36 @@
         android:layout_alignStart="@+id/pit_autonomous_check"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <CheckBox
+        android:text="Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_starting_left_check"
+        android:textSize="30sp"
+        android:layout_below="@+id/pit_start_position_label"
+        android:layout_alignLeft="@+id/pit_score_high_check"
+        android:layout_alignStart="@+id/pit_score_high_check"
+        android:layout_marginTop="11dp" />
+
+    <CheckBox
+        android:text="Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_starting_right_check"
+        android:textSize="30sp"
+        android:layout_alignBaseline="@+id/pit_starting_center_check"
+        android:layout_alignBottom="@+id/pit_starting_center_check"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <CheckBox
+        android:text="Center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pit_starting_center_check"
+        android:textSize="30sp"
+        android:layout_above="@+id/pit_autonomous_check"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
