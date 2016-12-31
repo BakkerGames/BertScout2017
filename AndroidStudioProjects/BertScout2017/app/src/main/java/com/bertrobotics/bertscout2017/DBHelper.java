@@ -235,13 +235,23 @@ public class DBHelper extends SQLiteOpenHelper {
     //
 
     public JSONArray getDataAllPit(String pEvent) {
-        JSONArray resultSet = new JSONArray();
 
+        JSONArray resultSet = new JSONArray();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor results = db.rawQuery(
-                "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
-                " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
-                "", null);
+        Cursor results;
+
+        if (pEvent == "")
+        {
+            results = db.rawQuery(
+                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME, null);
+        }
+        else
+        {
+            results = db.rawQuery(
+                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
+                            " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
+                            "", null);
+        }
         results.moveToFirst();
 
         while (results.isAfterLast() == false) {
@@ -287,61 +297,6 @@ public class DBHelper extends SQLiteOpenHelper {
         results.close();
         return resultSet;
     }
-
-//    public JSONObject getDataPit(String pEvent, int pTeam)
-//    {
-//        JSONObject rowObject = new JSONObject();
-//
-//        if (pEvent != "" && pTeam > 0)
-//        {
-//            SQLiteDatabase db = this.getReadableDatabase();
-//            Cursor results = db.rawQuery(
-//                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME +
-//                            " WHERE " + DBContract.TablePitInfo.COLUMN_NAME_EVENT + " = '" + pEvent + "'" +
-//                            " AND " + DBContract.TablePitInfo.COLUMN_NAME_TEAM + " = " + pTeam +
-//                            " ORDER BY " + DBContract.TablePitInfo.COLUMN_NAME_TEAM +
-//                    "", null);
-//            results.moveToFirst();
-//
-//            int totalColumn = results.getColumnCount();
-//
-//            for (int i = 0; i < totalColumn; i++) {
-//                if (results.getColumnName(i) != null) {
-//                    try {
-//                        switch (results.getColumnName(i)) {
-//                            case DBContract.TablePitInfo._ID:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_TEAM:
-//                                rowObject.put(results.getColumnName(i), results.getInt(i));
-//                                break;
-//                            case DBContract.TablePitInfo.COLUMN_NAME_EVENT:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_PIT_COMMENT:
-//                                rowObject.put(results.getColumnName(i), results.getString(i));
-//                                break;
-//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_LOW:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_SCORE_HIGH:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_BLOCK:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_CAN_CLIMB:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_START_LEFT:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_START_CENTER:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_START_RIGHT:
-//                            case DBContract.TablePitInfo.COLUMN_NAME_HAS_AUTONOMOUS:
-//                                if (results.getInt(i) == 0) {
-//                                    rowObject.put(results.getColumnName(i), false);
-//                                } else {
-//                                    rowObject.put(results.getColumnName(i), true);
-//                                }
-//                                break;
-//                        }
-//                    } catch (JSONException e) {
-//                    }
-//                }
-//            }
-//
-//            results.close();
-//        }
-//
-//        return rowObject;
-//    }
 
     public boolean updatePitInfo(JSONObject pitInfo) {
 

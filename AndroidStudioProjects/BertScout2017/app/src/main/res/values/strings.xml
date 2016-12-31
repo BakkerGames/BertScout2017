@@ -3,5 +3,6 @@
     <string name="north_shore">North Shore</string>
     <string name="pine_tree">Pine Tree</string>
     <string name="sync_data">Sync Data</string>
+    <string name="export_data">Export Data</string>
     <string name="clear_data">Clear Data</string>
 </resources>

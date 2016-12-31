@@ -31,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     View mRootView;
 
     public DBHelper dbHelper;
+    public ExportData exportData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.sync_data:
                 openSyncDataDialog(mRootView);
+                break;
+            case R.id.export_data:
+                openExportDataDialog(mRootView);
                 break;
             case R.id.clear_data:
                 openClearDataDialog(mRootView);
@@ -305,6 +310,43 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void openExportDataDialog(final View view){
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Export data for " + getTitle() + "?");
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                ExportData exportData = new ExportData();
+                String result;
+                try
+                {
+                    JSONArray currPitInfoArray = dbHelper.getDataAllPit("");
+                    String pitOutFilename = exportData.getDocumentStorageDir() + "/" + DBContract.TablePitInfo.TABLE_NAME + ".json";
+                    exportData.ExportData(pitOutFilename, currPitInfoArray);
+                    result = "Export done!";
+                } catch (Exception e) {
+                    result = "Error during export";
+                }
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, result, duration);
+                toast.show();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public void openClearDataDialog(final View view){
