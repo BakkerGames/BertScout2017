@@ -39,7 +39,7 @@ public class TeamDetails extends AppCompatActivity {
         int team = intent.getIntExtra("team", 0);
 
 
-        data = dbHelper.getTeamData(event, team);
+//        data = dbHelper.getTeamData(event, team);
 
         ArrayList<String> teamDetailsArray = new ArrayList<String>();
 

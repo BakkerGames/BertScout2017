@@ -1,13 +1,10 @@
 package com.bertrobotics.bertscout2017;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,7 +16,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,12 +27,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.zip.Inflater;
 
 import static android.net.Uri.encode;
 
@@ -49,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     View mRootView;
 
     public DBHelper dbHelper;
-    public ExportData exportData;
+//    public ExportData exportData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
         mRootView = findViewById(R.id.main_layout);
 
         mStatisticsFragment = new StatisticsFragment();
-        mStandScoutingFragment = new StandScoutingFragment(mStatisticsFragment);
-        mPitScoutingFragment = new PitScoutingFragment(mStatisticsFragment);
+        //mStandScoutingFragment = new StandScoutingFragment(mStatisticsFragment);
+        mStandScoutingFragment = new StandScoutingFragment();
+//        mPitScoutingFragment = new PitScoutingFragment(mStatisticsFragment);
+        mPitScoutingFragment = new PitScoutingFragment();
 
         dbHelper = new DBHelper(this);
 
@@ -111,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.north_shore:
                 setTitle("North Shore");
 
-                mStandScoutingFragment.buildMatchSpinner("north_shore");
+//                mStandScoutingFragment.buildMatchSpinner("north_shore");
                 mStandScoutingFragment.buildTeamSpinner("north_shore");
 
                 mPitScoutingFragment.buildTeamSpinner("north_shore");
@@ -121,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.pine_tree:
                 setTitle("Pine Tree");
 
-                mStandScoutingFragment.buildMatchSpinner("pine_tree");
+//                mStandScoutingFragment.buildMatchSpinner("pine_tree");
                 mStandScoutingFragment.buildTeamSpinner("pine_tree");
 
                 mPitScoutingFragment.buildTeamSpinner("pine_tree");
@@ -155,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
         Spinner teamSpinner = (Spinner) findViewById(R.id.team_spinner);
         teamSpinner.setSelection(((ArrayAdapter) teamSpinner.getAdapter()).getPosition(team.toString()));
 
-        Spinner matchSpinner = (Spinner) findViewById(R.id.match_spinner);
-        matchSpinner.setSelection(((ArrayAdapter) matchSpinner.getAdapter()).getPosition(match_no.toString()));
+//        Spinner matchSpinner = (Spinner) findViewById(R.id.match_spinner);
+//        matchSpinner.setSelection(((ArrayAdapter) matchSpinner.getAdapter()).getPosition(match_no.toString()));
 
         mStandScoutingFragment.loadScreen();
     }
@@ -242,13 +238,10 @@ public class MainActivity extends AppCompatActivity {
 
                 for (int i = 0; i < remoteData.length(); i++) {
                     JSONObject row = remoteData.getJSONObject(i);
-                    dbHelper.insertStandScouting(row.getString("event"), row.getInt("match_no"),
-                            row.getInt("team"), row.getInt("auto_high"), row.getInt("auto_low"),
-                            row.getInt("auto_cross"), row.getInt("tele_high"), row.getInt("tele_low"),
-                            row.getInt("tele_cross"), row.getInt("endgame"), row.getString("comment"));
+                    dbHelper.updateStandInfo(row);
                 }
 
-                JSONArray localData = dbHelper.getData(getTitle().toString());
+                JSONArray localData = dbHelper.getDataAllStand(getTitle().toString());
 
                 String insertResult;
 
@@ -315,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
     public void openExportDataDialog(final View view){
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Export data for " + getTitle() + "?");
+        alertDialogBuilder.setMessage("Export data to Documents folder?");
 
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -324,15 +317,20 @@ public class MainActivity extends AppCompatActivity {
                 String result;
                 try
                 {
-                    JSONArray currPitInfoArray = dbHelper.getDataAllPit("");
-                    String pitOutFilename = exportData.getDocumentStorageDir() + "/" + DBContract.TablePitInfo.TABLE_NAME + ".json";
+                    JSONArray currStandInfoArray = dbHelper.getDataAllStand(getTitle().toString());
+                    String standOutFilename = exportData.getDocumentStorageDir() + "/" +
+                            DBContract.TableStandInfo.TABLE_NAME_STAND + ".json";
+                    exportData.ExportData(standOutFilename, currStandInfoArray);
+                    JSONArray currPitInfoArray = dbHelper.getDataAllPit(""); // ### getTitle().toString()
+                    String pitOutFilename = exportData.getDocumentStorageDir() + "/" +
+                            DBContract.TablePitInfo.TABLE_NAME_PIT + ".json";
                     exportData.ExportData(pitOutFilename, currPitInfoArray);
                     result = "Export done!";
                 } catch (Exception e) {
                     result = "Error during export";
                 }
                 Context context = getApplicationContext();
-                int duration = Toast.LENGTH_SHORT;
+                int duration = Toast.LENGTH_LONG;
                 Toast toast = Toast.makeText(context, result, duration);
                 toast.show();
             }
@@ -350,21 +348,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openClearDataDialog(final View view){
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Clear all data?");
 
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                AsyncTaskClearData clearData = new AsyncTaskClearData(view.getContext());
-                clearData.execute();
+                String result;
+                try
+                {
+                    dbHelper.deleteStandScouting();
+                    dbHelper.deletePitInfo();
+                    result = "Clear done!";
+                } catch (Exception e) {
+                    result = "Error during clear";
+                }
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, result, duration);
+                toast.show();
             }
         });
 
         alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                // do nothing
             }
         });
 
@@ -372,42 +382,67 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private class AsyncTaskClearData extends AsyncTask<String, Void, String> {
 
-        ProgressDialog progress;
 
-        private AsyncTaskClearData(Context context) {
-            progress = new ProgressDialog(context);
-        }
+//    public void openClearDataDialog(final View view){
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage("Clear all data?");
+//
+//        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface arg0, int arg1) {
+//                AsyncTaskClearData clearData = new AsyncTaskClearData(view.getContext());
+//                clearData.execute();
+//            }
+//        });
+//
+//        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // do nothing
+//            }
+//        });
+//
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
+//    }
 
-        @Override
-        protected void onPreExecute() {
-            progress.setTitle("Saving");
-            progress.setMessage("Please wait...");
-            progress.show();
-        }
+//    private class AsyncTaskClearData extends AsyncTask<String, Void, String> {
+//
+//        ProgressDialog progress;
+//
+//        private AsyncTaskClearData(Context context) {
+//            progress = new ProgressDialog(context);
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            progress.setTitle("Saving");
+//            progress.setMessage("Please wait...");
+//            progress.show();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            try {
+//                dbHelper.deleteStandScouting();
+//                dbHelper.deletePitInfo();
+//            } catch (Exception e) {
+//                return "Failure";
+//            }
+//            return "Success";
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            mStatisticsFragment.populateList();
+//
+//            progress.dismiss();
+//
+//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                dbHelper.deleteStandScouting();
-
-            } catch (Exception e) {
-                return "Failure";
-            }
-
-            return "Success";
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            mStatisticsFragment.populateList();
-
-            progress.dismiss();
-
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-        }
-    }
 }
