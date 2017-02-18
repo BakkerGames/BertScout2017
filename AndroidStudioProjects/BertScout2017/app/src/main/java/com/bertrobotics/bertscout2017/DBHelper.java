@@ -3,7 +3,6 @@ package com.bertrobotics.bertscout2017;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -11,14 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import java.util.HashMap;
-
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "bert_scout.db";
-    private static final int DATABASE_VERSION = 10;
-
-    private HashMap hp;
+    public static final int DATABASE_VERSION = 18;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,37 +29,29 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
-        if (oldVersion < 10) {
+        if (oldVersion < DATABASE_VERSION) {
             db.execSQL(DBContract.TableStandInfo.SQL_QUERY_DELETE_TABLE);
             db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
             onCreate(db);
             return;
         }
-//        if (oldVersion < 4)
-//        {
-//            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_START_LEFT);
-//            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_START_CENTER);
-//            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_START_RIGHT);
-//            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_HAS_AUTONOMOUS);
-//            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_UPGRADE_VER_4_PIT_COMMENT);
-//        }
     }
 
-    public JSONArray getDataAllStand(String pEvent) {
+    public JSONArray getDataAllStand() {
 
         JSONArray resultSet = new JSONArray();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor results;
 
-        if (pEvent == "") {
+//        if (pEvent == "") {
             results = db.rawQuery(
                     "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND, null);
-        } else {
-            results = db.rawQuery(
-                    "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND +
-                            " WHERE " + DBContract.TableStandInfo.COLNAME_STAND_EVENT + " = '" + pEvent + "'" +
-                            "", null);
-        }
+//        } else {
+//            results = db.rawQuery(
+//                    "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND +
+//                            " WHERE " + DBContract.TableStandInfo.COLNAME_STAND_EVENT + " = '" + pEvent + "'" +
+//                            "", null);
+//        }
         results.moveToFirst();
 
         while (!results.isAfterLast()) {
@@ -78,35 +65,38 @@ public class DBHelper extends SQLiteOpenHelper {
                             case DBContract.TableStandInfo._ID:
                             case DBContract.TableStandInfo.COLNAME_STAND_MATCH:
                             case DBContract.TableStandInfo.COLNAME_STAND_TEAM:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_SCORE_HIGH:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_SCORE_LOW:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_GEARS_RECEIVED:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_GEARS_PLACED:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_CLIMB_TIME:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_HUMAN_SPEED:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_PILOT_SPEED:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_PENALTIES:
+                            case DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH:
+                            case DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES:
                                 rowObject.put(results.getColumnName(i), results.getInt(i));
                                 break;
-                            case DBContract.TableStandInfo.COLNAME_STAND_EVENT:
+//                            case DBContract.TableStandInfo.COLNAME_STAND_EVENT:
+//                            case DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME:
                             case DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE:
-                            case DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME:
                             case DBContract.TableStandInfo.COLNAME_STAND_COMMENT:
                                 rowObject.put(results.getColumnName(i), results.getString(i));
                                 break;
                             case DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE:
-                            case DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH:
-                            case DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW:
                             case DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR:
                             case DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_CLIMBED:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELE_TOUCHPAD:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED:
+                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD:
                                 if (results.getInt(i) == 0) {
                                     rowObject.put(results.getColumnName(i), false);
                                 } else {
                                     rowObject.put(results.getColumnName(i), true);
                                 }
                                 break;
+//                                if (results.getString(i).toLowerCase() != "blue") {
+//                                    rowObject.put(results.getColumnName(i), "Red");
+//                                } else {
+//                                    rowObject.put(results.getColumnName(i), "Blue");
+//                                }
+//                                break;
                         }
                     } catch (JSONException e) {
                         return null;
@@ -128,30 +118,27 @@ public class DBHelper extends SQLiteOpenHelper {
 
         try {
 
-            SetStringValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_EVENT);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_MATCH);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TEAM);
-            SetStringValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE);
-            SetStringValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME);
+//            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_EVENT, standInfo.getString(DBContract.TableStandInfo.COLNAME_STAND_EVENT));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_MATCH, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TEAM, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, standInfo.getString(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE));
+//            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, standInfo.getString(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME));
 
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE);
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH);
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW);
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR);
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER);
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE, standInfo.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR, standInfo.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER, standInfo.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER));
 
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_SCORE_HIGH);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_SCORE_LOW);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_GEARS_RECEIVED);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_GEARS_PLACED);
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_CLIMBED);
-            SetBooleanValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_TOUCHPAD);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_CLIMB_TIME);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_HUMAN_SPEED);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_PILOT_SPEED);
-            SetIntegerValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_TELE_PENALTIES);
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED, standInfo.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED));
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD, standInfo.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD));
 
-            SetStringValue(standInfo, contentValues, DBContract.TableStandInfo.COLNAME_STAND_COMMENT);
+            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_COMMENT, standInfo.getString(DBContract.TableStandInfo.COLNAME_STAND_COMMENT));
 
             if (standInfo.has(DBContract.TableStandInfo._ID)) {
 
@@ -185,75 +172,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-//    public JSONArray getTeamData(String pEvent, Integer pTeam){
-//        JSONArray resultSet = new JSONArray();
-//
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor results =  db.rawQuery("SELECT * FROM stand_scouting WHERE event = '" + pEvent + "' AND team = " + pTeam, null);
-//        results.moveToFirst();
-//
-//        while (!results.isAfterLast()) {
-//            int totalColumn = results.getColumnCount();
-//            JSONObject rowObject = new JSONObject();
-//
-//            for(int i = 0; i < totalColumn; i++) {
-//                if(results.getColumnName(i) != null) {
-//                    try {
-//                        if(results.getString(i) != null) {
-//                            rowObject.put(results.getColumnName(i) ,  results.getString(i) );
-//                        } else {
-//                            rowObject.put(results.getColumnName(i) ,  "" );
-//                        }
-//                    } catch( Exception e ) {
-//
-//                    }
-//                }
-//            }
-//
-//            resultSet.put(rowObject);
-//            results.moveToNext();
-//        }
-//
-//        results.close();
-//        return resultSet;
-//    }
-//
-//
-//    public JSONArray getMatchData(String pEvent, Integer match_no, Integer team){
-//        JSONArray resultSet = new JSONArray();
-//
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor results =  db.rawQuery("SELECT * FROM stand_scouting WHERE event = '" + pEvent +
-//                                "' AND match_no = " + match_no + " AND team = " + team, null);
-//        results.moveToFirst();
-//
-//        int totalColumn = results.getColumnCount();
-//        JSONObject rowObject = new JSONObject();
-//
-//        for(int i = 0; i < totalColumn; i++) {
-//            if(results.getColumnName(i) != null) {
-//                try {
-//                    if(results.getString(i) != null) {
-//                        rowObject.put(results.getColumnName(i) ,  results.getString(i) );
-//                    } else {
-//                        rowObject.put(results.getColumnName(i) ,  "" );
-//                    }
-//                } catch( Exception e ) {
-//
-//                }
-//            }
-//        }
-//
-//        rowObject.length();
-//
-//        if (rowObject.length() != 0) {
-//            resultSet.put(rowObject);
-//        }
-//
-//        results.close();
-//        return resultSet;
-//    }
-
     public Integer deleteStandScouting() {
         SQLiteDatabase db = this.getWritableDatabase();
         int result;
@@ -271,31 +189,25 @@ public class DBHelper extends SQLiteOpenHelper {
         return result;
     }
 
-//    public int numberOfRows(){
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        int numRows = (int) DatabaseUtils.queryNumEntries(db, DBContract.TableStandInfo.TABLE_NAME_STAND);
-//        return numRows;
-//    }
-
     //
     // Pit Scouting
     //
 
-    public JSONArray getDataAllPit(String pEvent) {
+    public JSONArray getDataAllPit() {
 
         JSONArray resultSet = new JSONArray();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor results;
 
-        if (pEvent == "") {
+//        if (pEvent == "") {
             results = db.rawQuery(
                     "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME_PIT, null);
-        } else {
-            results = db.rawQuery(
-                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME_PIT +
-                            " WHERE " + DBContract.TablePitInfo.COLNAME_PIT_EVENT + " = '" + pEvent + "'" +
-                            "", null);
-        }
+//        } else {
+//            results = db.rawQuery(
+//                    "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME_PIT +
+//                            " WHERE " + DBContract.TablePitInfo.COLNAME_PIT_EVENT + " = '" + pEvent + "'" +
+//                            "", null);
+//        }
         results.moveToFirst();
 
         while (!results.isAfterLast()) {
@@ -320,8 +232,8 @@ public class DBHelper extends SQLiteOpenHelper {
                             case DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING:
                                 rowObject.put(results.getColumnName(i), results.getInt(i));
                                 break;
-                            case DBContract.TablePitInfo.COLNAME_PIT_EVENT:
-                            case DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME:
+//                            case DBContract.TablePitInfo.COLNAME_PIT_EVENT:
+//                            case DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME:
                             case DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE:
                             case DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT:
                             case DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION:
@@ -371,9 +283,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         try {
 
-            SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_EVENT);
+//            SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_EVENT);
             SetIntegerValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_TEAM);
-            SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME);
+//            SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME);
 
             SetIntegerValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS);
             SetIntegerValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS);

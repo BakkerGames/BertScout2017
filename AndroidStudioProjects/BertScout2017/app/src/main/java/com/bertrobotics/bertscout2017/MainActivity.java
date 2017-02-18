@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         mRootView = findViewById(R.id.main_layout);
 
         mStatisticsFragment = new StatisticsFragment();
-        //mStandScoutingFragment = new StandScoutingFragment(mStatisticsFragment);
         mStandScoutingFragment = new StandScoutingFragment();
+//        mStandScoutingFragment = new StandScoutingFragment();
 //        mPitScoutingFragment = new PitScoutingFragment(mStatisticsFragment);
         mPitScoutingFragment = new PitScoutingFragment();
 
@@ -108,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
                 setTitle("North Shore");
 
 //                mStandScoutingFragment.buildMatchSpinner("north_shore");
-                mStandScoutingFragment.buildTeamSpinner("north_shore");
+                mStandScoutingFragment.buildStandTeamSpinner("teams_list");
 
-                mPitScoutingFragment.buildTeamSpinner("north_shore");
+                mPitScoutingFragment.buildPitTeamSpinner("teams_list");
 
                 mStatisticsFragment.populateList();
                 break;
@@ -118,9 +118,9 @@ public class MainActivity extends AppCompatActivity {
                 setTitle("Pine Tree");
 
 //                mStandScoutingFragment.buildMatchSpinner("pine_tree");
-                mStandScoutingFragment.buildTeamSpinner("pine_tree");
+                mStandScoutingFragment.buildStandTeamSpinner("teams_list");
 
-                mPitScoutingFragment.buildTeamSpinner("pine_tree");
+                mPitScoutingFragment.buildPitTeamSpinner("teams_list");
 
                 mStatisticsFragment.populateList();
                 break;
@@ -145,16 +145,16 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.getTabAt(0).select();
 
-        Integer match_no = data.getIntExtra("match_no", 0);
-        Integer team = data.getIntExtra("team", 0);
-
-        Spinner teamSpinner = (Spinner) findViewById(R.id.team_spinner);
-        teamSpinner.setSelection(((ArrayAdapter) teamSpinner.getAdapter()).getPosition(team.toString()));
+//        Integer match_no = data.getIntExtra("match_no", 0);
+//        Integer team = data.getIntExtra("team", 0);
+//
+//        Spinner standTeamSpinner = (Spinner) findViewById(R.id.stand_team_spinner);
+//        standTeamSpinner.setSelection(((ArrayAdapter) standTeamSpinner.getAdapter()).getPosition(team.toString()));
 
 //        Spinner matchSpinner = (Spinner) findViewById(R.id.match_spinner);
 //        matchSpinner.setSelection(((ArrayAdapter) matchSpinner.getAdapter()).getPosition(match_no.toString()));
 
-        mStandScoutingFragment.loadScreen();
+//        mStandScoutingFragment.loadScreen();
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     dbHelper.updateStandInfo(row);
                 }
 
-                JSONArray localData = dbHelper.getDataAllStand(getTitle().toString());
+                JSONArray localData = dbHelper.getDataAllStand();
 
                 String insertResult;
 
@@ -317,14 +317,22 @@ public class MainActivity extends AppCompatActivity {
                 String result;
                 try
                 {
-                    JSONArray currStandInfoArray = dbHelper.getDataAllStand(getTitle().toString());
+                    // stand info
+                    JSONObject standInfo = new JSONObject();
+                    standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+                    JSONArray currStandInfoArray = dbHelper.getDataAllStand();
+                    standInfo.put("stand_data", currStandInfoArray);
                     String standOutFilename = exportData.getDocumentStorageDir() + "/" +
                             DBContract.TableStandInfo.TABLE_NAME_STAND + ".json";
-                    exportData.ExportData(standOutFilename, currStandInfoArray);
-                    JSONArray currPitInfoArray = dbHelper.getDataAllPit(""); // ### getTitle().toString()
+                    exportData.ExportData(standOutFilename, standInfo);
+                    // pit info
+                    JSONObject pitInfo = new JSONObject();
+                    pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+                    JSONArray currPitInfoArray = dbHelper.getDataAllPit();
+                    pitInfo.put("pit_data", currPitInfoArray);
                     String pitOutFilename = exportData.getDocumentStorageDir() + "/" +
                             DBContract.TablePitInfo.TABLE_NAME_PIT + ".json";
-                    exportData.ExportData(pitOutFilename, currPitInfoArray);
+                    exportData.ExportData(pitOutFilename, pitInfo);
                     result = "Export done!";
                 } catch (Exception e) {
                     result = "Error during export";

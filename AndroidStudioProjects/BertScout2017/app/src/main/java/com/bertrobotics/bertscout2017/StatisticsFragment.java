@@ -117,7 +117,7 @@ public class StatisticsFragment extends Fragment {
 
         String event = mActivity.getTitle().toString();
 
-        JSONArray data = dbHelper.getDataAllStand(event);
+        JSONArray data = dbHelper.getDataAllStand();
 
         ArrayList<String> teams = new ArrayList<String>();
 

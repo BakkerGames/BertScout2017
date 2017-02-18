@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -32,7 +31,7 @@ public class PitScoutingFragment extends Fragment {
     public int currPitInfoIndex;
     public JSONObject currTeam;
 
-    private boolean fillingInfo = false;
+    private boolean fillingPitInfo = false;
 
 //    StatisticsFragment mStatisticsFragment;
 
@@ -46,19 +45,29 @@ public class PitScoutingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         mRootView = inflater.inflate(R.layout.pit_scouting, container, false);
         dbHelper = new DBHelper(mRootView.getContext());
 
-        final Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
-        teamSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        final Button pitOKButton = (Button) mRootView.findViewById(R.id.stand_ok_btn);
+        pitOKButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onClick(View view) {
 
                 currPitInfoIndex = -1;
-                clearScreen();
+                clearPitScreen();
 
-                int teamNumber = Integer.parseInt((String) teamSpinner.getSelectedItem());
+                int teamNumber;
+                try {
+                    TextView teamText = (TextView) mRootView.findViewById(R.id.pit_team_number);
+                    teamNumber = Integer.parseInt(teamText.getText().toString());
+                } catch (Exception e) {
+                    return;
+                }
+
+                currPitInfoArray = dbHelper.getDataAllPit();
+
                 for (int i = 0; i < currPitInfoArray.length(); i++) {
                     try {
                         currTeam = currPitInfoArray.getJSONObject(i);
@@ -73,9 +82,9 @@ public class PitScoutingFragment extends Fragment {
                 if (currPitInfoIndex < 0) {
                     currTeam = new JSONObject();
                     try {
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_EVENT, currEvent);
+//                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_EVENT, currEvent);
                         currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM, teamNumber);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME, "");
+//                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME, "");
 
                         currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS, 0);
                         currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS, 0);
@@ -119,18 +128,14 @@ public class PitScoutingFragment extends Fragment {
                     } catch (JSONException e) {
                     }
                 }
-
                 showPitInfo();
 
             }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
         });
 
-        final EditText teamYearsTextbox = (EditText) mRootView.findViewById(R.id.team_years);
-        teamYearsTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
+        pit_team_years_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -143,10 +148,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(teamYearsTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_team_years_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -157,40 +162,44 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button teamYearsMinusButton = (Button) mRootView.findViewById(R.id.team_years_minus_btn);
-        teamYearsMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_team_years_MinusButton = (Button) mRootView.findViewById(R.id.pit_team_years_minus_btn);
+        pit_team_years_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView teamMembersText = (TextView) mRootView.findViewById(R.id.team_years);
-                teamMembersText.requestFocus();
+                TextView pit_team_years_Text = (TextView) mRootView.findViewById(R.id.pit_team_years);
+                pit_team_years_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(teamMembersText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_team_years_Text.getText().toString());
                     if (tempValue > 0) {
                         tempValue--;
-                        teamMembersText.setText(Integer.toString(tempValue));
+                        pit_team_years_Text.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_team_years_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button teamYearsPlusButton = (Button) mRootView.findViewById(R.id.team_years_plus_btn);
-        teamYearsPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_team_years_PlusButton = (Button) mRootView.findViewById(R.id.pit_team_years_plus_btn);
+        pit_team_years_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView teamMembersText = (TextView) mRootView.findViewById(R.id.team_years);
-                teamMembersText.requestFocus();
+                TextView pit_team_years_Text = (TextView) mRootView.findViewById(R.id.pit_team_years);
+                pit_team_years_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(teamMembersText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_team_years_Text.getText().toString());
                     tempValue++;
-                    teamMembersText.setText(Integer.toString(tempValue));
+                    pit_team_years_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_team_years_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText teamMembersTextbox = (EditText) mRootView.findViewById(R.id.team_members);
-        teamMembersTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_team_members_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_members);
+        pit_team_members_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -203,10 +212,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(teamMembersTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_team_members_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -217,11 +226,11 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button teamMemberMinusButton = (Button) mRootView.findViewById(R.id.team_members_minus_btn);
-        teamMemberMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_team_members_MinusButton = (Button) mRootView.findViewById(R.id.pit_team_members_minus_btn);
+        pit_team_members_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView teamMemberText = (TextView) mRootView.findViewById(R.id.team_members);
+                TextView teamMemberText = (TextView) mRootView.findViewById(R.id.pit_team_members);
                 teamMemberText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(teamMemberText.getText().toString());
@@ -230,27 +239,31 @@ public class PitScoutingFragment extends Fragment {
                         teamMemberText.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    teamMemberText.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button teamMemberPlusButton = (Button) mRootView.findViewById(R.id.team_members_plus_btn);
-        teamMemberPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_team_members_PlusButton = (Button) mRootView.findViewById(R.id.pit_team_members_plus_btn);
+        pit_team_members_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView teamMemberText = (TextView) mRootView.findViewById(R.id.team_members);
-                teamMemberText.requestFocus();
+                TextView pit_team_members_Text = (TextView) mRootView.findViewById(R.id.pit_team_members);
+                pit_team_members_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(teamMemberText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_team_members_Text.getText().toString());
                     tempValue++;
-                    teamMemberText.setText(Integer.toString(tempValue));
+                    pit_team_members_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_team_members_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText heightTextbox = (EditText) mRootView.findViewById(R.id.height);
-        heightTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_height_Textbox = (EditText) mRootView.findViewById(R.id.pit_height);
+        pit_height_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -263,10 +276,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(heightTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_height_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -277,40 +290,44 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button heightMinusButton = (Button) mRootView.findViewById(R.id.height_minus_btn);
-        heightMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_height_MinusButton = (Button) mRootView.findViewById(R.id.pit_height_minus_btn);
+        pit_height_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView heightText = (TextView) mRootView.findViewById(R.id.height);
+                TextView heightText = (TextView) mRootView.findViewById(R.id.pit_height);
                 heightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(heightText.getText().toString());
-                    if (tempValue > 0) {
-                        tempValue--;
+                    if (tempValue >= 4) {
+                        tempValue = 24;
                         heightText.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    heightText.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button heightPlusButton = (Button) mRootView.findViewById(R.id.height_plus_btn);
+        Button heightPlusButton = (Button) mRootView.findViewById(R.id.pit_height_plus_btn);
         heightPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView heightText = (TextView) mRootView.findViewById(R.id.height);
+                TextView heightText = (TextView) mRootView.findViewById(R.id.pit_height);
                 heightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(heightText.getText().toString());
-                    tempValue++;
+                    tempValue = 36;
                     heightText.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    heightText.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText weightTextbox = (EditText) mRootView.findViewById(R.id.weight);
-        weightTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_weight_Textbox = (EditText) mRootView.findViewById(R.id.pit_weight);
+        pit_weight_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -323,10 +340,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(weightTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_weight_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -337,40 +354,50 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button weightMinusButton = (Button) mRootView.findViewById(R.id.weight_minus_btn);
-        weightMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_weight_MinusButton = (Button) mRootView.findViewById(R.id.pit_weight_minus_btn);
+        pit_weight_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView weightText = (TextView) mRootView.findViewById(R.id.weight);
+                TextView weightText = (TextView) mRootView.findViewById(R.id.pit_weight);
                 weightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(weightText.getText().toString());
-                    if (tempValue > 0) {
-                        tempValue--;
-                        weightText.setText(Integer.toString(tempValue));
+                    if (tempValue >= 5) {
+                        tempValue = tempValue - 5;
+                    } else {
+                        tempValue = 0;
                     }
-                } catch (Exception e) {
-                }
-            }
-        });
-
-        Button weightPlusButton = (Button) mRootView.findViewById(R.id.weight_plus_btn);
-        weightPlusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView weightText = (TextView) mRootView.findViewById(R.id.weight);
-                weightText.requestFocus();
-                try {
-                    int tempValue = Integer.parseInt(weightText.getText().toString());
-                    tempValue++;
                     weightText.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    weightText.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText numCimsTextbox = (EditText) mRootView.findViewById(R.id.num_cims);
-        numCimsTextbox.addTextChangedListener(new TextWatcher() {
+        Button pit_weight_PlusButton = (Button) mRootView.findViewById(R.id.pit_weight_plus_btn);
+        pit_weight_PlusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView weightText = (TextView) mRootView.findViewById(R.id.pit_weight);
+                weightText.requestFocus();
+                try {
+                    int tempValue = Integer.parseInt(weightText.getText().toString());
+                    if (tempValue <= 115) {
+                        tempValue = tempValue + 5;
+                    } else {
+                        tempValue = 120;
+                    }
+                    weightText.setText(Integer.toString(tempValue));
+                } catch (Exception e) {
+                    int tempValue = 120;
+                    weightText.setText(Integer.toString(tempValue));
+                }
+            }
+        });
+
+        final EditText pit_num_cims_Textbox = (EditText) mRootView.findViewById(R.id.pit_num_cims);
+        pit_num_cims_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -383,10 +410,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(numCimsTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_num_cims_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -397,40 +424,44 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button numCimsMinusButton = (Button) mRootView.findViewById(R.id.num_cims_minus_btn);
-        numCimsMinusButton.setOnClickListener(new View.OnClickListener() {
+        final Button pit_num_cims_MinusButton = (Button) mRootView.findViewById(R.id.pit_num_cims_minus_btn);
+        pit_num_cims_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView numCimsText = (TextView) mRootView.findViewById(R.id.num_cims);
-                numCimsText.requestFocus();
+                TextView pit_num_cims_Text = (TextView) mRootView.findViewById(R.id.pit_num_cims);
+                pit_num_cims_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(numCimsText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_num_cims_Text.getText().toString());
                     if (tempValue > 0) {
                         tempValue--;
-                        numCimsText.setText(Integer.toString(tempValue));
+                        pit_num_cims_Text.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_num_cims_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button numCimsPlusButton = (Button) mRootView.findViewById(R.id.num_cims_plus_btn);
-        numCimsPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_num_cims_PlusButton = (Button) mRootView.findViewById(R.id.pit_num_cims_plus_btn);
+        pit_num_cims_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView numCimsText = (TextView) mRootView.findViewById(R.id.num_cims);
-                numCimsText.requestFocus();
+                TextView pit_num_cims_Text = (TextView) mRootView.findViewById(R.id.pit_num_cims);
+                pit_num_cims_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(numCimsText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_num_cims_Text.getText().toString());
                     tempValue++;
-                    numCimsText.setText(Integer.toString(tempValue));
+                    pit_num_cims_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_num_cims_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText maxSpeedTextbox = (EditText) mRootView.findViewById(R.id.max_speed);
-        maxSpeedTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_max_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_speed);
+        pit_max_speed_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -443,10 +474,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(maxSpeedTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_max_speed_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -457,40 +488,44 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button maxSpeedMinusButton = (Button) mRootView.findViewById(R.id.max_speed_minus_btn);
-        maxSpeedMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_max_speed_MinusButton = (Button) mRootView.findViewById(R.id.pit_max_speed_minus_btn);
+        pit_max_speed_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView maxSpeedText = (TextView) mRootView.findViewById(R.id.max_speed);
-                maxSpeedText.requestFocus();
+                TextView pit_max_speed_Text = (TextView) mRootView.findViewById(R.id.pit_max_speed);
+                pit_max_speed_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(maxSpeedText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_max_speed_Text.getText().toString());
                     if (tempValue > 0) {
                         tempValue--;
-                        maxSpeedText.setText(Integer.toString(tempValue));
+                        pit_max_speed_Text.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_max_speed_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button maxSpeedPlusButton = (Button) mRootView.findViewById(R.id.max_speed_plus_btn);
-        maxSpeedPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_max_speed_PlusButton = (Button) mRootView.findViewById(R.id.pit_max_speed_plus_btn);
+        pit_max_speed_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView maxSpeedText = (TextView) mRootView.findViewById(R.id.max_speed);
-                maxSpeedText.requestFocus();
+                TextView pit_max_speed_Text = (TextView) mRootView.findViewById(R.id.pit_max_speed);
+                pit_max_speed_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(maxSpeedText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_max_speed_Text.getText().toString());
                     tempValue++;
-                    maxSpeedText.setText(Integer.toString(tempValue));
+                    pit_max_speed_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_max_speed_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText wheelTypeTextbox = (EditText) mRootView.findViewById(R.id.wheel_type);
-        wheelTypeTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_wheel_type_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_type);
+        pit_wheel_type_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -503,10 +538,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        String tempValue = wheelTypeTextbox.getText().toString();
+                        String tempValue = pit_wheel_type_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -516,8 +551,8 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final EditText wheelLayoutTextbox = (EditText) mRootView.findViewById(R.id.wheel_layout);
-        wheelLayoutTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_wheel_layout_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_layout);
+        pit_wheel_layout_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -530,10 +565,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        String tempValue = wheelLayoutTextbox.getText().toString();
+                        String tempValue = pit_wheel_layout_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -543,8 +578,8 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final EditText maxFuelTextbox = (EditText) mRootView.findViewById(R.id.max_fuel);
-        maxFuelTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_max_fuel_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_fuel);
+        pit_max_fuel_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -557,10 +592,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(maxFuelTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_max_fuel_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -571,40 +606,44 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button maxFuelMinusButton = (Button) mRootView.findViewById(R.id.max_fuel_minus_btn);
-        maxFuelMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_max_fuel_MinusButton = (Button) mRootView.findViewById(R.id.pit_max_fuel_minus_btn);
+        pit_max_fuel_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView maxFuelText = (TextView) mRootView.findViewById(R.id.max_fuel);
-                maxFuelText.requestFocus();
+                TextView pit_max_fuel_Text = (TextView) mRootView.findViewById(R.id.pit_max_fuel);
+                pit_max_fuel_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(maxFuelText.getText().toString());
-                    if (tempValue > 0) {
-                        tempValue--;
-                        maxFuelText.setText(Integer.toString(tempValue));
+                    int tempValue = Integer.parseInt(pit_max_fuel_Text.getText().toString());
+                    if (tempValue >= 5) {
+                        tempValue = tempValue - 5;
+                        pit_max_fuel_Text.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_max_fuel_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button maxFuelPlusButton = (Button) mRootView.findViewById(R.id.max_fuel_plus_btn);
-        maxFuelPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_max_fuel_PlusButton = (Button) mRootView.findViewById(R.id.pit_max_fuel_plus_btn);
+        pit_max_fuel_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView maxFuelText = (TextView) mRootView.findViewById(R.id.max_fuel);
-                maxFuelText.requestFocus();
+                TextView pit_max_fuel_Text = (TextView) mRootView.findViewById(R.id.pit_max_fuel);
+                pit_max_fuel_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(maxFuelText.getText().toString());
-                    tempValue++;
-                    maxFuelText.setText(Integer.toString(tempValue));
+                    int tempValue = Integer.parseInt(pit_max_fuel_Text.getText().toString());
+                    tempValue = tempValue + 5;
+                    pit_max_fuel_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_max_fuel_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText shootSpeedTextbox = (EditText) mRootView.findViewById(R.id.shoot_speed);
-        shootSpeedTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_shoot_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_speed);
+        pit_shoot_speed_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -617,10 +656,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(shootSpeedTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_shoot_speed_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -631,40 +670,44 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button shootSpeedMinusButton = (Button) mRootView.findViewById(R.id.shoot_speed_minus_btn);
-        shootSpeedMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_shoot_speed_MinusButton = (Button) mRootView.findViewById(R.id.pit_shoot_speed_minus_btn);
+        pit_shoot_speed_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView shootSpeedText = (TextView) mRootView.findViewById(R.id.shoot_speed);
-                shootSpeedText.requestFocus();
+                TextView pit_shoot_speed_Text = (TextView) mRootView.findViewById(R.id.pit_shoot_speed);
+                pit_shoot_speed_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(shootSpeedText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_shoot_speed_Text.getText().toString());
                     if (tempValue > 0) {
                         tempValue--;
-                        shootSpeedText.setText(Integer.toString(tempValue));
+                        pit_shoot_speed_Text.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_shoot_speed_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button shootSpeedPlusButton = (Button) mRootView.findViewById(R.id.shoot_speed_plus_btn);
-        shootSpeedPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_shoot_speed_PlusButton = (Button) mRootView.findViewById(R.id.pit_shoot_speed_plus_btn);
+        pit_shoot_speed_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView shootSpeedText = (TextView) mRootView.findViewById(R.id.shoot_speed);
-                shootSpeedText.requestFocus();
+                TextView pit_shoot_speed_Text = (TextView) mRootView.findViewById(R.id.pit_shoot_speed);
+                pit_shoot_speed_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(shootSpeedText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_shoot_speed_Text.getText().toString());
                     tempValue++;
-                    shootSpeedText.setText(Integer.toString(tempValue));
+                    pit_shoot_speed_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_shoot_speed_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final EditText shootLocationTextbox = (EditText) mRootView.findViewById(R.id.shoot_location);
-        shootLocationTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_shoot_location_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_location);
+        pit_shoot_location_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -677,10 +720,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        String tempValue = shootLocationTextbox.getText().toString();
+                        String tempValue = pit_shoot_location_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -690,16 +733,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton canShootHighButton = (ToggleButton) mRootView.findViewById(R.id.can_shoot_high);
-        canShootHighButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_can_shoot_high_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_high);
+        pit_can_shoot_high_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = canShootHighButton.isChecked();
+                        boolean tempValue = pit_can_shoot_high_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -709,16 +752,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton canShootLowButton = (ToggleButton) mRootView.findViewById(R.id.can_shoot_low);
-        canShootLowButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
+        pit_can_shoot_low_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = canShootLowButton.isChecked();
+                        boolean tempValue = pit_can_shoot_low_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -728,16 +771,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton floorPickupButton = (ToggleButton) mRootView.findViewById(R.id.floor_pickup);
-        floorPickupButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
+        pit_floor_pickup_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = floorPickupButton.isChecked();
+                        boolean tempValue = pit_floor_pickup_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -747,16 +790,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton topLoaderButton = (ToggleButton) mRootView.findViewById(R.id.top_loader);
-        topLoaderButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
+        pit_top_loader_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = topLoaderButton.isChecked();
+                        boolean tempValue = pit_top_loader_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -766,16 +809,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton autoAimButton = (ToggleButton) mRootView.findViewById(R.id.auto_aim);
-        autoAimButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_auto_aim_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_aim);
+        pit_auto_aim_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = autoAimButton.isChecked();
+                        boolean tempValue = pit_auto_aim_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -785,16 +828,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton canCarryGearButton = (ToggleButton) mRootView.findViewById(R.id.can_carry_gear);
-        canCarryGearButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
+        pit_can_carry_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = canCarryGearButton.isChecked();
+                        boolean tempValue = pit_can_carry_gear_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -804,16 +847,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton canClimbButton = (ToggleButton) mRootView.findViewById(R.id.can_climb);
-        canClimbButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
+        pit_can_climb_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = canClimbButton.isChecked();
+                        boolean tempValue = pit_can_climb_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -823,16 +866,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton ownRopeButton = (ToggleButton) mRootView.findViewById(R.id.own_rope);
-        ownRopeButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_own_rope_Button = (ToggleButton) mRootView.findViewById(R.id.pit_own_rope);
+        pit_own_rope_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = ownRopeButton.isChecked();
+                        boolean tempValue = pit_own_rope_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -842,16 +885,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton startLeftButton = (ToggleButton) mRootView.findViewById(R.id.start_left);
-        startLeftButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_start_left_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_left);
+        pit_start_left_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = startLeftButton.isChecked();
+                        boolean tempValue = pit_start_left_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -861,16 +904,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton startCenterButton = (ToggleButton) mRootView.findViewById(R.id.start_center);
-        startCenterButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_start_center_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_center);
+        pit_start_center_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = startCenterButton.isChecked();
+                        boolean tempValue = pit_start_center_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -880,16 +923,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton startRightButton = (ToggleButton) mRootView.findViewById(R.id.start_right);
-        startRightButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_start_right_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_right);
+        pit_start_right_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = startRightButton.isChecked();
+                        boolean tempValue = pit_start_right_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -899,8 +942,8 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final EditText autoNumModesTextbox = (EditText) mRootView.findViewById(R.id.auto_num_modes);
-        autoNumModesTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_auto_num_modes_Textbox = (EditText) mRootView.findViewById(R.id.pit_auto_num_modes);
+        pit_auto_num_modes_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -913,10 +956,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = Integer.parseInt(autoNumModesTextbox.getText().toString());
+                        int tempValue = Integer.parseInt(pit_auto_num_modes_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -927,48 +970,52 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        Button autoNumModesMinusButton = (Button) mRootView.findViewById(R.id.auto_num_modes_minus_btn);
-        autoNumModesMinusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_auto_num_modes_MinusButton = (Button) mRootView.findViewById(R.id.pit_auto_num_modes_minus_btn);
+        pit_auto_num_modes_MinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView autoNumModesText = (TextView) mRootView.findViewById(R.id.auto_num_modes);
-                autoNumModesText.requestFocus();
+                TextView pit_auto_num_modes_Text = (TextView) mRootView.findViewById(R.id.pit_auto_num_modes);
+                pit_auto_num_modes_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(autoNumModesText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_auto_num_modes_Text.getText().toString());
                     if (tempValue > 0) {
                         tempValue--;
-                        autoNumModesText.setText(Integer.toString(tempValue));
+                        pit_auto_num_modes_Text.setText(Integer.toString(tempValue));
                     }
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_auto_num_modes_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        Button autoNumModesPlusButton = (Button) mRootView.findViewById(R.id.auto_num_modes_plus_btn);
-        autoNumModesPlusButton.setOnClickListener(new View.OnClickListener() {
+        Button pit_auto_num_modes_PlusButton = (Button) mRootView.findViewById(R.id.pit_auto_num_modes_plus_btn);
+        pit_auto_num_modes_PlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView autoNumModesText = (TextView) mRootView.findViewById(R.id.auto_num_modes);
-                autoNumModesText.requestFocus();
+                TextView pit_auto_num_modes_Text = (TextView) mRootView.findViewById(R.id.pit_auto_num_modes);
+                pit_auto_num_modes_Text.requestFocus();
                 try {
-                    int tempValue = Integer.parseInt(autoNumModesText.getText().toString());
+                    int tempValue = Integer.parseInt(pit_auto_num_modes_Text.getText().toString());
                     tempValue++;
-                    autoNumModesText.setText(Integer.toString(tempValue));
+                    pit_auto_num_modes_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
+                    int tempValue = 0;
+                    pit_auto_num_modes_Text.setText(Integer.toString(tempValue));
                 }
             }
         });
 
-        final ToggleButton autoBaseLineButton = (ToggleButton) mRootView.findViewById(R.id.auto_base_line);
-        autoBaseLineButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_auto_base_line_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_base_line);
+        pit_auto_base_line_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = autoBaseLineButton.isChecked();
+                        boolean tempValue = pit_auto_base_line_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -978,16 +1025,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton autoPlaceGearButton = (ToggleButton) mRootView.findViewById(R.id.auto_place_gear);
-        autoPlaceGearButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_auto_place_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_place_gear);
+        pit_auto_place_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = autoPlaceGearButton.isChecked();
+                        boolean tempValue = pit_auto_place_gear_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -997,16 +1044,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton autoHighGoalButton = (ToggleButton) mRootView.findViewById(R.id.auto_high_goal);
-        autoHighGoalButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_auto_high_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_high_goal);
+        pit_auto_high_goal_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = autoHighGoalButton.isChecked();
+                        boolean tempValue = pit_auto_high_goal_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -1016,16 +1063,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton autoLowGoalButton = (ToggleButton) mRootView.findViewById(R.id.auto_low_goal);
-        autoLowGoalButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_auto_low_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_low_goal);
+        pit_auto_low_goal_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = autoLowGoalButton.isChecked();
+                        boolean tempValue = pit_auto_low_goal_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -1035,16 +1082,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton autoHopperButton = (ToggleButton) mRootView.findViewById(R.id.auto_hopper);
-        autoHopperButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_auto_hopper_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_hopper);
+        pit_auto_hopper_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = autoHopperButton.isChecked();
+                        boolean tempValue = pit_auto_hopper_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -1054,16 +1101,16 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final RatingBar teamRatingBar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
-        teamRatingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        final RatingBar pit_team_rating_Bar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
+        pit_team_rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
-            public void onRatingChanged(RatingBar teamRatingBar, float rating, boolean fromUser) {
+            public void onRatingChanged(RatingBar pit_team_rating_Bar, float rating, boolean fromUser) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        int tempValue = (int) teamRatingBar.getRating();
+                        int tempValue = (int) pit_team_rating_Bar.getRating();
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -1073,8 +1120,8 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final EditText commentsTextbox = (EditText) mRootView.findViewById(R.id.comments);
-        commentsTextbox.addTextChangedListener(new TextWatcher() {
+        final EditText pit_comments_Textbox = (EditText) mRootView.findViewById(R.id.pit_comments);
+        pit_comments_Textbox.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -1087,10 +1134,10 @@ public class PitScoutingFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        String tempValue = commentsTextbox.getText().toString();
+                        String tempValue = pit_comments_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_COMMENT) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_COMMENT, tempValue);
-                            if (!fillingInfo) {
+                            if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
                         }
@@ -1100,232 +1147,236 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        buildTeamSpinner("north_shore");
+        buildPitTeamSpinner("north_shore");
 
         return mRootView;
+    }
+
+    public void buildPitTeamSpinner(String event) {
+
+//        currEvent = event;
+//        Integer teamList = null;
+//
+//        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.pit_team_spinner);
+//
+//        if (event.equals("north_shore")) {
+//            teamList = R.array.north_shore_teams;
+//        } else if (event.equals("pine_tree")) {
+//            teamList = R.array.pine_tree_teams;
+//        }
+//
+//        if (teamList != null) {
+//            currPitInfoArray = dbHelper.getDataAllPit();
+//            ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(mRootView.getContext(),
+//                    teamList, R.layout.spinner_item);
+//            dataAdapter.setDropDownViewResource(R.layout.spinner_item);
+//            teamSpinner.setAdapter(dataAdapter);
+//        } else {
+//            currPitInfoArray = new JSONArray();
+//            teamSpinner.setAdapter(null);
+//        }
+
     }
 
     private void showPitInfo() {
 
         try {
 
-            fillingInfo = true;
+            fillingPitInfo = true;
 
-            EditText teamYearsTextbox = (EditText) mRootView.findViewById(R.id.team_years);
-            teamYearsTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS)));
+            EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
+            pit_team_years_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS)));
 
-            EditText teamMembersTextbox = (EditText) mRootView.findViewById(R.id.team_members);
-            teamMembersTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS)));
+            EditText pit_team_members_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_members);
+            pit_team_members_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS)));
 
-            EditText heightTextbox = (EditText) mRootView.findViewById(R.id.height);
-            heightTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT)));
+            EditText pit_height_Textbox = (EditText) mRootView.findViewById(R.id.pit_height);
+            pit_height_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT)));
 
-            EditText weightTextbox = (EditText) mRootView.findViewById(R.id.weight);
-            weightTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT)));
+            EditText pit_weight_Textbox = (EditText) mRootView.findViewById(R.id.pit_weight);
+            pit_weight_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT)));
 
-            EditText numCimsTextbox = (EditText) mRootView.findViewById(R.id.num_cims);
-            numCimsTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS)));
+            EditText pit_num_cims_Textbox = (EditText) mRootView.findViewById(R.id.pit_num_cims);
+            pit_num_cims_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS)));
 
-            EditText maxSpeedTextbox = (EditText) mRootView.findViewById(R.id.max_speed);
-            maxSpeedTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED)));
+            EditText pit_max_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_speed);
+            pit_max_speed_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED)));
 
-            EditText wheelTypeTextbox = (EditText) mRootView.findViewById(R.id.wheel_type);
-            wheelTypeTextbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE));
+            EditText pit_wheel_type_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_type);
+            pit_wheel_type_Textbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE));
 
-            EditText wheelLayoutTextbox = (EditText) mRootView.findViewById(R.id.wheel_layout);
-            wheelLayoutTextbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT));
+            EditText pit_wheel_layout_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_layout);
+            pit_wheel_layout_Textbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT));
 
-            EditText maxFuelTextbox = (EditText) mRootView.findViewById(R.id.max_fuel);
-            maxFuelTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL)));
+            EditText pit_max_fuel_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_fuel);
+            pit_max_fuel_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL)));
 
-            EditText shootSpeedTextbox = (EditText) mRootView.findViewById(R.id.shoot_speed);
-            shootSpeedTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED)));
+            EditText pit_shoot_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_speed);
+            pit_shoot_speed_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED)));
 
-            EditText shootLocationTextbox = (EditText) mRootView.findViewById(R.id.shoot_location);
-            shootLocationTextbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION));
+            EditText pit_shoot_location_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_location);
+            pit_shoot_location_Textbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION));
 
-            ToggleButton canShootHighButton = (ToggleButton) mRootView.findViewById(R.id.can_shoot_high);
-            canShootHighButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH));
+            ToggleButton pit_can_shoot_high_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_high);
+            pit_can_shoot_high_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH));
 
-            ToggleButton canShootLowButton = (ToggleButton) mRootView.findViewById(R.id.can_shoot_low);
-            canShootLowButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW));
+            ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
+            pit_can_shoot_low_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW));
 
-            ToggleButton floorPickupButton = (ToggleButton) mRootView.findViewById(R.id.floor_pickup);
-            floorPickupButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP));
+            ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
+            pit_floor_pickup_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP));
 
-            ToggleButton topLoaderButton = (ToggleButton) mRootView.findViewById(R.id.top_loader);
-            topLoaderButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER));
+            ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
+            pit_top_loader_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER));
 
-            ToggleButton autoAimButton = (ToggleButton) mRootView.findViewById(R.id.auto_aim);
-            autoAimButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM));
+            ToggleButton pit_auto_aim_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_aim);
+            pit_auto_aim_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM));
 
-            ToggleButton canCarryGearButton = (ToggleButton) mRootView.findViewById(R.id.can_carry_gear);
-            canCarryGearButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR));
+            ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
+            pit_can_carry_gear_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR));
 
-            ToggleButton canClimbButton = (ToggleButton) mRootView.findViewById(R.id.can_climb);
-            canClimbButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB));
+            ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
+            pit_can_climb_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB));
 
-            ToggleButton ownRopeButton = (ToggleButton) mRootView.findViewById(R.id.own_rope);
-            ownRopeButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE));
+            ToggleButton pit_own_rope_Button = (ToggleButton) mRootView.findViewById(R.id.pit_own_rope);
+            pit_own_rope_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE));
 
-            ToggleButton startLeftButton = (ToggleButton) mRootView.findViewById(R.id.start_left);
-            startLeftButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT));
+            ToggleButton pit_start_left_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_left);
+            pit_start_left_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT));
 
-            ToggleButton startCenterButton = (ToggleButton) mRootView.findViewById(R.id.start_center);
-            startCenterButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER));
+            ToggleButton pit_start_center_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_center);
+            pit_start_center_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER));
 
-            ToggleButton startRightButton = (ToggleButton) mRootView.findViewById(R.id.start_right);
-            startRightButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT));
+            ToggleButton pit_start_right_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_right);
+            pit_start_right_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT));
 
-            EditText autoNumModesTextbox = (EditText) mRootView.findViewById(R.id.auto_num_modes);
-            autoNumModesTextbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES)));
+            EditText pit_auto_num_modes_Textbox = (EditText) mRootView.findViewById(R.id.pit_auto_num_modes);
+            pit_auto_num_modes_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES)));
 
-            ToggleButton autoBaseLineButton = (ToggleButton) mRootView.findViewById(R.id.auto_base_line);
-            autoBaseLineButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE));
+            ToggleButton pit_auto_base_line_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_base_line);
+            pit_auto_base_line_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE));
 
-            ToggleButton autoPlaceGearButton = (ToggleButton) mRootView.findViewById(R.id.auto_place_gear);
-            autoPlaceGearButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR));
+            ToggleButton pit_auto_place_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_place_gear);
+            pit_auto_place_gear_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR));
 
-            ToggleButton autoHighGoalButton = (ToggleButton) mRootView.findViewById(R.id.auto_high_goal);
-            autoHighGoalButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL));
+            ToggleButton pit_auto_high_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_high_goal);
+            pit_auto_high_goal_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL));
 
-            ToggleButton autoLowGoalButton = (ToggleButton) mRootView.findViewById(R.id.auto_low_goal);
-            autoLowGoalButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL));
+            ToggleButton pit_auto_low_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_low_goal);
+            pit_auto_low_goal_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL));
 
-            ToggleButton autoHopperButton = (ToggleButton) mRootView.findViewById(R.id.auto_hopper);
-            autoHopperButton.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER));
+            ToggleButton pit_auto_hopper_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_hopper);
+            pit_auto_hopper_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER));
 
-            RatingBar teamRatingBar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
-            teamRatingBar.setRating(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING));
+            RatingBar pit_team_rating_Bar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
+            pit_team_rating_Bar.setRating(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING));
 
-            EditText commentsTextbox = (EditText) mRootView.findViewById(R.id.comments);
-            commentsTextbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_COMMENT));
+            EditText pit_comments_Textbox = (EditText) mRootView.findViewById(R.id.pit_comments);
+            pit_comments_Textbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_COMMENT));
 
-            fillingInfo = false;
+            fillingPitInfo = false;
 
         } catch (JSONException e) {
-            fillingInfo = false;
+            fillingPitInfo = false;
             //e.printStackTrace();
         }
     }
 
-    public void buildTeamSpinner(String event) {
+    public void clearPitScreen() {
 
-        currEvent = event;
-        Integer teamList = null;
+        fillingPitInfo = true;
 
-        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.team_spinner);
+        EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
+        pit_team_years_Textbox.setText("");
 
-        if (event.equals("north_shore")) {
-            teamList = R.array.north_shore_teams;
-        } else if (event.equals("pine_tree")) {
-            teamList = R.array.pine_tree_teams;
-        }
+        EditText pit_team_members_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_members);
+        pit_team_members_Textbox.setText("");
 
-        if (teamList != null) {
-            currPitInfoArray = dbHelper.getDataAllPit(currEvent);
-            ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(mRootView.getContext(),
-                    teamList, R.layout.spinner_item);
-            dataAdapter.setDropDownViewResource(R.layout.spinner_item);
-            teamSpinner.setAdapter(dataAdapter);
-        } else {
-            currPitInfoArray = new JSONArray();
-            teamSpinner.setAdapter(null);
-        }
+        EditText pit_height_Textbox = (EditText) mRootView.findViewById(R.id.pit_height);
+        pit_height_Textbox.setText("");
 
-    }
+        EditText pit_weight_Textbox = (EditText) mRootView.findViewById(R.id.pit_weight);
+        pit_weight_Textbox.setText("");
 
-    public void clearScreen() {
+        EditText pit_num_cims_Textbox = (EditText) mRootView.findViewById(R.id.pit_num_cims);
+        pit_num_cims_Textbox.setText("");
 
-        EditText teamYearsTextbox = (EditText) mRootView.findViewById(R.id.team_years);
-        teamYearsTextbox.setText("");
+        EditText pit_max_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_speed);
+        pit_max_speed_Textbox.setText("");
 
-        EditText teamMembersTextbox = (EditText) mRootView.findViewById(R.id.team_members);
-        teamMembersTextbox.setText("");
+        EditText pit_wheel_type_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_type);
+        pit_wheel_type_Textbox.setText("");
 
-        EditText heightTextbox = (EditText) mRootView.findViewById(R.id.height);
-        heightTextbox.setText("");
+        EditText pit_wheel_layout_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_layout);
+        pit_wheel_layout_Textbox.setText("");
 
-        EditText weightTextbox = (EditText) mRootView.findViewById(R.id.weight);
-        weightTextbox.setText("");
+        EditText pit_max_fuel_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_fuel);
+        pit_max_fuel_Textbox.setText("");
 
-        EditText numCimsTextbox = (EditText) mRootView.findViewById(R.id.num_cims);
-        numCimsTextbox.setText("");
+        EditText pit_shoot_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_speed);
+        pit_shoot_speed_Textbox.setText("");
 
-        EditText maxSpeedTextbox = (EditText) mRootView.findViewById(R.id.max_speed);
-        maxSpeedTextbox.setText("");
+        EditText pit_shoot_location_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_location);
+        pit_shoot_location_Textbox.setText("");
 
-        EditText wheelTypeTextbox = (EditText) mRootView.findViewById(R.id.wheel_type);
-        wheelTypeTextbox.setText("");
+        ToggleButton pit_can_shoot_high_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_high);
+        pit_can_shoot_high_Button.setChecked(false);
 
-        EditText wheelLayoutTextbox = (EditText) mRootView.findViewById(R.id.wheel_layout);
-        wheelLayoutTextbox.setText("");
+        ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
+        pit_can_shoot_low_Button.setChecked(false);
 
-        EditText maxFuelTextbox = (EditText) mRootView.findViewById(R.id.max_fuel);
-        maxFuelTextbox.setText("");
+        ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
+        pit_floor_pickup_Button.setChecked(false);
 
-        EditText shootSpeedTextbox = (EditText) mRootView.findViewById(R.id.shoot_speed);
-        shootSpeedTextbox.setText("");
+        ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
+        pit_top_loader_Button.setChecked(false);
 
-        EditText shootLocationTextbox = (EditText) mRootView.findViewById(R.id.shoot_location);
-        shootLocationTextbox.setText("");
+        ToggleButton pit_auto_aim_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_aim);
+        pit_auto_aim_Button.setChecked(false);
 
-        ToggleButton canShootHighButton = (ToggleButton) mRootView.findViewById(R.id.can_shoot_high);
-        canShootHighButton.setChecked(false);
+        ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
+        pit_can_carry_gear_Button.setChecked(false);
 
-        ToggleButton canShootLowButton = (ToggleButton) mRootView.findViewById(R.id.can_shoot_low);
-        canShootLowButton.setChecked(false);
+        ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
+        pit_can_climb_Button.setChecked(false);
 
-        ToggleButton floorPickupButton = (ToggleButton) mRootView.findViewById(R.id.floor_pickup);
-        floorPickupButton.setChecked(false);
+        ToggleButton pit_own_rope_Button = (ToggleButton) mRootView.findViewById(R.id.pit_own_rope);
+        pit_own_rope_Button.setChecked(false);
 
-        ToggleButton topLoaderButton = (ToggleButton) mRootView.findViewById(R.id.top_loader);
-        topLoaderButton.setChecked(false);
+        ToggleButton pit_start_left_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_left);
+        pit_start_left_Button.setChecked(false);
 
-        ToggleButton autoAimButton = (ToggleButton) mRootView.findViewById(R.id.auto_aim);
-        autoAimButton.setChecked(false);
+        ToggleButton pit_start_center_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_center);
+        pit_start_center_Button.setChecked(false);
 
-        ToggleButton canCarryGearButton = (ToggleButton) mRootView.findViewById(R.id.can_carry_gear);
-        canCarryGearButton.setChecked(false);
+        ToggleButton pit_start_right_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_right);
+        pit_start_right_Button.setChecked(false);
 
-        ToggleButton canClimbButton = (ToggleButton) mRootView.findViewById(R.id.can_climb);
-        canClimbButton.setChecked(false);
+        EditText pit_auto_num_modes_Textbox = (EditText) mRootView.findViewById(R.id.pit_auto_num_modes);
+        pit_auto_num_modes_Textbox.setText("");
 
-        ToggleButton ownRopeButton = (ToggleButton) mRootView.findViewById(R.id.own_rope);
-        ownRopeButton.setChecked(false);
+        ToggleButton pit_auto_base_line_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_base_line);
+        pit_auto_base_line_Button.setChecked(false);
 
-        ToggleButton startLeftButton = (ToggleButton) mRootView.findViewById(R.id.start_left);
-        startLeftButton.setChecked(false);
+        ToggleButton pit_auto_place_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_place_gear);
+        pit_auto_place_gear_Button.setChecked(false);
 
-        ToggleButton startCenterButton = (ToggleButton) mRootView.findViewById(R.id.start_center);
-        startCenterButton.setChecked(false);
+        ToggleButton pit_auto_high_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_high_goal);
+        pit_auto_high_goal_Button.setChecked(false);
 
-        ToggleButton startRightButton = (ToggleButton) mRootView.findViewById(R.id.start_right);
-        startRightButton.setChecked(false);
+        ToggleButton pit_auto_low_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_low_goal);
+        pit_auto_low_goal_Button.setChecked(false);
 
-        EditText autoNumModesTextbox = (EditText) mRootView.findViewById(R.id.auto_num_modes);
-        autoNumModesTextbox.setText("");
+        ToggleButton pit_auto_hopper_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_hopper);
+        pit_auto_hopper_Button.setChecked(false);
 
-        ToggleButton autoBaseLineButton = (ToggleButton) mRootView.findViewById(R.id.auto_base_line);
-        autoBaseLineButton.setChecked(false);
+        RatingBar pit_team_rating_Bar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
+        pit_team_rating_Bar.setRating(0);
 
-        ToggleButton autoPlaceGearButton = (ToggleButton) mRootView.findViewById(R.id.auto_place_gear);
-        autoPlaceGearButton.setChecked(false);
+        EditText pit_comments_Textbox = (EditText) mRootView.findViewById(R.id.pit_comments);
+        pit_comments_Textbox.setText("");
 
-        ToggleButton autoHighGoalButton = (ToggleButton) mRootView.findViewById(R.id.auto_high_goal);
-        autoHighGoalButton.setChecked(false);
-
-        ToggleButton autoLowGoalButton = (ToggleButton) mRootView.findViewById(R.id.auto_low_goal);
-        autoLowGoalButton.setChecked(false);
-
-        ToggleButton autoHopperButton = (ToggleButton) mRootView.findViewById(R.id.auto_hopper);
-        autoHopperButton.setChecked(false);
-
-        RatingBar teamRatingBar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
-        teamRatingBar.setRating(0);
-
-        EditText commentsTextbox = (EditText) mRootView.findViewById(R.id.comments);
-        commentsTextbox.setText("");
+        fillingPitInfo = false;
 
     }
 

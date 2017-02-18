@@ -8,33 +8,60 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <!-- team -->
 
     <TextView
-        android:id="@+id/team_label"
+        android:id="@+id/pit_team_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="10sp"
-        android:fontFamily="sans-serif"
         android:paddingBottom="10sp"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:text="Team"
         android:textSize="36sp" />
 
-    <Spinner
-        android:id="@+id/team_spinner"
+    <EditText
+        android:id="@+id/pit_team_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/team_label"
-        android:layout_marginLeft="250sp"
-        android:layout_toEndOf="@+id/team_label"
-        android:layout_toRightOf="@+id/team_label"
-        android:minHeight="50dp"
-        android:minWidth="100sp"
-        tools:minHeight="50sp" />
+        android:layout_marginLeft="10sp"
+        android:layout_alignBaseline="@+id/pit_team_label"
+        android:layout_toEndOf="@+id/pit_team_label"
+        android:layout_toRightOf="@+id/pit_team_label"
+        android:ems="3"
+        android:inputType="number"
+        android:text=""
+        android:textSize="36sp" />
 
+    <Button
+        android:id="@+id/stand_ok_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/pit_team_number"
+        android:layout_toEndOf="@+id/pit_team_number"
+        android:layout_alignBaseline="@+id/pit_team_number"
+        android:minWidth="110dp"
+        android:paddingLeft="10sp"
+        android:paddingBottom="0sp"
+        android:paddingTop="0sp"
+        android:text="LOAD"
+        android:textSize="30sp" />
+
+    <!--<Spinner-->
+        <!--android:id="@+id/pit_team_spinner"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/pit_team_label"-->
+        <!--android:layout_marginLeft="250sp"-->
+        <!--android:layout_toEndOf="@+id/pit_team_label"-->
+        <!--android:layout_toRightOf="@+id/pit_team_label"-->
+        <!--android:minHeight="50dp"-->
+        <!--android:minWidth="100sp"-->
+        <!--tools:minHeight="50sp" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,7 +69,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/team_label"
+        android:layout_below="@id/pit_team_label"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -57,962 +84,929 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="0sp">
 
+            <!-- team_years -->
 
             <TextView
-                android:id="@+id/team_years_label"
+                android:id="@+id/pit_team_years_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_marginBottom="0sp"
                 android:text="Team Years"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/team_years"
+                android:id="@+id/pit_team_years"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/team_years_label"
+                android:layout_alignBaseline="@+id/pit_team_years_label"
                 android:layout_marginLeft="150sp"
-                android:layout_toEndOf="@+id/team_years_label"
-                android:layout_toRightOf="@+id/team_years_label"
+                android:layout_toEndOf="@+id/pit_team_years_label"
+                android:layout_toRightOf="@+id/pit_team_years_label"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/team_years_minus_btn"
+                android:id="@+id/pit_team_years_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/team_years"
+                android:layout_alignBaseline="@id/pit_team_years"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/team_years"
+                android:layout_toRightOf="@+id/pit_team_years"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/team_years_plus_btn"
+                android:id="@+id/pit_team_years_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/team_years_minus_btn"
+                android:layout_alignBaseline="@+id/pit_team_years_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/team_years_minus_btn"
+                android:layout_toRightOf="@id/pit_team_years_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- team_members -->
 
             <TextView
-                android:id="@+id/team_members_label"
+                android:id="@+id/pit_team_members_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/team_years_label"
+                android:layout_below="@id/pit_team_years_label"
                 android:layout_marginBottom="0sp"
-                android:fontFamily="sans-serif"
                 android:text="Team Members"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/team_members"
+                android:id="@+id/pit_team_members"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/team_members_label"
-                android:layout_alignBottom="@+id/team_members_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_team_members_label"
+                android:layout_alignBottom="@+id/pit_team_members_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/team_members_minus_btn"
+                android:id="@+id/pit_team_members_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/team_members"
+                android:layout_alignBaseline="@id/pit_team_members"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/team_members"
+                android:layout_toRightOf="@+id/pit_team_members"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="32sp" />
 
             <Button
-                android:id="@+id/team_members_plus_btn"
+                android:id="@+id/pit_team_members_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/team_members_minus_btn"
+                android:layout_alignBaseline="@+id/pit_team_members_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/team_members_minus_btn"
+                android:layout_toRightOf="@id/pit_team_members_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="32sp" />
 
+            <!-- robot_info -->
 
             <TextView
-                android:id="@+id/robot_info_label"
+                android:id="@+id/pit_robot_info_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/team_members_label"
+                android:layout_below="@id/pit_team_members_label"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10sp"
-                android:layout_marginTop="20sp"
-                android:fontFamily="sans-serif"
+                android:layout_marginBottom="0sp"
+                android:layout_marginTop="0sp"
                 android:text="Robot Information"
                 android:textSize="36sp" />
 
+            <!-- height -->
 
             <TextView
-                android:id="@+id/height_label"
+                android:id="@+id/pit_height_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/robot_info_label"
-                android:layout_marginBottom="10sp"
-                android:layout_marginTop="20sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_robot_info_label"
+                android:layout_marginBottom="0sp"
+                android:layout_marginTop="0sp"
                 android:text="Height"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/height"
+                android:id="@+id/pit_height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/height_label"
-                android:layout_alignBottom="@+id/height_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_height_label"
+                android:layout_alignBottom="@+id/pit_height_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/height_minus_btn"
+                android:id="@+id/pit_height_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/height"
+                android:layout_alignBaseline="@id/pit_height"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/height"
+                android:layout_toRightOf="@+id/pit_height"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/height_plus_btn"
+                android:id="@+id/pit_height_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/height_minus_btn"
+                android:layout_alignBaseline="@+id/pit_height_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/height_minus_btn"
+                android:layout_toRightOf="@id/pit_height_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- weight -->
 
             <TextView
-                android:id="@+id/weight_label"
+                android:id="@+id/pit_weight_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/height_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_height_label"
+                android:layout_marginBottom="0sp"
                 android:text="Weight"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/weight"
+                android:id="@+id/pit_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/weight_label"
-                android:layout_alignBottom="@+id/weight_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_weight_label"
+                android:layout_alignBottom="@+id/pit_weight_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/weight_minus_btn"
+                android:id="@+id/pit_weight_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/weight"
+                android:layout_alignBaseline="@id/pit_weight"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/weight"
+                android:layout_toRightOf="@+id/pit_weight"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/weight_plus_btn"
+                android:id="@+id/pit_weight_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/weight_minus_btn"
+                android:layout_alignBaseline="@+id/pit_weight_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/weight_minus_btn"
+                android:layout_toRightOf="@id/pit_weight_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- num_cims -->
 
             <TextView
-                android:id="@+id/num_cims_label"
+                android:id="@+id/pit_num_cims_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/weight_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_weight_label"
+                android:layout_marginBottom="0sp"
                 android:text="Num CIMs"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/num_cims"
+                android:id="@+id/pit_num_cims"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/num_cims_label"
-                android:layout_alignBottom="@+id/num_cims_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_num_cims_label"
+                android:layout_alignBottom="@+id/pit_num_cims_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/num_cims_minus_btn"
+                android:id="@+id/pit_num_cims_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/num_cims"
+                android:layout_alignBaseline="@id/pit_num_cims"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/num_cims"
+                android:layout_toRightOf="@+id/pit_num_cims"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/num_cims_plus_btn"
+                android:id="@+id/pit_num_cims_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/num_cims_minus_btn"
+                android:layout_alignBaseline="@+id/pit_num_cims_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/num_cims_minus_btn"
+                android:layout_toRightOf="@id/pit_num_cims_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- max_speed -->
 
             <TextView
-                android:id="@+id/max_speed_label"
+                android:id="@+id/pit_max_speed_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/num_cims_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_num_cims_label"
+                android:layout_marginBottom="0sp"
                 android:text="Max Speed"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/max_speed"
+                android:id="@+id/pit_max_speed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/max_speed_label"
-                android:layout_alignBottom="@+id/max_speed_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_max_speed_label"
+                android:layout_alignBottom="@+id/pit_max_speed_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/max_speed_minus_btn"
+                android:id="@+id/pit_max_speed_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/max_speed"
+                android:layout_alignBaseline="@id/pit_max_speed"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/max_speed"
+                android:layout_toRightOf="@+id/pit_max_speed"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/max_speed_plus_btn"
+                android:id="@+id/pit_max_speed_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/max_speed_minus_btn"
+                android:layout_alignBaseline="@+id/pit_max_speed_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/max_speed_minus_btn"
+                android:layout_toRightOf="@id/pit_max_speed_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- wheel_type -->
 
             <TextView
-                android:id="@+id/wheel_type_label"
+                android:id="@+id/pit_wheel_type_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/max_speed_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_max_speed_label"
+                android:layout_marginBottom="0sp"
                 android:text="Wheel Type"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/wheel_type"
+                android:id="@+id/pit_wheel_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/wheel_type_label"
-                android:layout_alignBottom="@+id/wheel_type_label"
-                android:layout_alignLeft="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_wheel_type_label"
+                android:layout_alignBottom="@+id/pit_wheel_type_label"
+                android:layout_alignLeft="@+id/pit_team_years"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
+            <!-- wheel_layout -->
 
             <TextView
-                android:id="@+id/wheel_layout_label"
+                android:id="@+id/pit_wheel_layout_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/wheel_type_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_wheel_type_label"
+                android:layout_marginBottom="0sp"
                 android:text="Wheel Layout"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/wheel_layout"
+                android:id="@+id/pit_wheel_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/wheel_layout_label"
-                android:layout_alignBottom="@+id/wheel_layout_label"
-                android:layout_alignLeft="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_wheel_layout_label"
+                android:layout_alignBottom="@+id/pit_wheel_layout_label"
+                android:layout_alignLeft="@+id/pit_team_years"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
+            <!-- max_fuel -->
 
             <TextView
-                android:id="@+id/max_fuel_label"
+                android:id="@+id/pit_max_fuel_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/wheel_layout_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@+id/pit_wheel_layout_label"
+                android:layout_marginBottom="0sp"
                 android:text="Max Fuel"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/max_fuel"
+                android:id="@+id/pit_max_fuel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/max_fuel_label"
-                android:layout_alignBottom="@+id/max_fuel_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_max_fuel_label"
+                android:layout_alignBottom="@+id/pit_max_fuel_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/max_fuel_minus_btn"
+                android:id="@+id/pit_max_fuel_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/max_fuel"
+                android:layout_alignBaseline="@id/pit_max_fuel"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/max_fuel"
+                android:layout_toRightOf="@+id/pit_max_fuel"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/max_fuel_plus_btn"
+                android:id="@+id/pit_max_fuel_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/max_fuel_minus_btn"
+                android:layout_alignBaseline="@+id/pit_max_fuel_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/max_fuel_minus_btn"
+                android:layout_toRightOf="@id/pit_max_fuel_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- shoot_speed -->
 
             <TextView
-                android:id="@+id/shoot_speed_label"
+                android:id="@+id/pit_shoot_speed_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/max_fuel_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_max_fuel_label"
+                android:layout_marginBottom="0sp"
                 android:text="Shoot Speed"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/shoot_speed"
+                android:id="@+id/pit_shoot_speed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/shoot_speed_label"
-                android:layout_alignBottom="@+id/shoot_speed_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_shoot_speed_label"
+                android:layout_alignBottom="@+id/pit_shoot_speed_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/shoot_speed_minus_btn"
+                android:id="@+id/pit_shoot_speed_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/shoot_speed"
+                android:layout_alignBaseline="@id/pit_shoot_speed"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/shoot_speed"
+                android:layout_toRightOf="@+id/pit_shoot_speed"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/shoot_speed_plus_btn"
+                android:id="@+id/pit_shoot_speed_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/shoot_speed_minus_btn"
+                android:layout_alignBaseline="@+id/pit_shoot_speed_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/shoot_speed_minus_btn"
+                android:layout_toRightOf="@id/pit_shoot_speed_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- shoot_location -->
 
             <TextView
-                android:id="@+id/shoot_location_label"
+                android:id="@+id/pit_shoot_location_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/shoot_speed_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_shoot_speed_label"
+                android:layout_marginBottom="0sp"
                 android:text="Shoot Location"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/shoot_location"
+                android:id="@+id/pit_shoot_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/shoot_location_label"
-                android:layout_alignBottom="@+id/shoot_location_label"
-                android:layout_alignLeft="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_shoot_location_label"
+                android:layout_alignBottom="@+id/pit_shoot_location_label"
+                android:layout_alignLeft="@+id/pit_team_years"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
+            <!-- can_shoot_high -->
 
             <TextView
-                android:id="@+id/can_shoot_high_label"
+                android:id="@+id/pit_can_shoot_high_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/shoot_location_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_shoot_location_label"
+                android:layout_marginBottom="0sp"
                 android:text="Can Shoot High"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/can_shoot_high"
+                android:id="@+id/pit_can_shoot_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/can_shoot_high_label"
-                android:layout_alignLeft="@+id/shoot_location"
-                android:layout_alignStart="@+id/shoot_location"
+                android:layout_alignBottom="@+id/pit_can_shoot_high_label"
+                android:layout_alignLeft="@+id/pit_shoot_location"
+                android:layout_alignStart="@+id/pit_shoot_location"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- can_shoot_low -->
 
             <TextView
-                android:id="@+id/can_shoot_low_label"
+                android:id="@+id/pit_can_shoot_low_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/can_shoot_high_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_can_shoot_high_label"
+                android:layout_marginBottom="0sp"
                 android:text="Can Shoot Low"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/can_shoot_low"
+                android:id="@+id/pit_can_shoot_low"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/can_shoot_low_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_can_shoot_low_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- floor_pickup -->
 
             <TextView
-                android:id="@+id/floor_pickup_label"
+                android:id="@+id/pit_floor_pickup_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/can_shoot_low_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_can_shoot_low_label"
+                android:layout_marginBottom="0sp"
                 android:text="Floor Pickup"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/floor_pickup"
+                android:id="@+id/pit_floor_pickup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/floor_pickup_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_floor_pickup_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- top_loader -->
 
             <TextView
-                android:id="@+id/top_loader_label"
+                android:id="@+id/pit_top_loader_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/floor_pickup_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_floor_pickup_label"
+                android:layout_marginBottom="0sp"
                 android:text="Top Loader"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/top_loader"
+                android:id="@+id/pit_top_loader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/top_loader_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_top_loader_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=""
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- vision_sensor -->
 
             <TextView
-                android:id="@+id/auto_aim_label"
+                android:id="@+id/pit_auto_aim_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/top_loader_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_top_loader_label"
+                android:layout_marginBottom="0sp"
                 android:text="Vision Sensor"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/auto_aim"
+                android:id="@+id/pit_auto_aim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/auto_aim_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_auto_aim_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- can_carry_gear -->
 
             <TextView
-                android:id="@+id/can_carry_gear_label"
+                android:id="@+id/pit_can_carry_gear_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_aim_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_auto_aim_label"
+                android:layout_marginBottom="0sp"
                 android:text="Can Carry Gear"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/can_carry_gear"
+                android:id="@+id/pit_can_carry_gear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/can_carry_gear_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_can_carry_gear_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- can_climb -->
 
             <TextView
-                android:id="@+id/can_climb_label"
+                android:id="@+id/pit_can_climb_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/can_carry_gear_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_can_carry_gear_label"
+                android:layout_marginBottom="0sp"
                 android:text="Can Climb"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/can_climb"
+                android:id="@+id/pit_can_climb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/can_climb_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_can_climb_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- use_own_rope -->
 
             <TextView
-                android:id="@+id/own_rope_label"
+                android:id="@+id/pit_own_rope_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/can_climb_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_can_climb_label"
+                android:layout_marginBottom="0sp"
                 android:text="Use Own Rope"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/own_rope"
+                android:id="@+id/pit_own_rope"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/own_rope_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_own_rope_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- starting_posision -->
 
             <TextView
-                android:id="@+id/starting_position_label"
+                android:id="@+id/pit_starting_position_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/own_rope_label"
+                android:layout_below="@+id/pit_own_rope_label"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10sp"
-                android:layout_marginTop="20sp"
-                android:fontFamily="sans-serif"
+                android:layout_marginBottom="0sp"
+                android:layout_marginTop="0sp"
                 android:text="Starting Positions"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/start_center"
+                android:id="@+id/pit_start_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/starting_position_label"
+                android:layout_below="@+id/pit_starting_position_label"
                 android:layout_centerHorizontal="true"
                 android:ems="6"
                 android:textOff=" "
                 android:textOn="Center"
-                
                 android:textSize="24sp" />
 
             <ToggleButton
-                android:id="@+id/start_left"
+                android:id="@+id/pit_start_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/start_center"
+                android:layout_alignBottom="@id/pit_start_center"
                 android:layout_marginRight="30sp"
-                android:layout_toLeftOf="@id/start_center"
+                android:layout_toLeftOf="@id/pit_start_center"
                 android:ems="6"
                 android:textOff=" "
                 android:textOn="Left"
-                
                 android:textSize="24sp" />
 
             <ToggleButton
-                android:id="@+id/start_right"
+                android:id="@+id/pit_start_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/start_center"
+                android:layout_alignBottom="@+id/pit_start_center"
                 android:layout_marginLeft="30sp"
-                android:layout_toRightOf="@+id/start_center"
+                android:layout_toRightOf="@+id/pit_start_center"
                 android:ems="6"
                 android:textOff=" "
                 android:textOn="right"
-                
                 android:textSize="24sp" />
 
+            <!-- autonomous -->
+
             <TextView
-                android:id="@+id/autonomous_label"
+                android:id="@+id/pit_autonomous_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/start_right"
+                android:layout_below="@+id/pit_start_right"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10sp"
-                android:layout_marginTop="20sp"
-                android:fontFamily="sans-serif"
+                android:layout_marginBottom="0sp"
+                android:layout_marginTop="0sp"
                 android:text="Autonomous"
                 android:textSize="36sp" />
 
+            <!-- auto_num_modes -->
 
             <TextView
-                android:id="@+id/auto_num_modes_label"
+                android:id="@+id/pit_auto_num_modes_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/autonomous_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_autonomous_label"
+                android:layout_marginBottom="0sp"
                 android:text="Number of Modes"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/auto_num_modes"
+                android:id="@+id/pit_auto_num_modes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/auto_num_modes_label"
-                android:layout_alignBottom="@+id/auto_num_modes_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBaseline="@+id/pit_auto_num_modes_label"
+                android:layout_alignBottom="@+id/pit_auto_num_modes_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="2"
                 android:inputType="number"
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/auto_num_modes_minus_btn"
+                android:id="@+id/pit_auto_num_modes_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/auto_num_modes"
+                android:layout_alignBaseline="@id/pit_auto_num_modes"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/auto_num_modes"
+                android:layout_toRightOf="@+id/pit_auto_num_modes"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
-                android:text="-"
-                
+                android:text="—"
+
                 android:textSize="36sp" />
 
             <Button
-                android:id="@+id/auto_num_modes_plus_btn"
+                android:id="@+id/pit_auto_num_modes_plus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/auto_num_modes_minus_btn"
+                android:layout_alignBaseline="@+id/pit_auto_num_modes_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/auto_num_modes_minus_btn"
+                android:layout_toRightOf="@id/pit_auto_num_modes_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
-                
                 android:textSize="36sp" />
 
+            <!-- auto_base_line -->
 
             <TextView
-                android:id="@+id/auto_base_line_label"
+                android:id="@+id/pit_auto_base_line_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_num_modes_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_auto_num_modes_label"
+                android:layout_marginBottom="0sp"
                 android:text="Cross Base Line"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/auto_base_line"
+                android:id="@+id/pit_auto_base_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/auto_base_line_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_auto_base_line_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- auto_place_gear -->
 
             <TextView
-                android:id="@+id/auto_place_gear_label"
+                android:id="@+id/pit_auto_place_gear_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_base_line_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_auto_base_line_label"
+                android:layout_marginBottom="0sp"
                 android:text="Auto Place Gear"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/auto_place_gear"
+                android:id="@+id/pit_auto_place_gear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/auto_place_gear_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_auto_place_gear_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- auto_high_goal -->
 
             <TextView
-                android:id="@+id/auto_high_goal_label"
+                android:id="@+id/pit_auto_high_goal_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_place_gear_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_auto_place_gear_label"
+                android:layout_marginBottom="0sp"
                 android:text="Auto High Goal"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/auto_high_goal"
+                android:id="@+id/pit_auto_high_goal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/auto_high_goal_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_auto_high_goal_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- auto_low_goal -->
 
             <TextView
-                android:id="@+id/auto_low_goal_label"
+                android:id="@+id/pit_auto_low_goal_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_high_goal_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_auto_high_goal_label"
+                android:layout_marginBottom="0sp"
                 android:text="Auto Low Goal"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/auto_low_goal"
+                android:id="@+id/pit_auto_low_goal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/auto_low_goal_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_auto_low_goal_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- auto_open_hopper -->
 
             <TextView
-                android:id="@+id/auto_hopper_label"
+                android:id="@+id/pit_auto_hopper_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_low_goal_label"
-                android:layout_marginBottom="10sp"
-                android:fontFamily="sans-serif"
+                android:layout_below="@id/pit_auto_low_goal_label"
+                android:layout_marginBottom="0sp"
                 android:text="Auto Open Hopper"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/auto_hopper"
+                android:id="@+id/pit_auto_hopper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/auto_hopper_label"
-                android:layout_alignLeft="@+id/team_years"
-                android:layout_alignStart="@+id/team_years"
+                android:layout_alignBottom="@+id/pit_auto_hopper_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                
                 android:textSize="24sp" />
 
+            <!-- pit_team_rating -->
 
             <RatingBar
                 android:id="@+id/pit_team_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/auto_hopper_label"
-                
-                android:stepSize="1"
-                android:layout_centerHorizontal="true" />
+                android:layout_below="@id/pit_auto_hopper_label"
+                android:layout_centerHorizontal="true"
+                android:stepSize="1" />
 
+            <!-- comments -->
 
             <TextView
-                android:id="@+id/comments_label"
+                android:id="@+id/pit_comments_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_team_rating"
                 android:layout_centerHorizontal="true"
-                android:fontFamily="sans-serif"
                 android:text="Comments"
                 android:textSize="36sp" />
 
             <EditText
-                android:id="@+id/comments"
+                android:id="@+id/pit_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/comments_label"
+                android:layout_below="@+id/pit_comments_label"
                 android:ems="20"
                 android:inputType="textMultiLine"
                 android:textSize="36sp" />
-
 
         </RelativeLayout>
 

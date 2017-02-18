@@ -3,6 +3,7 @@ package com.bertrobotics.bertscout2017;
 import android.os.Environment;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,15 +34,10 @@ public final class ExportData {
         return file;
     }
 
-    public void ExportData(String filename, JSONArray data)
+    public void ExportData(String filename, JSONObject data)
     {
-//        if (!isExternalStorageWritable())
-//        {
-//            return; // ### show error ###
-//        }
         try
         {
-//            outFileBase.createNewFile();
             FileWriter outFile = new FileWriter(filename);
             outFile.write(data.toString());
             outFile.close();

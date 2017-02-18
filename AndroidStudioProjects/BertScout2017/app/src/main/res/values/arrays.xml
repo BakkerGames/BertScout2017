@@ -1,6 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="teams_list">
+        <item></item>
+        <item>58</item>
+        <item>78</item>
+        <item>88</item>
+        <item>125</item>
+        <item>133</item>
+        <item>157</item>
+        <item>166</item>
+        <item>172</item>
+        <item>173</item>
+        <item>190</item>
+        <item>238</item>
+        <item>246</item>
+        <item>296</item>
+        <item>319</item>
+        <item>348</item>
+        <item>501</item>
+        <item>509</item>
+        <item>663</item>
+        <item>811</item>
+        <item>885</item>
+        <item>1058</item>
+        <item>1071</item>
+        <item>1100</item>
+        <item>1153</item>
+        <item>1289</item>
+        <item>1350</item>
+        <item>1474</item>
+        <item>1517</item>
+        <item>1519</item>
+        <item>1699</item>
+        <item>1721</item>
+        <item>1729</item>
+        <item>1761</item>
+        <item>1786</item>
+        <item>1831</item>
+        <item>2079</item>
+        <item>2084</item>
+        <item>2342</item>
+        <item>2423</item>
+        <item>2648</item>
+        <item>2713</item>
+        <item>2877</item>
+        <item>3236</item>
+        <item>3323</item>
+        <item>3451</item>
+        <item>3467</item>
+        <item>3566</item>
+        <item>3597</item>
+        <item>3609</item>
+        <item>3930</item>
+        <item>4041</item>
+        <item>4042</item>
+        <item>4169</item>
+        <item>4311</item>
+        <item>4473</item>
+        <item>4546</item>
+        <item>4555</item>
+        <item>4564</item>
+        <item>4761</item>
+        <item>4905</item>
+        <item>4906</item>
+        <item>4909</item>
+        <item>4925</item>
+        <item>4929</item>
+        <item>4958</item>
+        <item>5122</item>
+        <item>5265</item>
+        <item>5459</item>
+        <item>5471</item>
+        <item>5491</item>
+        <item>5506</item>
+        <item>5556</item>
+        <item>5633</item>
+        <item>5687</item>
+        <item>5735</item>
+        <item>5752</item>
+        <item>5813</item>
+        <item>5962</item>
+        <item>6153</item>
+        <item>6161</item>
+        <item>6172</item>
+        <item>6224</item>
+        <item>6324</item>
+        <item>6328</item>
+        <item>6329</item>
+        <item>6335</item>
+        <item>6337</item>
+    </string-array>
     <string-array name="north_shore_teams">
+        <item></item>
         <item>58</item>
         <item>133</item>
         <item>173</item>
@@ -39,6 +130,7 @@
     </string-array>
 
     <string-array name="pine_tree_teams">
+        <item></item>
         <item>58</item>
         <item>133</item>
         <item>166</item>
