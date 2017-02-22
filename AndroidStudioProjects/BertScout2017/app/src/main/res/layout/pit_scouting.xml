@@ -27,13 +27,28 @@
         android:id="@+id/pit_team_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10sp"
+        android:layout_marginLeft="15sp"
         android:layout_alignBaseline="@+id/pit_team_label"
         android:layout_toEndOf="@+id/pit_team_label"
         android:layout_toRightOf="@+id/pit_team_label"
         android:ems="3"
         android:inputType="number"
         android:text=""
+        android:visibility="visible"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/pit_team_number_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15sp"
+        android:layout_alignBaseline="@+id/pit_team_label"
+        android:layout_toEndOf="@+id/pit_team_label"
+        android:layout_toRightOf="@+id/pit_team_label"
+        android:ems="3"
+        android:inputType="number"
+        android:text=""
+        android:visibility="invisible"
         android:textSize="36sp" />
 
     <Button
@@ -50,18 +65,6 @@
         android:paddingTop="0sp"
         android:text="LOAD"
         android:textSize="30sp" />
-
-    <!--<Spinner-->
-        <!--android:id="@+id/pit_team_spinner"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignTop="@+id/pit_team_label"-->
-        <!--android:layout_marginLeft="250sp"-->
-        <!--android:layout_toEndOf="@+id/pit_team_label"-->
-        <!--android:layout_toRightOf="@+id/pit_team_label"-->
-        <!--android:minHeight="50dp"-->
-        <!--android:minWidth="100sp"-->
-        <!--tools:minHeight="50sp" />-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -84,15 +87,38 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="0sp">
 
+            <!-- team_name -->
+
+            <TextView
+                android:id="@+id/pit_team_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="0sp"
+                android:text="Name"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/pit_team_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_team_name_label"
+                android:layout_marginLeft="10sp"
+                android:layout_toEndOf="@+id/pit_team_name_label"
+                android:layout_toRightOf="@+id/pit_team_name_label"
+                android:inputType="textCapWords"
+                android:ems="12"
+                android:textSize="36sp" />
+
             <!-- team_years -->
 
             <TextView
                 android:id="@+id/pit_team_years_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
+                android:layout_below="@id/pit_team_name_label"
                 android:layout_marginBottom="0sp"
                 android:text="Team Years"
                 android:textSize="36sp" />
@@ -102,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_team_years_label"
-                android:layout_marginLeft="150sp"
+                android:layout_marginLeft="180sp"
                 android:layout_toEndOf="@+id/pit_team_years_label"
                 android:layout_toRightOf="@+id/pit_team_years_label"
                 android:ems="2"
@@ -206,7 +232,7 @@
                 android:layout_below="@id/pit_robot_info_label"
                 android:layout_marginBottom="0sp"
                 android:layout_marginTop="0sp"
-                android:text="Height"
+                android:text="Height (inches)"
                 android:textSize="36sp" />
 
             <EditText
@@ -255,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_height_label"
                 android:layout_marginBottom="0sp"
-                android:text="Weight"
+                android:text="Weight (pounds)"
                 android:textSize="36sp" />
 
             <EditText
@@ -304,7 +330,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_weight_label"
                 android:layout_marginBottom="0sp"
-                android:text="Num CIMs"
+                android:text="Number of CIMs"
                 android:textSize="36sp" />
 
             <EditText
@@ -353,7 +379,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_num_cims_label"
                 android:layout_marginBottom="0sp"
-                android:text="Max Speed"
+                android:text="Max Speed (feet/s)"
                 android:textSize="36sp" />
 
             <EditText
@@ -415,6 +441,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignStart="@+id/pit_team_years"
+                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
@@ -439,6 +466,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignStart="@+id/pit_team_years"
+                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
@@ -452,7 +480,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/pit_wheel_layout_label"
                 android:layout_marginBottom="0sp"
-                android:text="Max Fuel"
+                android:text="Maximum Fuel"
                 android:textSize="36sp" />
 
             <EditText
@@ -502,7 +530,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_max_fuel_label"
                 android:layout_marginBottom="0sp"
-                android:text="Shoot Speed"
+                android:text="Shoot Speed (balls/s)"
                 android:textSize="36sp" />
 
             <EditText
@@ -565,6 +593,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignStart="@+id/pit_team_years"
+                android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:textSize="36sp" />
 
@@ -576,7 +605,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_shoot_location_label"
                 android:layout_marginBottom="0sp"
-                android:text="Can Shoot High"
+                android:text="Can Shoot High?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -599,7 +628,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_can_shoot_high_label"
                 android:layout_marginBottom="0sp"
-                android:text="Can Shoot Low"
+                android:text="Can Shoot Low?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -622,7 +651,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_can_shoot_low_label"
                 android:layout_marginBottom="0sp"
-                android:text="Floor Pickup"
+                android:text="Floor Pickup?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -645,7 +674,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_floor_pickup_label"
                 android:layout_marginBottom="0sp"
-                android:text="Top Loader"
+                android:text="Top Loader?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -668,7 +697,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_top_loader_label"
                 android:layout_marginBottom="0sp"
-                android:text="Vision Sensor"
+                android:text="Vision Sensor?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -691,7 +720,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_auto_aim_label"
                 android:layout_marginBottom="0sp"
-                android:text="Can Carry Gear"
+                android:text="Can Carry Gear?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -714,7 +743,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_can_carry_gear_label"
                 android:layout_marginBottom="0sp"
-                android:text="Can Climb"
+                android:text="Can Climb?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -737,7 +766,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_can_climb_label"
                 android:layout_marginBottom="0sp"
-                android:text="Use Own Rope"
+                android:text="Use Own Rope?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -871,7 +900,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_auto_num_modes_label"
                 android:layout_marginBottom="0sp"
-                android:text="Cross Base Line"
+                android:text="Cross Base Line?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -894,7 +923,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_auto_base_line_label"
                 android:layout_marginBottom="0sp"
-                android:text="Auto Place Gear"
+                android:text="Auto Place Gear?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -917,7 +946,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_auto_place_gear_label"
                 android:layout_marginBottom="0sp"
-                android:text="Auto High Goal"
+                android:text="Auto High Goal?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -940,7 +969,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_auto_high_goal_label"
                 android:layout_marginBottom="0sp"
-                android:text="Auto Low Goal"
+                android:text="Auto Low Goal?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -963,7 +992,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_auto_low_goal_label"
                 android:layout_marginBottom="0sp"
-                android:text="Auto Open Hopper"
+                android:text="Auto Open Hopper?"
                 android:textSize="36sp" />
 
             <ToggleButton
@@ -1005,8 +1034,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/pit_comments_label"
                 android:ems="20"
-                android:inputType="textMultiLine"
-                android:textSize="36sp" />
+                android:inputType="textCapSentences|textMultiLine"
+                android:textSize="36sp"
+                android:textAllCaps="false" />
 
         </RelativeLayout>
 

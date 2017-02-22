@@ -16,11 +16,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     View mRootView;
 
+    public static String ScoutName = "";
+
     public DBHelper dbHelper;
-//    public ExportData exportData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setTitle("North Shore");
+        SetMainTitle();
+
     }
 
     @Override
@@ -104,32 +106,35 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.north_shore:
-                setTitle("North Shore");
-
-//                mStandScoutingFragment.buildMatchSpinner("north_shore");
-                mStandScoutingFragment.buildStandTeamSpinner("teams_list");
-
-                mPitScoutingFragment.buildPitTeamSpinner("teams_list");
-
-                mStatisticsFragment.populateList();
-                break;
-            case R.id.pine_tree:
-                setTitle("Pine Tree");
-
-//                mStandScoutingFragment.buildMatchSpinner("pine_tree");
-                mStandScoutingFragment.buildStandTeamSpinner("teams_list");
-
-                mPitScoutingFragment.buildPitTeamSpinner("teams_list");
-
-                mStatisticsFragment.populateList();
-                break;
-            case R.id.sync_data:
-                openSyncDataDialog(mRootView);
+//            case R.id.north_shore:
+//                setTitle("North Shore");
+//
+////                mStandScoutingFragment.buildMatchSpinner("north_shore");
+//                mStandScoutingFragment.buildStandTeamSpinner("teams_list");
+//
+//                mPitScoutingFragment.buildPitTeamSpinner("teams_list");
+//
+//                mStatisticsFragment.populateList();
+//                break;
+//            case R.id.pine_tree:
+//                setTitle("Pine Tree");
+//
+////                mStandScoutingFragment.buildMatchSpinner("pine_tree");
+//                mStandScoutingFragment.buildStandTeamSpinner("teams_list");
+//
+//                mPitScoutingFragment.buildPitTeamSpinner("teams_list");
+//
+//                mStatisticsFragment.populateList();
+//                break;
+            case R.id.enter_scout_name:
+                enterScoutNameDialog(mRootView);
                 break;
             case R.id.export_data:
                 openExportDataDialog(mRootView);
                 break;
+//            case R.id.sync_data:
+//                openSyncDataDialog(mRootView);
+//                break;
             case R.id.clear_data:
                 openClearDataDialog(mRootView);
                 break;
@@ -186,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openSyncDataDialog(final View view){
+    public void openSyncDataDialog(final View view) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Sync data for " + getTitle() + "?");
 
@@ -305,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openExportDataDialog(final View view){
+    public void openExportDataDialog(final View view) {
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Export data to Documents folder?");
@@ -313,26 +318,24 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                ExportData exportData = new ExportData();
                 String result;
-                try
-                {
+                try {
                     // stand info
                     JSONObject standInfo = new JSONObject();
                     standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
                     JSONArray currStandInfoArray = dbHelper.getDataAllStand();
                     standInfo.put("stand_data", currStandInfoArray);
-                    String standOutFilename = exportData.getDocumentStorageDir() + "/" +
-                            DBContract.TableStandInfo.TABLE_NAME_STAND + ".json";
-                    exportData.ExportData(standOutFilename, standInfo);
+                    String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
+                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_stand.json";
+                    ExportData.ExportData(standOutFilename, standInfo);
                     // pit info
                     JSONObject pitInfo = new JSONObject();
                     pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
                     JSONArray currPitInfoArray = dbHelper.getDataAllPit();
                     pitInfo.put("pit_data", currPitInfoArray);
-                    String pitOutFilename = exportData.getDocumentStorageDir() + "/" +
-                            DBContract.TablePitInfo.TABLE_NAME_PIT + ".json";
-                    exportData.ExportData(pitOutFilename, pitInfo);
+                    String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
+                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_pit.json";
+                    ExportData.ExportData(pitOutFilename, pitInfo);
                     result = "Export done!";
                 } catch (Exception e) {
                     result = "Error during export";
@@ -355,20 +358,23 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void openClearDataDialog(final View view){
+    public void openClearDataDialog(final View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Password");
+        final String realPassword = "3.14";
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Clear all data?");
+        alertDialogBuilder.setMessage("Do you want to *** ERASE *** ALL *** DATA *** ???");
 
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
                 String result;
-                try
-                {
+                try {
                     dbHelper.deleteStandScouting();
                     dbHelper.deletePitInfo();
-                    result = "Clear done!";
+                    result = "Clear done! Please exit app!";
                 } catch (Exception e) {
                     result = "Error during clear";
                 }
@@ -382,15 +388,69 @@ public class MainActivity extends AppCompatActivity {
         alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // do nothing
+                dialog.cancel();
             }
         });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        final AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String clearPassword = input.getText().toString();
+                if (clearPassword.equals(realPassword)) {
+                    alertDialog.show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
     }
 
+    public void enterScoutNameDialog(final View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter Scout Name");
 
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.ScoutName = input.getText().toString();
+                SetMainTitle();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
 
 //    public void openClearDataDialog(final View view){
 //        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -453,4 +513,29 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
+    public void SetMainTitle() {
+        String tempScoutName;
+        if (ScoutName.equals("")) {
+            tempScoutName = "";
+        } else {
+            tempScoutName = " - " + ScoutName;
+        }
+        try {
+            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
+            String title = ExportData.ImportData(titleFilename);
+            setTitle(GetKindleName() + tempScoutName);
+        } catch (Exception e) {
+            setTitle(GetKindleName() + tempScoutName);
+        }
+    }
+
+    public static String GetKindleName() {
+        try {
+            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
+            String title = ExportData.ImportData(titleFilename);
+            return title;
+        } catch (Exception e) {
+            return "Scouting 2017";
+        }
+    }
 }

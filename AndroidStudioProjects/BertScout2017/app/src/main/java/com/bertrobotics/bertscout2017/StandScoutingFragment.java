@@ -1,5 +1,7 @@
 package com.bertrobotics.bertscout2017;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -7,14 +9,13 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.json.JSONArray;
@@ -54,11 +55,11 @@ public class StandScoutingFragment extends Fragment {
             public void onClick(View view) {
 
                 if (standOKButton.getText().equals("") ||
-                        standOKButton.getText().equals("BLUE")) {
+                        standOKButton.getText().toString().equalsIgnoreCase("Blue")) {
                     if (currStandInfoIndex >= 0) {
-                        standOKButton.setText("RED");
+                        standOKButton.setText("Red");
                         try {
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "RED");
+                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "Red");
                         } catch (JSONException e) {
                         }
                         if (!fillingStandInfo) {
@@ -67,11 +68,11 @@ public class StandScoutingFragment extends Fragment {
                     }
                     return;
                 }
-                if (standOKButton.getText().equals("RED")) {
+                if (standOKButton.getText().toString().equalsIgnoreCase("Red")) {
                     if (currStandInfoIndex >= 0) {
-                        standOKButton.setText("BLUE");
+                        standOKButton.setText("Blue");
                         try {
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "BLUE");
+                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "Blue");
                         } catch (JSONException e) {
                         }
                         if (!fillingStandInfo) {
@@ -81,9 +82,14 @@ public class StandScoutingFragment extends Fragment {
                     return;
                 }
 
-                if (standOKButton.getText().equals("LOAD")) {
+                if (standOKButton.getText().toString().equalsIgnoreCase("LOAD")) {
 
                     currStandInfoIndex = -1;
+
+                    if (MainActivity.ScoutName.equals("")) {
+                        Toast.makeText(getContext(), "Please enter Scout Name", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
                     int currMatch;
                     String tempMatchString;
@@ -111,6 +117,9 @@ public class StandScoutingFragment extends Fragment {
                             if (currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) == currMatch &&
                                     currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM) == teamNumber) {
                                 currStandInfoIndex = i;
+                                if (!MainActivity.ScoutName.equals("")) {
+                                    currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, MainActivity.ScoutName);
+                                }
                                 break;
                             }
                         } catch (JSONException e) {
@@ -124,8 +133,7 @@ public class StandScoutingFragment extends Fragment {
 //                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_EVENT, currEvent);
                             currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_MATCH, currMatch);
                             currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TEAM, teamNumber);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "RED");
-//                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, "");
+                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "Red");
 
                             currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH, 0);
                             currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW, 0);
@@ -142,6 +150,7 @@ public class StandScoutingFragment extends Fragment {
                             currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD, false);
 
                             currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_COMMENT, "");
+                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, MainActivity.ScoutName);
 
                             currStandInfoArray.put(currTeam);
                             currStandInfoIndex = currStandInfoArray.length() - 1;
@@ -153,6 +162,7 @@ public class StandScoutingFragment extends Fragment {
                     standOKButton.setText("");
                     showStandInfo();
 
+                    hideSoftKeyboard(getActivity());
                 }
             }
 
@@ -737,35 +747,9 @@ public class StandScoutingFragment extends Fragment {
             }
         });
 
-        buildStandTeamSpinner("north_shore");
+        clearStandScreen();
 
         return mRootView;
-    }
-
-    public void buildStandTeamSpinner(String event) {
-
-//        currEvent = event;
-//        Integer teamList;
-//
-//        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.stand_team_spinner);
-//
-//        if (event.equals("north_shore")) {
-//            teamList = R.array.north_shore_teams;
-//        } else {
-//            teamList = R.array.pine_tree_teams;
-//        }
-//
-//        if (teamList != null) {
-//            currStandInfoArray = dbHelper.getDataAllStand(currEvent);
-//            ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(mRootView.getContext(),
-//                    teamList, R.layout.spinner_item);
-//            dataAdapter.setDropDownViewResource(R.layout.spinner_item);
-//            teamSpinner.setAdapter(dataAdapter);
-//        } else {
-//            currStandInfoArray = new JSONArray();
-//            teamSpinner.setAdapter(null);
-//        }
-//
     }
 
     private void showStandInfo() {
@@ -774,53 +758,132 @@ public class StandScoutingFragment extends Fragment {
 
             fillingStandInfo = true;
 
+            EditText stand_team_number_Textbox = (EditText) mRootView.findViewById(R.id.stand_team_number);
+            TextView stand_team_number_view_Textbox = (TextView) mRootView.findViewById(R.id.stand_team_number_view);
+            stand_team_number_view_Textbox.setText(stand_team_number_Textbox.getText());
+            stand_team_number_view_Textbox.setVisibility(View.VISIBLE);
+            stand_team_number_Textbox.setVisibility(View.INVISIBLE);
+
             Button stand_ok_Button = (Button) mRootView.findViewById(R.id.stand_ok_btn);
             stand_ok_Button.setText(currTeam.getString(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE));
 
             TextView auto_score_high_number_Textview = (TextView) mRootView.findViewById(R.id.stand_auto_score_high_number);
             auto_score_high_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH)));
+            auto_score_high_number_Textview.setVisibility(View.VISIBLE);
 
             TextView auto_score_low_number_Textview = (TextView) mRootView.findViewById(R.id.stand_auto_score_low_number);
             auto_score_low_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW)));
+            auto_score_low_number_Textview.setVisibility(View.VISIBLE);
 
             ToggleButton auto_cross_baseline_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_auto_cross_baseline_toggle);
             boolean auto_cross_baseline_flag = currTeam.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE);
             auto_cross_baseline_toggle_ToggleButton.setChecked(auto_cross_baseline_flag);
+            auto_cross_baseline_toggle_ToggleButton.setVisibility(View.VISIBLE);
 
             ToggleButton auto_place_gear_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_auto_place_gear_toggle);
             boolean auto_place_gear_flag = currTeam.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR);
             auto_place_gear_toggle_ToggleButton.setChecked(auto_place_gear_flag);
+            auto_place_gear_toggle_ToggleButton.setVisibility(View.VISIBLE);
 
             ToggleButton auto_open_hopper_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_auto_open_hopper_toggle);
             boolean auto_open_hopper_flag = currTeam.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER);
             auto_open_hopper_toggle_ToggleButton.setChecked(auto_open_hopper_flag);
+            auto_open_hopper_toggle_ToggleButton.setVisibility(View.VISIBLE);
 
             TextView teleop_score_high_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_score_high_number);
             teleop_score_high_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH)));
+            teleop_score_high_number_Textview.setVisibility(View.VISIBLE);
 
             TextView teleop_score_low_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_number);
             teleop_score_low_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW)));
+            teleop_score_low_number_Textview.setVisibility(View.VISIBLE);
 
             TextView teleop_gears_received_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
             teleop_gears_received_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED)));
+            teleop_gears_received_number_Textview.setVisibility(View.VISIBLE);
 
             TextView teleop_gears_placed_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_number);
             teleop_gears_placed_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED)));
+            teleop_gears_placed_number_Textview.setVisibility(View.VISIBLE);
 
             TextView penalties_incurred_number_Textview = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_number);
             penalties_incurred_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES)));
+            penalties_incurred_number_Textview.setVisibility(View.VISIBLE);
 
             ToggleButton teleop_climb_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_teleop_climb_toggle);
             boolean teleop_climb_flag = currTeam.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED);
             teleop_climb_toggle_ToggleButton.setChecked(teleop_climb_flag);
+            teleop_climb_toggle_ToggleButton.setVisibility(View.VISIBLE);
 
             ToggleButton teleop_touchpad_scored_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_teleop_touchpad_scored_toggle);
             boolean teleop_touchpad_scored_flag = currTeam.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD);
             teleop_touchpad_scored_toggle_ToggleButton.setChecked(teleop_touchpad_scored_flag);
+            teleop_touchpad_scored_toggle_ToggleButton.setVisibility(View.VISIBLE);
 
             EditText comments_text_Textview = (EditText) mRootView.findViewById(R.id.stand_comments_text);
             String comments_flag = currTeam.getString(DBContract.TableStandInfo.COLNAME_STAND_COMMENT);
             comments_text_Textview.setText(comments_flag);
+            comments_text_Textview.setVisibility(View.VISIBLE);
+
+            Button score_highMinusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_high_minus_btn);
+            score_highMinusButton.setVisibility(View.VISIBLE);
+            Button score_highPlusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_high_plus_btn);
+            score_highPlusButton.setVisibility(View.VISIBLE);
+            Button score_lowMinusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_low_minus_btn);
+            score_lowMinusButton.setVisibility(View.VISIBLE);
+            Button score_lowPlusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_low_plus_btn);
+            score_lowPlusButton.setVisibility(View.VISIBLE);
+            Button teleop_score_highMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_high_minus_btn);
+            teleop_score_highMinusButton.setVisibility(View.VISIBLE);
+            Button teleop_score_highPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_high_plus_btn);
+            teleop_score_highPlusButton.setVisibility(View.VISIBLE);
+            Button teleop_score_lowMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_low_minus_btn);
+            teleop_score_lowMinusButton.setVisibility(View.VISIBLE);
+            Button teleop_score_lowPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_low_plus_btn);
+            teleop_score_lowPlusButton.setVisibility(View.VISIBLE);
+            Button teleop_gears_receviedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_minus_btn);
+            teleop_gears_receviedMinusButton.setVisibility(View.VISIBLE);
+            Button teleop_gears_receivedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_plus_btn);
+            teleop_gears_receivedPlusButton.setVisibility(View.VISIBLE);
+            Button teleop_gears_placedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_minus_btn);
+            teleop_gears_placedMinusButton.setVisibility(View.VISIBLE);
+            Button teleop_gears_placedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_plus_btn);
+            teleop_gears_placedPlusButton.setVisibility(View.VISIBLE);
+            Button penalties_incurredMinusButton = (Button) mRootView.findViewById(R.id.stand_penalties_incurred_minus_btn);
+            penalties_incurredMinusButton.setVisibility(View.VISIBLE);
+            Button penalties_incurredPlusButton = (Button) mRootView.findViewById(R.id.stand_penalties_incurred_plus_btn);
+            penalties_incurredPlusButton.setVisibility(View.VISIBLE);
+
+            TextView stand_auto_period_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_period_label);
+            stand_auto_period_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_auto_score_high_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_score_high_label);
+            stand_auto_score_high_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_auto_score_low_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_score_low_label);
+            stand_auto_score_low_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_auto_cross_baseline_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_cross_baseline_label);
+            stand_auto_cross_baseline_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_auto_place_gear_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_place_gear_label);
+            stand_auto_place_gear_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_auto_open_hopper_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_open_hopper_label);
+            stand_auto_open_hopper_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_period_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_period_label);
+            stand_teleop_period_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_score_high_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_score_high_label);
+            stand_teleop_score_high_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_score_low_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_label);
+            stand_teleop_score_low_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_gears_received_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_label);
+            stand_teleop_gears_received_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_gears_placed_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_label);
+            stand_teleop_gears_placed_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_penalties_incurred_label_Text = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_label);
+            stand_penalties_incurred_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_climb_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_climb_label);
+            stand_teleop_climb_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_teleop_touchpad_scored_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_touchpad_scored_label);
+            stand_teleop_touchpad_scored_label_Text.setVisibility(View.VISIBLE);
+            TextView stand_comments_label_Text = (TextView) mRootView.findViewById(R.id.stand_comments_label);
+            stand_comments_label_Text.setVisibility(View.VISIBLE);
 
             fillingStandInfo = false;
 
@@ -836,47 +899,127 @@ public class StandScoutingFragment extends Fragment {
 
         try {
 
+            EditText stand_team_number_Textbox = (EditText) mRootView.findViewById(R.id.stand_team_number);
+            TextView stand_team_number_view_Textbox = (TextView) mRootView.findViewById(R.id.stand_team_number_view);
+            stand_team_number_view_Textbox.setText("");
+            stand_team_number_Textbox.setText("");
+            stand_team_number_view_Textbox.setVisibility(View.INVISIBLE);
+            stand_team_number_Textbox.setVisibility(View.VISIBLE);
+
             Button stand_ok_Button = (Button) mRootView.findViewById(R.id.stand_ok_btn);
-            stand_ok_Button.setText("?");
+            stand_ok_Button.setText("LOAD");
 
             TextView auto_score_high_number_Textview = (TextView) mRootView.findViewById(R.id.stand_auto_score_high_number);
             auto_score_high_number_Textview.setText("0");
+            auto_score_high_number_Textview.setVisibility(View.INVISIBLE);
 
             TextView auto_score_low_number_Textview = (TextView) mRootView.findViewById(R.id.stand_auto_score_low_number);
             auto_score_low_number_Textview.setText("0");
+            auto_score_low_number_Textview.setVisibility(View.INVISIBLE);
 
             ToggleButton auto_cross_baseline_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_auto_cross_baseline_toggle);
             auto_cross_baseline_toggle_ToggleButton.setChecked(false);
+            auto_cross_baseline_toggle_ToggleButton.setVisibility(View.INVISIBLE);
 
             ToggleButton auto_place_gear_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_auto_place_gear_toggle);
             auto_place_gear_toggle_ToggleButton.setChecked(false);
+            auto_place_gear_toggle_ToggleButton.setVisibility(View.INVISIBLE);
 
             ToggleButton auto_open_hopper_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_auto_open_hopper_toggle);
             auto_open_hopper_toggle_ToggleButton.setChecked(false);
+            auto_open_hopper_toggle_ToggleButton.setVisibility(View.INVISIBLE);
 
             TextView teleop_score_high_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_score_high_number);
             teleop_score_high_number_Textview.setText("0");
+            teleop_score_high_number_Textview.setVisibility(View.INVISIBLE);
 
             TextView teleop_score_low_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_number);
             teleop_score_low_number_Textview.setText("0");
+            teleop_score_low_number_Textview.setVisibility(View.INVISIBLE);
 
             TextView teleop_gears_received_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
             teleop_gears_received_number_Textview.setText("0");
+            teleop_gears_received_number_Textview.setVisibility(View.INVISIBLE);
 
             TextView teleop_gears_placed_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_number);
             teleop_gears_placed_number_Textview.setText("0");
+            teleop_gears_placed_number_Textview.setVisibility(View.INVISIBLE);
 
             TextView penalties_incurred_number_Textview = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_number);
             penalties_incurred_number_Textview.setText("0");
+            penalties_incurred_number_Textview.setVisibility(View.INVISIBLE);
 
             ToggleButton teleop_climb_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_teleop_climb_toggle);
             teleop_climb_toggle_ToggleButton.setChecked(false);
+            teleop_climb_toggle_ToggleButton.setVisibility(View.INVISIBLE);
 
             ToggleButton teleop_touchpad_scored_toggle_ToggleButton = (ToggleButton) mRootView.findViewById(R.id.stand_teleop_touchpad_scored_toggle);
             teleop_touchpad_scored_toggle_ToggleButton.setChecked(false);
+            teleop_touchpad_scored_toggle_ToggleButton.setVisibility(View.INVISIBLE);
 
             EditText stand_comments_text_Textview = (EditText) mRootView.findViewById(R.id.stand_comments_text);
             stand_comments_text_Textview.setText("");
+            stand_comments_text_Textview.setVisibility(View.INVISIBLE);
+
+            Button score_highMinusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_high_minus_btn);
+            score_highMinusButton.setVisibility(View.INVISIBLE);
+            Button score_highPlusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_high_plus_btn);
+            score_highPlusButton.setVisibility(View.INVISIBLE);
+            Button score_lowMinusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_low_minus_btn);
+            score_lowMinusButton.setVisibility(View.INVISIBLE);
+            Button score_lowPlusButton = (Button) mRootView.findViewById(R.id.stand_auto_score_low_plus_btn);
+            score_lowPlusButton.setVisibility(View.INVISIBLE);
+            Button teleop_score_highMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_high_minus_btn);
+            teleop_score_highMinusButton.setVisibility(View.INVISIBLE);
+            Button teleop_score_highPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_high_plus_btn);
+            teleop_score_highPlusButton.setVisibility(View.INVISIBLE);
+            Button teleop_score_lowMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_low_minus_btn);
+            teleop_score_lowMinusButton.setVisibility(View.INVISIBLE);
+            Button teleop_score_lowPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_low_plus_btn);
+            teleop_score_lowPlusButton.setVisibility(View.INVISIBLE);
+            Button teleop_gears_receviedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_minus_btn);
+            teleop_gears_receviedMinusButton.setVisibility(View.INVISIBLE);
+            Button teleop_gears_receivedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_plus_btn);
+            teleop_gears_receivedPlusButton.setVisibility(View.INVISIBLE);
+            Button teleop_gears_placedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_minus_btn);
+            teleop_gears_placedMinusButton.setVisibility(View.INVISIBLE);
+            Button teleop_gears_placedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_plus_btn);
+            teleop_gears_placedPlusButton.setVisibility(View.INVISIBLE);
+            Button penalties_incurredMinusButton = (Button) mRootView.findViewById(R.id.stand_penalties_incurred_minus_btn);
+            penalties_incurredMinusButton.setVisibility(View.INVISIBLE);
+            Button penalties_incurredPlusButton = (Button) mRootView.findViewById(R.id.stand_penalties_incurred_plus_btn);
+            penalties_incurredPlusButton.setVisibility(View.INVISIBLE);
+
+            TextView stand_auto_period_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_period_label);
+            stand_auto_period_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_auto_score_high_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_score_high_label);
+            stand_auto_score_high_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_auto_score_low_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_score_low_label);
+            stand_auto_score_low_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_auto_cross_baseline_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_cross_baseline_label);
+            stand_auto_cross_baseline_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_auto_place_gear_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_place_gear_label);
+            stand_auto_place_gear_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_auto_open_hopper_label_Text = (TextView) mRootView.findViewById(R.id.stand_auto_open_hopper_label);
+            stand_auto_open_hopper_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_period_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_period_label);
+            stand_teleop_period_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_score_high_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_score_high_label);
+            stand_teleop_score_high_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_score_low_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_label);
+            stand_teleop_score_low_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_gears_received_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_label);
+            stand_teleop_gears_received_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_gears_placed_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_label);
+            stand_teleop_gears_placed_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_penalties_incurred_label_Text = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_label);
+            stand_penalties_incurred_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_climb_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_climb_label);
+            stand_teleop_climb_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_teleop_touchpad_scored_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_touchpad_scored_label);
+            stand_teleop_touchpad_scored_label_Text.setVisibility(View.INVISIBLE);
+            TextView stand_comments_label_Text = (TextView) mRootView.findViewById(R.id.stand_comments_label);
+            stand_comments_label_Text.setVisibility(View.INVISIBLE);
 
         } catch (Exception e) {
 
@@ -886,6 +1029,11 @@ public class StandScoutingFragment extends Fragment {
 
         fillingStandInfo = false;
 
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }

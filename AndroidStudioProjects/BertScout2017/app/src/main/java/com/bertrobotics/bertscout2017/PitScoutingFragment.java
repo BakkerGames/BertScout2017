@@ -1,5 +1,9 @@
 package com.bertrobotics.bertscout2017;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -7,14 +11,17 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.json.JSONArray;
@@ -55,83 +62,151 @@ public class PitScoutingFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                currPitInfoIndex = -1;
-                clearPitScreen();
+                if (pitOKButton.getText().toString().equalsIgnoreCase("NEXT")) {
 
-                int teamNumber;
-                try {
-                    TextView teamText = (TextView) mRootView.findViewById(R.id.pit_team_number);
-                    teamNumber = Integer.parseInt(teamText.getText().toString());
-                } catch (Exception e) {
+                    currPitInfoIndex = -1;
+                    EditText pit_team_number_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_number);
+                    pit_team_number_Textbox.setText("");
+                    pit_team_number_Textbox.setVisibility(View.VISIBLE);
+                    TextView pit_team_number_view_Textbox = (TextView) mRootView.findViewById(R.id.pit_team_number_view);
+                    pit_team_number_view_Textbox.setText("");
+                    pit_team_number_view_Textbox.setVisibility(View.INVISIBLE);
+                    clearPitScreen();
+                    pitOKButton.setText("LOAD");
                     return;
+
                 }
 
-                currPitInfoArray = dbHelper.getDataAllPit();
+                if (pitOKButton.getText().toString().equalsIgnoreCase("LOAD")) {
 
-                for (int i = 0; i < currPitInfoArray.length(); i++) {
+                    currPitInfoIndex = -1;
+                    clearPitScreen();
+
+                    if (MainActivity.ScoutName.equals("")) {
+                        Toast.makeText(getContext(), "Please enter Scout Name", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    int teamNumber;
                     try {
-                        currTeam = currPitInfoArray.getJSONObject(i);
-                        if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM) == teamNumber) {
-                            currPitInfoIndex = i;
-                            break;
+                        TextView teamText = (TextView) mRootView.findViewById(R.id.pit_team_number);
+                        teamNumber = Integer.parseInt(teamText.getText().toString());
+                    } catch (Exception e) {
+                        return;
+                    }
+
+                    currPitInfoArray = dbHelper.getDataAllPit();
+
+                    for (int i = 0; i < currPitInfoArray.length(); i++) {
+                        try {
+                            currTeam = currPitInfoArray.getJSONObject(i);
+                            if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM) == teamNumber) {
+                                currPitInfoIndex = i;
+                                if (!MainActivity.ScoutName.equals("")) {
+                                    currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME, MainActivity.ScoutName);
+                                }
+                                break;
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    if (currPitInfoIndex < 0) {
+                        currTeam = new JSONObject();
+                        try {
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM, teamNumber);
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME, "");
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS, 0);
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE, "");
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT, "");
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION, "");
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR, false);
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE, false);
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT, false);
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER, false);
+
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING, 0);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_COMMENT, "");
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME, MainActivity.ScoutName);
+
+                            currPitInfoArray.put(currTeam);
+                            currPitInfoIndex = currPitInfoArray.length() - 1;
+
+                        } catch (JSONException e) {
+                        }
+                    }
+
+                    EditText pit_team_number_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_number);
+                    TextView pit_team_number_view_Textbox = (TextView) mRootView.findViewById(R.id.pit_team_number_view);
+                    pit_team_number_view_Textbox.setText(pit_team_number_Textbox.getText());
+                    pit_team_number_view_Textbox.setVisibility(View.VISIBLE);
+                    pit_team_number_Textbox.setVisibility(View.INVISIBLE);
+
+                    pitOKButton.setText("NEXT");
+
+                    showPitInfo();
+
+                    hideSoftKeyboard(getActivity());
+
+                    return;
+
+                }
+
+            }
+
+        });
+
+        final EditText pit_team_name_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_name);
+        pit_team_name_Textbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        String tempValue = pit_team_name_Textbox.getText().toString();
+                        if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME) != tempValue) {
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME, tempValue);
+                            if (!fillingPitInfo) {
+                                dbHelper.updatePitInfo(currTeam);
+                            }
                         }
                     } catch (JSONException e) {
                     }
                 }
-
-                if (currPitInfoIndex < 0) {
-                    currTeam = new JSONObject();
-                    try {
-//                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_EVENT, currEvent);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM, teamNumber);
-//                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME, "");
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS, 0);
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE, "");
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT, "");
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION, "");
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR, false);
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE, false);
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT, false);
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL, false);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER, false);
-
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING, 0);
-                        currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_COMMENT, "");
-
-                        currPitInfoArray.put(currTeam);
-                        currPitInfoIndex = currPitInfoArray.length() - 1;
-                    } catch (JSONException e) {
-                    }
-                }
-                showPitInfo();
-
             }
-
         });
 
         final EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
@@ -192,7 +267,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue++;
                     pit_team_years_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_team_years_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -256,7 +331,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue++;
                     pit_team_members_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_team_members_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -298,10 +373,12 @@ public class PitScoutingFragment extends Fragment {
                 heightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(heightText.getText().toString());
-                    if (tempValue >= 4) {
-                        tempValue = 24;
-                        heightText.setText(Integer.toString(tempValue));
+                    if (tempValue > 0) {
+                        tempValue--;
+                    } else {
+                        tempValue = 36;
                     }
+                    heightText.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
                     int tempValue = 0;
                     heightText.setText(Integer.toString(tempValue));
@@ -317,10 +394,10 @@ public class PitScoutingFragment extends Fragment {
                 heightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(heightText.getText().toString());
-                    tempValue = 36;
+                    tempValue++;
                     heightText.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     heightText.setText(Integer.toString(tempValue));
                 }
             }
@@ -362,10 +439,10 @@ public class PitScoutingFragment extends Fragment {
                 weightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(weightText.getText().toString());
-                    if (tempValue >= 5) {
-                        tempValue = tempValue - 5;
+                    if (tempValue > 0) {
+                        tempValue--;
                     } else {
-                        tempValue = 0;
+                        tempValue = 120;
                     }
                     weightText.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
@@ -383,11 +460,7 @@ public class PitScoutingFragment extends Fragment {
                 weightText.requestFocus();
                 try {
                     int tempValue = Integer.parseInt(weightText.getText().toString());
-                    if (tempValue <= 115) {
-                        tempValue = tempValue + 5;
-                    } else {
-                        tempValue = 120;
-                    }
+                    tempValue++;
                     weightText.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
                     int tempValue = 120;
@@ -454,7 +527,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue++;
                     pit_num_cims_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_num_cims_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -518,7 +591,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue++;
                     pit_max_speed_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_max_speed_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -636,7 +709,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue = tempValue + 5;
                     pit_max_fuel_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_max_fuel_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -700,7 +773,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue++;
                     pit_shoot_speed_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_shoot_speed_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -1000,7 +1073,7 @@ public class PitScoutingFragment extends Fragment {
                     tempValue++;
                     pit_auto_num_modes_Text.setText(Integer.toString(tempValue));
                 } catch (Exception e) {
-                    int tempValue = 0;
+                    int tempValue = 1;
                     pit_auto_num_modes_Text.setText(Integer.toString(tempValue));
                 }
             }
@@ -1147,34 +1220,9 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        buildPitTeamSpinner("north_shore");
+        clearPitScreen();
 
         return mRootView;
-    }
-
-    public void buildPitTeamSpinner(String event) {
-
-//        currEvent = event;
-//        Integer teamList = null;
-//
-//        Spinner teamSpinner = (Spinner) mRootView.findViewById(R.id.pit_team_spinner);
-//
-//        if (event.equals("north_shore")) {
-//            teamList = R.array.north_shore_teams;
-//        } else if (event.equals("pine_tree")) {
-//            teamList = R.array.pine_tree_teams;
-//        }
-//
-//        if (teamList != null) {
-//            currPitInfoArray = dbHelper.getDataAllPit();
-//            ArrayAdapter<CharSequence> dataAdapter = ArrayAdapter.createFromResource(mRootView.getContext(),
-//                    teamList, R.layout.spinner_item);
-//            dataAdapter.setDropDownViewResource(R.layout.spinner_item);
-//            teamSpinner.setAdapter(dataAdapter);
-//        } else {
-//            currPitInfoArray = new JSONArray();
-//            teamSpinner.setAdapter(null);
-//        }
 
     }
 
@@ -1183,6 +1231,12 @@ public class PitScoutingFragment extends Fragment {
         try {
 
             fillingPitInfo = true;
+
+            RelativeLayout pit_scouting_scroll_Layout = (RelativeLayout) mRootView.findViewById(R.id.pit_scouting_scroll);
+            pit_scouting_scroll_Layout.setVisibility(View.VISIBLE);
+
+            EditText pit_team_name_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_name);
+            pit_team_name_Textbox.setText(currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME));
 
             EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
             pit_team_years_Textbox.setText(Integer.toString(currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS)));
@@ -1286,98 +1340,127 @@ public class PitScoutingFragment extends Fragment {
 
         fillingPitInfo = true;
 
-        EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
-        pit_team_years_Textbox.setText("");
+        try {
 
-        EditText pit_team_members_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_members);
-        pit_team_members_Textbox.setText("");
+            RelativeLayout pit_scouting_scroll_Layout = (RelativeLayout) mRootView.findViewById(R.id.pit_scouting_scroll);
+            pit_scouting_scroll_Layout.setVisibility(View.INVISIBLE);
 
-        EditText pit_height_Textbox = (EditText) mRootView.findViewById(R.id.pit_height);
-        pit_height_Textbox.setText("");
+        } catch (Exception e) {
 
-        EditText pit_weight_Textbox = (EditText) mRootView.findViewById(R.id.pit_weight);
-        pit_weight_Textbox.setText("");
+            fillingPitInfo = false;
 
-        EditText pit_num_cims_Textbox = (EditText) mRootView.findViewById(R.id.pit_num_cims);
-        pit_num_cims_Textbox.setText("");
+        }
 
-        EditText pit_max_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_speed);
-        pit_max_speed_Textbox.setText("");
+        fillingPitInfo = true;
 
-        EditText pit_wheel_type_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_type);
-        pit_wheel_type_Textbox.setText("");
+        try {
 
-        EditText pit_wheel_layout_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_layout);
-        pit_wheel_layout_Textbox.setText("");
+            EditText pit_team_name_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_name);
+            pit_team_name_Textbox.setText("");
 
-        EditText pit_max_fuel_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_fuel);
-        pit_max_fuel_Textbox.setText("");
+            EditText pit_team_years_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_years);
+            pit_team_years_Textbox.setText("");
 
-        EditText pit_shoot_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_speed);
-        pit_shoot_speed_Textbox.setText("");
+            EditText pit_team_members_Textbox = (EditText) mRootView.findViewById(R.id.pit_team_members);
+            pit_team_members_Textbox.setText("");
 
-        EditText pit_shoot_location_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_location);
-        pit_shoot_location_Textbox.setText("");
+            EditText pit_height_Textbox = (EditText) mRootView.findViewById(R.id.pit_height);
+            pit_height_Textbox.setText("");
 
-        ToggleButton pit_can_shoot_high_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_high);
-        pit_can_shoot_high_Button.setChecked(false);
+            EditText pit_weight_Textbox = (EditText) mRootView.findViewById(R.id.pit_weight);
+            pit_weight_Textbox.setText("");
 
-        ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
-        pit_can_shoot_low_Button.setChecked(false);
+            EditText pit_num_cims_Textbox = (EditText) mRootView.findViewById(R.id.pit_num_cims);
+            pit_num_cims_Textbox.setText("");
 
-        ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
-        pit_floor_pickup_Button.setChecked(false);
+            EditText pit_max_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_speed);
+            pit_max_speed_Textbox.setText("");
 
-        ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
-        pit_top_loader_Button.setChecked(false);
+            EditText pit_wheel_type_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_type);
+            pit_wheel_type_Textbox.setText("");
 
-        ToggleButton pit_auto_aim_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_aim);
-        pit_auto_aim_Button.setChecked(false);
+            EditText pit_wheel_layout_Textbox = (EditText) mRootView.findViewById(R.id.pit_wheel_layout);
+            pit_wheel_layout_Textbox.setText("");
 
-        ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
-        pit_can_carry_gear_Button.setChecked(false);
+            EditText pit_max_fuel_Textbox = (EditText) mRootView.findViewById(R.id.pit_max_fuel);
+            pit_max_fuel_Textbox.setText("");
 
-        ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
-        pit_can_climb_Button.setChecked(false);
+            EditText pit_shoot_speed_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_speed);
+            pit_shoot_speed_Textbox.setText("");
 
-        ToggleButton pit_own_rope_Button = (ToggleButton) mRootView.findViewById(R.id.pit_own_rope);
-        pit_own_rope_Button.setChecked(false);
+            EditText pit_shoot_location_Textbox = (EditText) mRootView.findViewById(R.id.pit_shoot_location);
+            pit_shoot_location_Textbox.setText("");
 
-        ToggleButton pit_start_left_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_left);
-        pit_start_left_Button.setChecked(false);
+            ToggleButton pit_can_shoot_high_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_high);
+            pit_can_shoot_high_Button.setChecked(false);
 
-        ToggleButton pit_start_center_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_center);
-        pit_start_center_Button.setChecked(false);
+            ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
+            pit_can_shoot_low_Button.setChecked(false);
 
-        ToggleButton pit_start_right_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_right);
-        pit_start_right_Button.setChecked(false);
+            ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
+            pit_floor_pickup_Button.setChecked(false);
 
-        EditText pit_auto_num_modes_Textbox = (EditText) mRootView.findViewById(R.id.pit_auto_num_modes);
-        pit_auto_num_modes_Textbox.setText("");
+            ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
+            pit_top_loader_Button.setChecked(false);
 
-        ToggleButton pit_auto_base_line_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_base_line);
-        pit_auto_base_line_Button.setChecked(false);
+            ToggleButton pit_auto_aim_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_aim);
+            pit_auto_aim_Button.setChecked(false);
 
-        ToggleButton pit_auto_place_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_place_gear);
-        pit_auto_place_gear_Button.setChecked(false);
+            ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
+            pit_can_carry_gear_Button.setChecked(false);
 
-        ToggleButton pit_auto_high_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_high_goal);
-        pit_auto_high_goal_Button.setChecked(false);
+            ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
+            pit_can_climb_Button.setChecked(false);
 
-        ToggleButton pit_auto_low_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_low_goal);
-        pit_auto_low_goal_Button.setChecked(false);
+            ToggleButton pit_own_rope_Button = (ToggleButton) mRootView.findViewById(R.id.pit_own_rope);
+            pit_own_rope_Button.setChecked(false);
 
-        ToggleButton pit_auto_hopper_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_hopper);
-        pit_auto_hopper_Button.setChecked(false);
+            ToggleButton pit_start_left_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_left);
+            pit_start_left_Button.setChecked(false);
 
-        RatingBar pit_team_rating_Bar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
-        pit_team_rating_Bar.setRating(0);
+            ToggleButton pit_start_center_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_center);
+            pit_start_center_Button.setChecked(false);
 
-        EditText pit_comments_Textbox = (EditText) mRootView.findViewById(R.id.pit_comments);
-        pit_comments_Textbox.setText("");
+            ToggleButton pit_start_right_Button = (ToggleButton) mRootView.findViewById(R.id.pit_start_right);
+            pit_start_right_Button.setChecked(false);
+
+            EditText pit_auto_num_modes_Textbox = (EditText) mRootView.findViewById(R.id.pit_auto_num_modes);
+            pit_auto_num_modes_Textbox.setText("");
+
+            ToggleButton pit_auto_base_line_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_base_line);
+            pit_auto_base_line_Button.setChecked(false);
+
+            ToggleButton pit_auto_place_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_place_gear);
+            pit_auto_place_gear_Button.setChecked(false);
+
+            ToggleButton pit_auto_high_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_high_goal);
+            pit_auto_high_goal_Button.setChecked(false);
+
+            ToggleButton pit_auto_low_goal_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_low_goal);
+            pit_auto_low_goal_Button.setChecked(false);
+
+            ToggleButton pit_auto_hopper_Button = (ToggleButton) mRootView.findViewById(R.id.pit_auto_hopper);
+            pit_auto_hopper_Button.setChecked(false);
+
+            RatingBar pit_team_rating_Bar = (RatingBar) mRootView.findViewById(R.id.pit_team_rating);
+            pit_team_rating_Bar.setRating(0);
+
+            EditText pit_comments_Textbox = (EditText) mRootView.findViewById(R.id.pit_comments);
+            pit_comments_Textbox.setText("");
+
+        } catch (Exception e) {
+
+            fillingPitInfo = false;
+
+        }
 
         fillingPitInfo = false;
 
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }

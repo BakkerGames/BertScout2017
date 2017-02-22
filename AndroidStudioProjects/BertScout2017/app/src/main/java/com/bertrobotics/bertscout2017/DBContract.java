@@ -2,25 +2,20 @@ package com.bertrobotics.bertscout2017;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by chime on 11/13/2016.
- */
-
 public final class DBContract {
 
     // To prevent someone from accidentally instantiating the contract class,
     // make the constructor private.
-    private DBContract() {}
+    private DBContract() {
+    }
 
     public static class TableStandInfo implements BaseColumns {
 
         public static final String TABLE_NAME_STAND = "stand_scouting";
 
-//        public static final String COLNAME_STAND_EVENT = "event";
         public static final String COLNAME_STAND_MATCH = "match";
         public static final String COLNAME_STAND_TEAM = "team";
         public static final String COLNAME_STAND_ALLIANCE = "alliance_red_blue";
-//        public static final String COLNAME_STAND_SCOUT_NAME = "scout_name";
 
         public static final String COLNAME_STAND_AUTO_SCORE_HIGH = "auto_score_high";
         public static final String COLNAME_STAND_AUTO_SCORE_LOW = "auto_score_low";
@@ -37,16 +32,16 @@ public final class DBContract {
         public static final String COLNAME_STAND_TELEOP_TOUCHPAD = "tele_touchpad";
 
         public static final String COLNAME_STAND_COMMENT = "stand_comment";
+        public static final String COLNAME_STAND_SCOUT_NAME = "scout_name";
 
         public static final String SQL_QUERY_CREATE_TABLE =
                 "CREATE TABLE " + TableStandInfo.TABLE_NAME_STAND + " (" +
 
                         TableStandInfo._ID + " INTEGER PRIMARY KEY" +
-//                        ", " + TableStandInfo.COLNAME_STAND_EVENT + " TEXT" +
+
                         ", " + TableStandInfo.COLNAME_STAND_MATCH + " TEXT" +
                         ", " + TableStandInfo.COLNAME_STAND_TEAM + " INTEGER" +
                         ", " + TableStandInfo.COLNAME_STAND_ALLIANCE + " TEXT" +
-//                        ", " + TableStandInfo.COLNAME_STAND_SCOUT_NAME + " TEXT" +
 
                         ", " + TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH + " INTEGER" +
                         ", " + TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW + " INTEGER" +
@@ -63,6 +58,7 @@ public final class DBContract {
                         ", " + TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD + " INTEGER" +
 
                         ", " + TableStandInfo.COLNAME_STAND_COMMENT + " TEXT" +
+                        ", " + TableStandInfo.COLNAME_STAND_SCOUT_NAME + " TEXT" +
 
                         ");";
 
@@ -76,10 +72,9 @@ public final class DBContract {
 
         public static final String TABLE_NAME_PIT = "pit_info";
 
-//        public static final String COLNAME_PIT_EVENT = "event";
         public static final String COLNAME_PIT_TEAM = "team";
-//        public static final String COLNAME_PIT_SCOUT_NAME = "scout_name";
 
+        public static final String COLNAME_PIT_TEAM_NAME = "team_name";
         public static final String COLNAME_PIT_TEAM_YEARS = "team_years";
         public static final String COLNAME_PIT_TEAM_MEMBERS = "team_members";
 
@@ -116,15 +111,15 @@ public final class DBContract {
 
         public static final String COLNAME_PIT_TEAM_RATING = "team_rating";
         public static final String COLNAME_PIT_COMMENT = "comment";
+        public static final String COLNAME_PIT_SCOUT_NAME = "scout_name";
 
         public static final String SQL_QUERY_CREATE_TABLE =
                 "CREATE TABLE " + TablePitInfo.TABLE_NAME_PIT + " (" +
 
                         TablePitInfo._ID + " INTEGER PRIMARY KEY" +
-//                        ", " + TablePitInfo.COLNAME_PIT_EVENT + " TEXT" +
                         ", " + TablePitInfo.COLNAME_PIT_TEAM + " INTEGER" +
-//                        ", " + TablePitInfo.COLNAME_PIT_SCOUT_NAME + " TEXT" +
 
+                        ", " + TablePitInfo.COLNAME_PIT_TEAM_NAME + " TEXT" +
                         ", " + TablePitInfo.COLNAME_PIT_TEAM_YEARS + " INTEGER" +
                         ", " + TablePitInfo.COLNAME_PIT_TEAM_MEMBERS + " INTEGER" +
 
@@ -162,6 +157,7 @@ public final class DBContract {
                         ", " + TablePitInfo.COLNAME_PIT_TEAM_RATING + " INTEGER" +
 
                         ", " + TablePitInfo.COLNAME_PIT_COMMENT + " TEXT" +
+                        ", " + TablePitInfo.COLNAME_PIT_SCOUT_NAME + " TEXT" +
 
                         ");";
 
