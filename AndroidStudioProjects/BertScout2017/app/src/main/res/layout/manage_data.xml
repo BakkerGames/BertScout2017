@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/passwordLabel"
+        android:layout_width="103dp"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Password:" />
+
+    <EditText
+        android:id="@+id/passwordText"
+        android:layout_width="355dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/passwordLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/sendDataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:maxWidth="0dp"
+        android:minHeight="75dp"
+        android:minWidth="200dp"
+        android:text="Send Data"
+        android:textSize="20sp"
+        android:layout_below="@+id/passwordText"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/pullDataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="37dp"
+        android:minHeight="75dp"
+        android:minWidth="200dp"
+        android:text="Pull Data"
+        android:textSize="20sp"
+        android:layout_below="@+id/sendDataBtn"
+        android:layout_alignLeft="@+id/sendDataBtn"
+        android:layout_alignStart="@+id/sendDataBtn" />
+
+    <Button
+        android:id="@+id/clearLocalDatabaseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:minHeight="75dp"
+        android:minWidth="300dp"
+        android:text="Clear Local Database"
+        android:textSize="20sp"
+        android:layout_below="@+id/exportDataBtn"
+        android:layout_alignLeft="@+id/clearRemoteDatabaseBtn"
+        android:layout_alignStart="@+id/clearRemoteDatabaseBtn" />
+
+    <Button
+        android:id="@+id/clearRemoteDatabaseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="41dp"
+        android:minHeight="75dp"
+        android:minWidth="300dp"
+        android:text="Clear Remote Database"
+        android:textSize="20sp"
+        android:layout_below="@+id/clearLocalDatabaseBtn"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/exportDataBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="75dp"
+        android:minWidth="200dp"
+        android:text="Export Data"
+        android:textSize="20sp"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/pullDataBtn"
+        android:layout_alignLeft="@+id/pullDataBtn"
+        android:layout_alignStart="@+id/pullDataBtn" />
+</RelativeLayout>

@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,35 +36,70 @@ public class TeamDetails extends AppCompatActivity {
         dbHelper = new DBHelper(mRootView.getContext());
 
         Intent intent = getIntent();
-        String event = intent.getStringExtra("event");
+//        String event = intent.getStringExtra("event");
         int team = intent.getIntExtra("team", 0);
 
+        Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar2);
+        toolbar.setTitle("Team: " + Integer.toString(team));
 
-//        data = dbHelper.getTeamData(event, team);
+        data = dbHelper.getDataAllStand(team);
 
         ArrayList<String> teamDetailsArray = new ArrayList<String>();
 
         for (int i = 0; i < data.length(); i++) {
             try {
-                Integer matchNo = Integer.parseInt(data.getJSONObject(i).getString("match_no"));
-                Integer autoHighGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_high"));
-                Integer autoLowGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_low"));
-                Integer autoCrossings = Integer.parseInt(data.getJSONObject(i).getString("auto_cross"));
-                Integer teleopHighGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_high"));
-                Integer teleopLowGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_low"));
-                Integer teleopCrossings = Integer.parseInt(data.getJSONObject(i).getString("tele_cross"));
-                Integer endgame = Integer.parseInt(data.getJSONObject(i).getString("endgame"));
-                String comment = data.getJSONObject(i).getString("comment");
+                String autoBaseLine = "No";
+                String autoPlaceGear = "No";
+                String autoOpenHopper = "No";
+                String teleopClimbed = "No";
+                String teleopTouchpad = "No";
 
-                teamDetailsArray.add(String.valueOf(i + 1) + ")  Match: " + Integer.toString(matchNo) + "\n\n" +
-                        "Auto High Goal: " + String.valueOf(autoHighGoal) + "                  " +
+                Integer match = Integer.parseInt(data.getJSONObject(i).getString("match_no"));
+                Integer autoHighGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_high"));
+                Integer autoLowGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_low"));
+                Integer teleopHighGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_high"));
+                Integer teleopLowGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_low"));
+                Integer teleopGearsReceived = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_received"));
+                Integer teleopGearsPlaced = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_placed"));
+                Integer teleopPenalties = Integer.parseInt(data.getJSONObject(i).getString("tele_penalties"));
+
+                if (data.getJSONObject(i).getString("auto_base_line") == "true") {
+                    autoBaseLine = "Yes";
+                }
+
+                if (data.getJSONObject(i).getString("auto_place_gear") == "true") {
+                    autoPlaceGear = "Yes";
+                }
+
+                if (data.getJSONObject(i).getString("auto_open_hopper") == "true") {
+                    autoOpenHopper = "Yes";
+                }
+
+                if (data.getJSONObject(i).getString("tele_climbed") == "true") {
+                    teleopClimbed = "Yes";
+                }
+
+                if (data.getJSONObject(i).getString("tele_touchpad") == "true") {
+                    teleopTouchpad = "Yes";
+                }
+
+                String comment = data.getJSONObject(i).getString("stand_comment");
+                String scoutName = data.getJSONObject(i).getString("scout_name");
+
+                teamDetailsArray.add(String.valueOf(i + 1) + ")  Match: " + Integer.toString(match) + "\n\n" +
+                        "Auto High Goal: " + String.valueOf(autoHighGoal) + "                           " +
                         "Teleop High Goal: " + String.valueOf(teleopHighGoal) +
-                        "\nAuto Low Goal: " + String.valueOf(autoLowGoal) + "                  " +
+                        "\nAuto Low Goal: " + String.valueOf(autoLowGoal) + "                            " +
                         "Teleop Low Goal: " + String.valueOf(teleopLowGoal) +
-                        "\nAuto Crossings: " + String.valueOf(autoCrossings) + "                  " +
-                        "Teleop Crossings: " + String.valueOf(teleopCrossings) +
-                        "\n\nEnd Game: " + String.valueOf(endgame) +
-                        "\n\nComment: " + comment + "\n");
+                        "\nAuto Baseline: " + String.valueOf(autoBaseLine) + "                           " +
+                        "Teleop Gears Received: " + String.valueOf(teleopGearsReceived) +
+                        "\nAuto Gear Placed: " + String.valueOf(autoPlaceGear) + "                     " +
+                        "Teleop Gears Placed: " + String.valueOf(teleopGearsPlaced) +
+                        "\nAuto Open Hopper: " + String.valueOf(autoOpenHopper) + "                   " +
+                        "Teleop Climbed: " + String.valueOf(teleopClimbed) +
+                        "\nPenalties: " + String.valueOf(teleopPenalties) + "                                      " +
+                        "Teleop Touchpad: " + String.valueOf(teleopTouchpad) +
+                        "\n\nComment(" + scoutName + "): " + comment + "\n");
 
             } catch (JSONException e) {
 

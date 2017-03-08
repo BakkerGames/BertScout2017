@@ -13,7 +13,9 @@ public final class DBContract {
 
         public static final String TABLE_NAME_STAND = "stand_scouting";
 
-        public static final String COLNAME_STAND_MATCH = "match";
+//        public static final String COLNAME_STAND_ID = "ID";
+
+        public static final String COLNAME_STAND_MATCH = "match_no";
         public static final String COLNAME_STAND_TEAM = "team";
         public static final String COLNAME_STAND_ALLIANCE = "alliance_red_blue";
 
@@ -37,9 +39,10 @@ public final class DBContract {
         public static final String SQL_QUERY_CREATE_TABLE =
                 "CREATE TABLE " + TableStandInfo.TABLE_NAME_STAND + " (" +
 
-                        TableStandInfo._ID + " INTEGER PRIMARY KEY" +
+//                        TableStandInfo.COLNAME_STAND_ID + " INTEGER PRIMARY KEY" +
 
-                        ", " + TableStandInfo.COLNAME_STAND_MATCH + " TEXT" +
+//                        ", " + TableStandInfo.COLNAME_STAND_MATCH + " TEXT" +
+                        TableStandInfo.COLNAME_STAND_MATCH + " TEXT" +
                         ", " + TableStandInfo.COLNAME_STAND_TEAM + " INTEGER" +
                         ", " + TableStandInfo.COLNAME_STAND_ALLIANCE + " TEXT" +
 
@@ -59,7 +62,7 @@ public final class DBContract {
 
                         ", " + TableStandInfo.COLNAME_STAND_COMMENT + " TEXT" +
                         ", " + TableStandInfo.COLNAME_STAND_SCOUT_NAME + " TEXT" +
-
+                        ", PRIMARY KEY (match_no, team)" +
                         ");";
 
         public static final String SQL_QUERY_DELETE_TABLE =
@@ -71,6 +74,8 @@ public final class DBContract {
     public static class TablePitInfo implements BaseColumns {
 
         public static final String TABLE_NAME_PIT = "pit_info";
+
+//        public static final String COLNAME_PIT_ID = "ID";
 
         public static final String COLNAME_PIT_TEAM = "team";
 
@@ -116,8 +121,9 @@ public final class DBContract {
         public static final String SQL_QUERY_CREATE_TABLE =
                 "CREATE TABLE " + TablePitInfo.TABLE_NAME_PIT + " (" +
 
-                        TablePitInfo._ID + " INTEGER PRIMARY KEY" +
-                        ", " + TablePitInfo.COLNAME_PIT_TEAM + " INTEGER" +
+//                        TablePitInfo.COLNAME_PIT_ID + " INTEGER PRIMARY KEY" +
+//                        ", " + TablePitInfo.COLNAME_PIT_TEAM + " INTEGER" +
+                        TablePitInfo.COLNAME_PIT_TEAM + " INTEGER PRIMARY KEY" +
 
                         ", " + TablePitInfo.COLNAME_PIT_TEAM_NAME + " TEXT" +
                         ", " + TablePitInfo.COLNAME_PIT_TEAM_YEARS + " INTEGER" +

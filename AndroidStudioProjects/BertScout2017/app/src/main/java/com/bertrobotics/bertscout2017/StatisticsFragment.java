@@ -45,7 +45,7 @@ public class StatisticsFragment extends Fragment {
                                     long id) {
 
                 Intent intent = new Intent(mRootView.getContext(), TeamDetails.class);
-                intent.putExtra("event", mActivity.getTitle().toString());
+//                intent.putExtra("event", mActivity.getTitle().toString());
                 intent.putExtra("team", sortedTeamData[position].team);
                 startActivityForResult(intent, 1);
             }
@@ -115,13 +115,13 @@ public class StatisticsFragment extends Fragment {
             return;
         }
 
-        String event = mActivity.getTitle().toString();
+//        String event = mActivity.getTitle().toString();
 
-        JSONArray data = dbHelper.getDataAllStand();
+        JSONArray data = dbHelper.getDataAllStand(0);
 
         ArrayList<String> teams = new ArrayList<String>();
 
-        TeamData[] totalTeamData = new TeamData[40];
+        TeamData[] totalTeamData = new TeamData[70];
 
         boolean teamFound;
 
@@ -129,14 +129,30 @@ public class StatisticsFragment extends Fragment {
 
         for (int i = 0; i < data.length(); i++) {
             try {
+
+                Integer autoBaseLine = 0;
+                Integer autoPlaceGear = 0;
+                Integer teleopTouchpad = 0;
+
                 Integer team = Integer.parseInt(data.getJSONObject(i).getString("team"));
-                Integer autoHighGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_high"));
-                Integer autoLowGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_low"));
-                Integer defense = Integer.parseInt(data.getJSONObject(i).getString("auto_cross"));
-                Integer teleopHighGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_high"));
-                Integer teleopLowGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_low"));
-                Integer teleopCrossings = Integer.parseInt(data.getJSONObject(i).getString("tele_cross"));
-                Integer endgame = Integer.parseInt(data.getJSONObject(i).getString("endgame"));
+                Integer autoHighGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_high"));
+                Integer autoLowGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_low"));
+                Integer teleopHighGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_high"));
+                Integer teleopLowGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_low"));
+                Integer teleopGearsPlaced = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_placed"));
+                Integer teleopPenalties = Integer.parseInt(data.getJSONObject(i).getString("tele_penalties"));
+
+                if (data.getJSONObject(i).getString("auto_base_line") == "true") {
+                    autoBaseLine = 1;
+                }
+
+                if (data.getJSONObject(i).getString("auto_place_gear") == "true") {
+                    autoPlaceGear = 1;
+                }
+
+                if (data.getJSONObject(i).getString("tele_touchpad") == "true") {
+                    teleopTouchpad = 1;
+                }
 
                 teamFound = false;
                 Integer nextIndex = 0;
@@ -151,11 +167,13 @@ public class StatisticsFragment extends Fragment {
                         totalTeamData[j].numMatches++;
                         totalTeamData[j].totalAutoHigh += autoHighGoal;
                         totalTeamData[j].totalAutoLow += autoLowGoal;
-                        totalTeamData[j].totalAutoCrossing += defense;
+                        totalTeamData[j].totalAutoBaseLine += autoBaseLine;
+                        totalTeamData[j].totalAutoPlaceGear += autoPlaceGear;
                         totalTeamData[j].totalTeleopHigh += teleopHighGoal;
                         totalTeamData[j].totalTeleopLow += teleopLowGoal;
-                        totalTeamData[j].totalTeleopCrossing += teleopCrossings;
-                        totalTeamData[j].totalEndgame += endgame;
+                        totalTeamData[j].totalTeleopGearsPlaced += teleopGearsPlaced;
+                        totalTeamData[j].totalTouchpad += teleopTouchpad;
+                        totalTeamData[j].totalPenalties += teleopPenalties;
 
                         break;
                     }
@@ -168,11 +186,13 @@ public class StatisticsFragment extends Fragment {
                     teamData.numMatches = 1;
                     teamData.totalAutoHigh = autoHighGoal;
                     teamData.totalAutoLow = autoLowGoal;
-                    teamData.totalAutoCrossing = defense;
+                    teamData.totalAutoBaseLine = autoBaseLine;
+                    teamData.totalAutoPlaceGear = autoPlaceGear;
                     teamData.totalTeleopHigh = teleopHighGoal;
                     teamData.totalTeleopLow = teleopLowGoal;
-                    teamData.totalTeleopCrossing = teleopCrossings;
-                    teamData.totalEndgame = endgame;
+                    teamData.totalTeleopGearsPlaced = teleopGearsPlaced;
+                    teamData.totalTouchpad = teleopTouchpad;
+                    teamData.totalPenalties = teleopPenalties;
 
                     totalTeamData[nextIndex] = teamData;
                     lastIndex = nextIndex;
@@ -222,13 +242,15 @@ public class StatisticsFragment extends Fragment {
             teams.add(String.valueOf(i + 1) + ")  " + teamSpaces + Integer.toString(sortedTeamData[i].team) + spaces +
                     "                                                                                 " +
                     "   Matches Played: " + String.valueOf(sortedTeamData[i].numMatches) +
-                    "\n\nAAH: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoHigh / (double) sortedTeamData[i].numMatches) +
-                    "   AAL: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoLow / (double) sortedTeamData[i].numMatches) +
-                    "   AAC: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoCrossing / (double) sortedTeamData[i].numMatches) +
-                    "   ATH: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopHigh / (double) sortedTeamData[i].numMatches) +
-                    "   ATL: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopLow / (double) sortedTeamData[i].numMatches) +
-                    "   ATC: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopCrossing / (double) sortedTeamData[i].numMatches) +
-                    "   ATE: " + String.format("%.1f", (double) sortedTeamData[i].totalEndgame / (double) sortedTeamData[i].numMatches));
+                    "\n\nAH: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoHigh / (double) sortedTeamData[i].numMatches) +
+                    "  AL: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoLow / (double) sortedTeamData[i].numMatches) +
+                    "  AB: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoBaseLine / (double) sortedTeamData[i].numMatches) +
+                    "  AG: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoPlaceGear / (double) sortedTeamData[i].numMatches) +
+                    "  TH: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopHigh / (double) sortedTeamData[i].numMatches) +
+                    "  TL: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopLow / (double) sortedTeamData[i].numMatches) +
+                    "  TG: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopGearsPlaced / (double) sortedTeamData[i].numMatches) +
+                    "  TT: " + String.format("%.1f", (double) sortedTeamData[i].totalTouchpad / (double) sortedTeamData[i].numMatches) +
+                    "  TP: " + String.format("%.1f", (double) sortedTeamData[i].totalPenalties / (double) sortedTeamData[i].numMatches));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mRootView.getContext(),
@@ -297,11 +319,13 @@ public class StatisticsFragment extends Fragment {
         int numMatches;
         int totalAutoHigh;
         int totalAutoLow;
-        int totalAutoCrossing;
+        int totalAutoBaseLine;
+        int totalAutoPlaceGear;
         int totalTeleopHigh;
         int totalTeleopLow;
-        int totalTeleopCrossing;
-        int totalEndgame;
+        int totalTeleopGearsPlaced;
+        int totalTouchpad;
+        int totalPenalties;
 
         public TeamData(StatisticsFragment statisticsFragment) {
             this.statisticsFragment = statisticsFragment;
@@ -309,11 +333,13 @@ public class StatisticsFragment extends Fragment {
             numMatches = 0;
             totalAutoHigh = 0;
             totalAutoLow = 0;
-            totalAutoCrossing = 0;
+            totalAutoBaseLine = 0;
+            totalAutoPlaceGear = 0;
             totalTeleopHigh = 0;
             totalTeleopLow = 0;
-            totalTeleopCrossing = 0;
-            totalEndgame = 0;
+            totalTeleopGearsPlaced = 0;
+            totalTouchpad = 0;
+            totalPenalties = 0;
         }
 
         @Override
@@ -343,11 +369,17 @@ public class StatisticsFragment extends Fragment {
                     } else {
                         return Double.compare((double) td.totalAutoLow / (double) td.numMatches, (double) this.totalAutoLow / (double) this.numMatches);
                     }
-                case "Avg Auto Cross":
+                case "Avg Auto Baseline":
                     if (sortOrderField.equals("Asc")) {
-                        return Double.compare((double) this.totalAutoCrossing / (double) this.numMatches, (double) td.totalAutoCrossing / (double) td.numMatches);
+                        return Double.compare((double) this.totalAutoBaseLine / (double) this.numMatches, (double) td.totalAutoBaseLine / (double) td.numMatches);
                     } else {
-                        return Double.compare((double) td.totalAutoCrossing / (double) td.numMatches, (double) this.totalAutoCrossing / (double) this.numMatches);
+                        return Double.compare((double) td.totalAutoBaseLine / (double) td.numMatches, (double) this.totalAutoBaseLine / (double) this.numMatches);
+                    }
+                case "Avg Auto Gear":
+                    if (sortOrderField.equals("Asc")) {
+                        return Double.compare((double) this.totalAutoPlaceGear / (double) this.numMatches, (double) td.totalAutoPlaceGear / (double) td.numMatches);
+                    } else {
+                        return Double.compare((double) td.totalAutoPlaceGear / (double) td.numMatches, (double) this.totalAutoPlaceGear / (double) this.numMatches);
                     }
                 case "Avg Teleop High":
                     if (sortOrderField.equals("Asc")) {
@@ -361,17 +393,23 @@ public class StatisticsFragment extends Fragment {
                     } else {
                         return Double.compare((double) td.totalTeleopLow / (double) td.numMatches, (double) this.totalTeleopLow / (double) this.numMatches);
                     }
-                case "Avg Teleop Cross":
+                case "Avg Teleop Gear":
                     if (sortOrderField.equals("Asc")) {
-                        return Double.compare((double) this.totalTeleopCrossing / (double) this.numMatches, (double) td.totalTeleopCrossing / (double) td.numMatches);
+                        return Double.compare((double) this.totalTeleopGearsPlaced / (double) this.numMatches, (double) td.totalTeleopGearsPlaced / (double) td.numMatches);
                     } else {
-                        return Double.compare((double) td.totalTeleopCrossing / (double) td.numMatches, (double) this.totalTeleopCrossing / (double) this.numMatches);
+                        return Double.compare((double) td.totalTeleopGearsPlaced / (double) td.numMatches, (double) this.totalTeleopGearsPlaced / (double) this.numMatches);
                     }
-                case "Avg Endgame":
+                case "Avg Touchpad":
                     if (sortOrderField.equals("Asc")) {
-                        return Double.compare((double) this.totalEndgame / (double) this.numMatches, (double) td.totalEndgame / (double) td.numMatches);
+                        return Double.compare((double) this.totalTouchpad / (double) this.numMatches, (double) td.totalTouchpad / (double) td.numMatches);
                     } else {
-                        return Double.compare((double) td.totalEndgame / (double) td.numMatches, (double) this.totalEndgame / (double) this.numMatches);
+                        return Double.compare((double) td.totalTouchpad / (double) td.numMatches, (double) this.totalTouchpad / (double) this.numMatches);
+                    }
+                case "Avg Penalties":
+                    if (sortOrderField.equals("Asc")) {
+                        return Double.compare((double) this.totalPenalties / (double) this.numMatches, (double) td.totalPenalties / (double) td.numMatches);
+                    } else {
+                        return Double.compare((double) td.totalPenalties / (double) td.numMatches, (double) this.totalPenalties / (double) this.numMatches);
                     }
             }
 

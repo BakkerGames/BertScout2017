@@ -83,86 +83,8 @@ public class StandScoutingFragment extends Fragment {
                 }
 
                 if (standOKButton.getText().toString().equalsIgnoreCase("LOAD")) {
+                    loadScreen();
 
-                    currStandInfoIndex = -1;
-
-                    if (MainActivity.ScoutName.equals("")) {
-                        Toast.makeText(getContext(), "Please enter Scout Name", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    int currMatch;
-                    String tempMatchString;
-                    int teamNumber;
-                    try {
-                        TextView matchText = (TextView) mRootView.findViewById(R.id.stand_match_number);
-                        tempMatchString = matchText.getText().toString();
-                        currMatch = Integer.parseInt(tempMatchString);
-                        TextView teamText = (TextView) mRootView.findViewById(R.id.stand_team_number);
-                        teamNumber = Integer.parseInt(teamText.getText().toString());
-                        if (currMatch < 1 || teamNumber < 1) {
-                            return; // no match and/or team yet
-                        }
-                    } catch (Exception e) {
-                        clearStandScreen();
-                        standOKButton.setText("LOAD");
-                        return; // no match and/or team yet
-                    }
-
-                    currStandInfoArray = dbHelper.getDataAllStand();
-
-                    for (int i = 0; i < currStandInfoArray.length(); i++) {
-                        try {
-                            currTeam = currStandInfoArray.getJSONObject(i);
-                            if (currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) == currMatch &&
-                                    currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM) == teamNumber) {
-                                currStandInfoIndex = i;
-                                if (!MainActivity.ScoutName.equals("")) {
-                                    currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, MainActivity.ScoutName);
-                                }
-                                break;
-                            }
-                        } catch (JSONException e) {
-                            currTeam = null;
-                        }
-                    }
-
-                    if (currStandInfoIndex < 0) {
-                        currTeam = new JSONObject();
-                        try {
-//                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_EVENT, currEvent);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_MATCH, currMatch);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TEAM, teamNumber);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "Red");
-
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE, false);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR, false);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER, false);
-
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES, 0);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED, false);
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD, false);
-
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_COMMENT, "");
-                            currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, MainActivity.ScoutName);
-
-                            currStandInfoArray.put(currTeam);
-                            currStandInfoIndex = currStandInfoArray.length() - 1;
-                        } catch (JSONException e) {
-                            currTeam = null;
-                        }
-                    }
-
-                    standOKButton.setText("");
-                    showStandInfo();
-
-                    hideSoftKeyboard(getActivity());
                 }
             }
 
@@ -750,6 +672,90 @@ public class StandScoutingFragment extends Fragment {
         clearStandScreen();
 
         return mRootView;
+    }
+
+    public void loadScreen() {
+        Button standOKButton = (Button) mRootView.findViewById(R.id.stand_ok_btn);
+
+        currStandInfoIndex = -1;
+
+        if (MainActivity.ScoutName.equals("")) {
+            Toast.makeText(getContext(), "Please enter Scout Name", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        int currMatch;
+        String tempMatchString;
+        int teamNumber;
+        try {
+            TextView matchText = (TextView) mRootView.findViewById(R.id.stand_match_number);
+            tempMatchString = matchText.getText().toString();
+            currMatch = Integer.parseInt(tempMatchString);
+            TextView teamText = (TextView) mRootView.findViewById(R.id.stand_team_number);
+            teamNumber = Integer.parseInt(teamText.getText().toString());
+            if (currMatch < 1 || teamNumber < 1) {
+                return; // no match and/or team yet
+            }
+        } catch (Exception e) {
+            clearStandScreen();
+            standOKButton.setText("LOAD");
+            return; // no match and/or team yet
+        }
+
+        currStandInfoArray = dbHelper.getDataAllStand(0);
+
+        for (int i = 0; i < currStandInfoArray.length(); i++) {
+            try {
+                currTeam = currStandInfoArray.getJSONObject(i);
+                if (currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) == currMatch &&
+                        currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM) == teamNumber) {
+                    currStandInfoIndex = i;
+                    if (!MainActivity.ScoutName.equals("")) {
+                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, MainActivity.ScoutName);
+                    }
+                    break;
+                }
+            } catch (JSONException e) {
+                currTeam = null;
+            }
+        }
+
+        if (currStandInfoIndex < 0) {
+            currTeam = new JSONObject();
+            try {
+//                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_EVENT, currEvent);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_MATCH, currMatch);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TEAM, teamNumber);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE, "Red");
+
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE, false);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR, false);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER, false);
+
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES, 0);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED, false);
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD, false);
+
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_COMMENT, "");
+                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, MainActivity.ScoutName);
+
+                currStandInfoArray.put(currTeam);
+                currStandInfoIndex = currStandInfoArray.length() - 1;
+            } catch (JSONException e) {
+                currTeam = null;
+            }
+        }
+
+        standOKButton.setText("");
+        showStandInfo();
+
+        hideSoftKeyboard(getActivity());
     }
 
     private void showStandInfo() {

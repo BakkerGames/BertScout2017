@@ -17,11 +17,13 @@
         <item>Team Number</item>
         <item>Avg Auto High</item>
         <item>Avg Auto Low</item>
-        <item>Avg Auto Cross</item>
+        <item>Avg Auto Baseline</item>
+        <item>Avg Auto Gear</item>
         <item>Avg Teleop High</item>
         <item>Avg Teleop Low</item>
-        <item>Avg Teleop Cross</item>
-        <item>Avg Endgame</item>
+        <item>Avg Teleop Gear</item>
+        <item>Avg Touchpad</item>
+        <item>Avg Penalties</item>
     </string-array>
 
     <string-array name="sort_order">

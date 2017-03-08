@@ -13,7 +13,7 @@ import org.json.JSONException;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "bert_scout.db";
-    public static final int DATABASE_VERSION = 21;
+    public static final int DATABASE_VERSION = 24;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -38,14 +38,22 @@ public class DBHelper extends SQLiteOpenHelper {
         return;
     }
 
-    public JSONArray getDataAllStand() {
+    public JSONArray getDataAllStand(int teamNumber) {
 
         JSONArray resultSet = new JSONArray();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor results;
 
-        results = db.rawQuery(
-                "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND, null);
+        String query;
+
+        if (teamNumber == 0) {
+            query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND + " ORDER BY match_no";
+        } else {
+            query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND +
+                    " WHERE team = " + teamNumber + " ORDER BY match_no";
+        }
+
+        results = db.rawQuery(query, null);
         results.moveToFirst();
 
         while (!results.isAfterLast()) {
@@ -56,7 +64,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (results.getColumnName(i) != null) {
                     try {
                         switch (results.getColumnName(i)) {
-                            case DBContract.TableStandInfo._ID:
+//                            case DBContract.TableStandInfo.COLNAME_STAND_ID:
                             case DBContract.TableStandInfo.COLNAME_STAND_MATCH:
                             case DBContract.TableStandInfo.COLNAME_STAND_TEAM:
                             case DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH:
@@ -126,29 +134,48 @@ public class DBHelper extends SQLiteOpenHelper {
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_COMMENT, standInfo.getString(DBContract.TableStandInfo.COLNAME_STAND_COMMENT));
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME, standInfo.getString(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME));
 
-            if (standInfo.has(DBContract.TableStandInfo._ID)) {
+            Cursor results;
+            String query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND + " WHERE match_no = " + standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) +
+                            " and team = " + standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM);
 
-                db.update(
-                        DBContract.TableStandInfo.TABLE_NAME_STAND,
-                        contentValues,
-                        "_id = ?",
-                        new String[]{String.valueOf(standInfo.getInt(DBContract.TableStandInfo._ID))}
-                );
-                return true;
+            results = db.rawQuery(query, null);
 
-            } else {
-
-                long newID = db.insert(
-                        DBContract.TableStandInfo.TABLE_NAME_STAND,
+            if (!results.moveToFirst()) {
+                db.insert(DBContract.TableStandInfo.TABLE_NAME_STAND,
                         null,
                         contentValues
                 );
-                if (newID > 0) {
-                    standInfo.put(DBContract.TableStandInfo._ID, newID);
-                    return true;
-                }
-
+            } else {
+                db.update(DBContract.TableStandInfo.TABLE_NAME_STAND,
+                          contentValues,
+                          "match_no = ? and team = ?",
+                          new String[]{String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH)),
+                                     String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM))}
+                );
             }
+
+//            if (standInfo.has(DBContract.TableStandInfo.COLNAME_STAND_ID)) {
+//
+//                db.update(
+//                        DBContract.TableStandInfo.TABLE_NAME_STAND,
+//                        contentValues,
+//                        "id = ?",
+//                        new String[]{String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_ID))}
+//                );
+//                return true;
+//
+//            } else {
+//
+//                long newID = db.insert(
+//                        DBContract.TableStandInfo.TABLE_NAME_STAND,
+//                        null,
+//                        contentValues
+//                );
+//                if (newID > 0) {
+//                    standInfo.put(DBContract.TableStandInfo.COLNAME_STAND_ID, newID);
+//                    return true;
+//                }
+//            }
 
         } catch (JSONException e) {
             return false;
@@ -162,13 +189,16 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int result;
         try {
-            db.execSQL(DBContract.TableStandInfo.SQL_QUERY_DELETE_TABLE);
-            try {
-                db.execSQL(DBContract.TableStandInfo.SQL_QUERY_CREATE_TABLE);
-                result = 0;
-            } catch (Exception e) {
-                result = 2; // error during create
-            }
+            db.delete("stand_scouting", null, null);
+//            db.execSQL("DELETE FROM stand_scouting");
+            result = 0;
+//            db.execSQL(DBContract.TableStandInfo.SQL_QUERY_DELETE_TABLE);
+//            try {
+//                db.execSQL(DBContract.TableStandInfo.SQL_QUERY_CREATE_TABLE);
+//                result = 0;
+//            } catch (Exception e) {
+//                result = 2; // error during create
+//            }
         } catch (Exception e) {
             result = 1; // error during delete
         }
@@ -197,7 +227,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 if (results.getColumnName(i) != null) {
                     try {
                         switch (results.getColumnName(i)) {
-                            case DBContract.TablePitInfo._ID:
+//                            case DBContract.TablePitInfo.COLNAME_PIT_ID:
                             case DBContract.TablePitInfo.COLNAME_PIT_TEAM:
                             case DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS:
                             case DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS:
@@ -306,29 +336,47 @@ public class DBHelper extends SQLiteOpenHelper {
             SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_COMMENT);
             SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_SCOUT_NAME);
 
-            if (pitInfo.has(DBContract.TablePitInfo._ID)) {
+            Cursor results;
+            String query = "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME_PIT +
+                            " WHERE team = " + pitInfo.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM);
 
-                db.update(
-                        DBContract.TablePitInfo.TABLE_NAME_PIT,
-                        contentValues,
-                        "_id = ?",
-                        new String[]{String.valueOf(pitInfo.getInt(DBContract.TablePitInfo._ID))}
-                );
-                return true;
+            results = db.rawQuery(query, null);
 
-            } else {
-
-                long newID = db.insert(
-                        DBContract.TablePitInfo.TABLE_NAME_PIT,
+            if (!results.moveToFirst()) {
+                db.insert(DBContract.TablePitInfo.TABLE_NAME_PIT,
                         null,
                         contentValues
                 );
-                if (newID > 0) {
-                    pitInfo.put(DBContract.TablePitInfo._ID, newID);
-                    return true;
-                }
-
+            } else {
+                db.update(DBContract.TablePitInfo.TABLE_NAME_PIT,
+                        contentValues,
+                        "team = ?",
+                        new String[]{String.valueOf(pitInfo.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM))}
+                );
             }
+
+//            if (pitInfo.has(DBContract.TablePitInfo.COLNAME_PIT_ID)) {
+//
+//                db.update(
+//                        DBContract.TablePitInfo.TABLE_NAME_PIT,
+//                        contentValues,
+//                        "id = ?",
+//                        new String[]{String.valueOf(pitInfo.getInt(DBContract.TablePitInfo.COLNAME_PIT_ID))}
+//                );
+//                return true;
+//
+//            } else {
+//
+//                long newID = db.insert(
+//                        DBContract.TablePitInfo.TABLE_NAME_PIT,
+//                        null,
+//                        contentValues
+//                );
+//                if (newID > 0) {
+//                    pitInfo.put(DBContract.TablePitInfo.COLNAME_PIT_ID, newID);
+//                    return true;
+//                }
+//            }
 
         } catch (JSONException e) {
             return false;
@@ -342,13 +390,16 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int result;
         try {
-            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
-            try {
-                db.execSQL(DBContract.TablePitInfo.SQL_QUERY_CREATE_TABLE);
-                result = 0;
-            } catch (Exception e) {
-                result = 2; // error during create
-            }
+            db.delete("pit_info", null, null);
+//            db.execSQL("DELETE FROM pit_info");
+            result = 0;
+//            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
+//            try {
+//                db.execSQL(DBContract.TablePitInfo.SQL_QUERY_CREATE_TABLE);
+//                result = 0;
+//            } catch (Exception e) {
+//                result = 2; // error during create
+//            }
         } catch (Exception e) {
             result = 1; // error during delete
         }

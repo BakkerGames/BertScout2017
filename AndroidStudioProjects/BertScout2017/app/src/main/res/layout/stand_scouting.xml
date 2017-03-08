@@ -606,7 +606,7 @@
         android:layout_below="@+id/stand_comments_label"
         android:inputType="textCapSentences|textMultiLine"
         android:scrollHorizontally="false"
-        android:textSize="30sp"
-        android:selectAllOnFocus="false" />
+        android:selectAllOnFocus="false"
+        android:textSize="30sp" />
 
 </RelativeLayout>

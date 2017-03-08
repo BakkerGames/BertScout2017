@@ -20,8 +20,11 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     StandScoutingFragment mStandScoutingFragment;
     PitScoutingFragment mPitScoutingFragment;
     StatisticsFragment mStatisticsFragment;
+    ManageDataFragment mManageDataFragment;
 
     View mRootView;
 
@@ -60,13 +64,15 @@ public class MainActivity extends AppCompatActivity {
 //        mStandScoutingFragment = new StandScoutingFragment();
 //        mPitScoutingFragment = new PitScoutingFragment(mStatisticsFragment);
         mPitScoutingFragment = new PitScoutingFragment();
+        mManageDataFragment = new ManageDataFragment();
 
         dbHelper = new DBHelper(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Stand Scouting"));
-        tabLayout.addTab(tabLayout.newTab().setText("Pit Scouting"));
+        tabLayout.addTab(tabLayout.newTab().setText("Stand"));
+        tabLayout.addTab(tabLayout.newTab().setText("Pit"));
         tabLayout.addTab(tabLayout.newTab().setText("Statistics"));
+        tabLayout.addTab(tabLayout.newTab().setText("Data"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -129,15 +135,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.enter_scout_name:
                 enterScoutNameDialog(mRootView);
                 break;
-            case R.id.export_data:
-                openExportDataDialog(mRootView);
-                break;
+//            case R.id.export_data:
+//                openExportDataDialog(mRootView);
+//                break;
 //            case R.id.sync_data:
 //                openSyncDataDialog(mRootView);
 //                break;
-            case R.id.clear_data:
-                openClearDataDialog(mRootView);
-                break;
+//            case R.id.clear_data:
+//                openClearDataDialog(mRootView);
+//                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -145,21 +151,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //onActivityResult(requestCode, resultCode, data);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.getTabAt(0).select();
+        if (resultCode == 2) {
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            tabLayout.getTabAt(0).select();
 
-//        Integer match_no = data.getIntExtra("match_no", 0);
-//        Integer team = data.getIntExtra("team", 0);
-//
+            Integer match_no = data.getIntExtra("match_no", 0);
+            Integer team = data.getIntExtra("team", 0);
+
+            TextView matchText = (TextView) mRootView.findViewById(R.id.stand_match_number);
+            matchText.setText(Integer.toString(match_no));
+
+            TextView teamText = (TextView) mRootView.findViewById(R.id.stand_team_number);
+            teamText.setText(Integer.toString(team));
+
 //        Spinner standTeamSpinner = (Spinner) findViewById(R.id.stand_team_spinner);
 //        standTeamSpinner.setSelection(((ArrayAdapter) standTeamSpinner.getAdapter()).getPosition(team.toString()));
-
+//
 //        Spinner matchSpinner = (Spinner) findViewById(R.id.match_spinner);
 //        matchSpinner.setSelection(((ArrayAdapter) matchSpinner.getAdapter()).getPosition(match_no.toString()));
-
+//
 //        mStandScoutingFragment.loadScreen();
+
+//        Button standOKButton = (Button) mRootView.findViewById(R.id.stand_ok_btn);
+//        standOKButton.callOnClick();
+            mStandScoutingFragment.loadScreen();
+        }
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -180,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
                     return mPitScoutingFragment;
                 case 2:
                     return mStatisticsFragment;
+                case 3:
+                    return mManageDataFragment;
                 default:
                     return null;
             }
@@ -246,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                     dbHelper.updateStandInfo(row);
                 }
 
-                JSONArray localData = dbHelper.getDataAllStand();
+                JSONArray localData = dbHelper.getDataAllStand(0);
 
                 String insertResult;
 
@@ -310,53 +330,53 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openExportDataDialog(final View view) {
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Export data to Documents folder?");
-
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                String result;
-                try {
-                    // stand info
-                    JSONObject standInfo = new JSONObject();
-                    standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
-                    JSONArray currStandInfoArray = dbHelper.getDataAllStand();
-                    standInfo.put("stand_data", currStandInfoArray);
-                    String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
-                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_stand.json";
-                    ExportData.ExportData(standOutFilename, standInfo);
-                    // pit info
-                    JSONObject pitInfo = new JSONObject();
-                    pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
-                    JSONArray currPitInfoArray = dbHelper.getDataAllPit();
-                    pitInfo.put("pit_data", currPitInfoArray);
-                    String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
-                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_pit.json";
-                    ExportData.ExportData(pitOutFilename, pitInfo);
-                    result = "Export done!";
-                } catch (Exception e) {
-                    result = "Error during export";
-                }
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_LONG;
-                Toast toast = Toast.makeText(context, result, duration);
-                toast.show();
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // do nothing
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
+//    public void openExportDataDialog(final View view) {
+//
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage("Export data to Documents folder?");
+//
+//        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface arg0, int arg1) {
+//                String result;
+//                try {
+//                    // stand info
+//                    JSONObject standInfo = new JSONObject();
+//                    standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+//                    JSONArray currStandInfoArray = dbHelper.getDataAllStand(0);
+//                    standInfo.put("stand_data", currStandInfoArray);
+//                    String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
+//                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_stand.json";
+//                    ExportData.ExportData(standOutFilename, standInfo);
+//                    // pit info
+//                    JSONObject pitInfo = new JSONObject();
+//                    pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+//                    JSONArray currPitInfoArray = dbHelper.getDataAllPit();
+//                    pitInfo.put("pit_data", currPitInfoArray);
+//                    String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
+//                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_pit.json";
+//                    ExportData.ExportData(pitOutFilename, pitInfo);
+//                    result = "Export done!";
+//                } catch (Exception e) {
+//                    result = "Error during export";
+//                }
+//                Context context = getApplicationContext();
+//                int duration = Toast.LENGTH_LONG;
+//                Toast toast = Toast.makeText(context, result, duration);
+//                toast.show();
+//            }
+//        });
+//
+//        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                // do nothing
+//            }
+//        });
+//
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
+//    }
 
     public void openClearDataDialog(final View view) {
 
