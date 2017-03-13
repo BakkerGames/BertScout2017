@@ -52,6 +52,10 @@ public class ManageDataFragment extends Fragment {
 
     public DBHelper dbHelper;
 
+    public ManageDataFragment() {
+        // default constructor
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.manage_data, container, false);
@@ -740,14 +744,14 @@ public class ManageDataFragment extends Fragment {
         }
     }
 
-    public String GetKindleName() {
-        try {
-            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
-            String title = ExportData.ImportData(titleFilename);
-            return title;
-        } catch (Exception e) {
-            return "Scouting 2017";
-        }
-    }
+//    public String GetKindleName() {
+//        try {
+//            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
+//            String title = ExportData.ImportData(titleFilename);
+//            return title;
+//        } catch (Exception e) {
+//            return "Scouting 2017";
+//        }
+//    }
 
 }
