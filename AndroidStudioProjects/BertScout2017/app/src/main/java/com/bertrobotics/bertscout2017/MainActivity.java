@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     StandScoutingFragment mStandScoutingFragment;
     PitScoutingFragment mPitScoutingFragment;
-    StatisticsFragment mStatisticsFragment;
-    ManageDataFragment mManageDataFragment;
+//    StatisticsFragment mStatisticsFragment;
+//    ManageDataFragment mManageDataFragment;
 
     View mRootView;
 
@@ -59,20 +59,18 @@ public class MainActivity extends AppCompatActivity {
 
         mRootView = findViewById(R.id.main_layout);
 
-        mStatisticsFragment = new StatisticsFragment();
         mStandScoutingFragment = new StandScoutingFragment();
-//        mStandScoutingFragment = new StandScoutingFragment();
-//        mPitScoutingFragment = new PitScoutingFragment(mStatisticsFragment);
         mPitScoutingFragment = new PitScoutingFragment();
-        mManageDataFragment = new ManageDataFragment();
+//        mStatisticsFragment = new StatisticsFragment();
+//        mManageDataFragment = new ManageDataFragment();
 
         dbHelper = new DBHelper(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Stand"));
-        tabLayout.addTab(tabLayout.newTab().setText("Pit"));
-        tabLayout.addTab(tabLayout.newTab().setText("Statistics"));
-        tabLayout.addTab(tabLayout.newTab().setText("Data"));
+        tabLayout.addTab(tabLayout.newTab().setText("Stand Scouting"));
+        tabLayout.addTab(tabLayout.newTab().setText("Pit Scouting"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Statistics"));
+//        tabLayout.addTab(tabLayout.newTab().setText("Data"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -96,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        enterScoutNameDialog(mRootView);
 
         SetMainTitle();
 
@@ -135,15 +135,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.enter_scout_name:
                 enterScoutNameDialog(mRootView);
                 break;
-//            case R.id.export_data:
-//                openExportDataDialog(mRootView);
-//                break;
+            case R.id.export_data:
+                openExportDataDialog(mRootView);
+                break;
 //            case R.id.sync_data:
 //                openSyncDataDialog(mRootView);
 //                break;
-//            case R.id.clear_data:
-//                openClearDataDialog(mRootView);
-//                break;
+            case R.id.clear_data:
+                openClearDataDialog(mRootView);
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -196,10 +196,10 @@ public class MainActivity extends AppCompatActivity {
                     return mStandScoutingFragment;
                 case 1:
                     return mPitScoutingFragment;
-                case 2:
-                    return mStatisticsFragment;
-                case 3:
-                    return mManageDataFragment;
+//                case 2:
+//                    return mStatisticsFragment;
+//                case 3:
+//                    return mManageDataFragment;
                 default:
                     return null;
             }
@@ -211,172 +211,172 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openSyncDataDialog(final View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Sync data for " + getTitle() + "?");
-
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                AsyncTaskSyncData syncData = new AsyncTaskSyncData(view.getContext());
-                syncData.execute();
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private class AsyncTaskSyncData extends AsyncTask<String, Void, String> {
-
-        ProgressDialog progress;
-
-        private AsyncTaskSyncData(Context context) {
-            progress = new ProgressDialog(context);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String results;
-
-            try {
-                String urlString = "http://76.179.97.182/getData.php?event=" + getTitle().toString().replace(" ", "%20");
-
-                // Do your long operations here and return the result
-                URL url = new URL(urlString);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                results = CharStreams.toString(new InputStreamReader(
-                        in, Charsets.UTF_8));
-
-                JSONArray remoteData = new JSONArray(results);
-
-                for (int i = 0; i < remoteData.length(); i++) {
-                    JSONObject row = remoteData.getJSONObject(i);
-                    dbHelper.updateStandInfo(row);
-                }
-
-                JSONArray localData = dbHelper.getDataAllStand(0);
-
-                String insertResult;
-
-                for (int i = 0; i < localData.length(); i++) {
-                    JSONObject row = localData.getJSONObject(i);
-
-                    try {
-                        String insertString = "http://76.179.97.182/insertData.php?" +
-                                "event=" + encode(row.getString("event")) +
-                                "&match_no=" + row.getInt("match_no") +
-                                "&team=" + row.getInt("team") +
-                                "&auto_high=" + row.getInt("auto_high") +
-                                "&auto_low=" + row.getInt("auto_low") +
-                                "&auto_cross=" + row.getInt("auto_cross") +
-                                "&tele_high=" + row.getInt("tele_high") +
-                                "&tele_low=" + row.getInt("tele_low") +
-                                "&tele_cross=" + row.getInt("tele_cross") +
-                                "&endgame=" + row.getInt("endgame") +
-                                "&comment=" + encode(row.getString("comment"));
-
-                        // Do your long operations here and return the result
-
-                        URL insertUrl = new URL(insertString);
-
-                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
-
-                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
-
-                        insertResult = CharStreams.toString(new InputStreamReader(
-                                insertIn, Charsets.UTF_8));
-
-                    } catch (Exception e) {
-                        return "Error";
-                    }
-                }
-            } catch (Exception e) {
-                return "Error";
-            }
-
-            return "Success";
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progress.setTitle("Syncing");
-            progress.setMessage("Please wait...");
-            progress.show();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            mStatisticsFragment.populateList();
-
-            progress.dismiss();
-
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-//    public void openExportDataDialog(final View view) {
-//
+//    public void openSyncDataDialog(final View view) {
 //        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-//        alertDialogBuilder.setMessage("Export data to Documents folder?");
+//        alertDialogBuilder.setMessage("Sync data for " + getTitle() + "?");
 //
 //        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface arg0, int arg1) {
-//                String result;
-//                try {
-//                    // stand info
-//                    JSONObject standInfo = new JSONObject();
-//                    standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
-//                    JSONArray currStandInfoArray = dbHelper.getDataAllStand(0);
-//                    standInfo.put("stand_data", currStandInfoArray);
-//                    String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
-//                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_stand.json";
-//                    ExportData.ExportData(standOutFilename, standInfo);
-//                    // pit info
-//                    JSONObject pitInfo = new JSONObject();
-//                    pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
-//                    JSONArray currPitInfoArray = dbHelper.getDataAllPit();
-//                    pitInfo.put("pit_data", currPitInfoArray);
-//                    String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
-//                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_pit.json";
-//                    ExportData.ExportData(pitOutFilename, pitInfo);
-//                    result = "Export done!";
-//                } catch (Exception e) {
-//                    result = "Error during export";
-//                }
-//                Context context = getApplicationContext();
-//                int duration = Toast.LENGTH_LONG;
-//                Toast toast = Toast.makeText(context, result, duration);
-//                toast.show();
+//                AsyncTaskSyncData syncData = new AsyncTaskSyncData(view.getContext());
+//                syncData.execute();
 //            }
 //        });
 //
 //        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialog, int which) {
-//                // do nothing
+//
 //            }
 //        });
 //
 //        AlertDialog alertDialog = alertDialogBuilder.create();
 //        alertDialog.show();
 //    }
+//
+//    private class AsyncTaskSyncData extends AsyncTask<String, Void, String> {
+//
+//        ProgressDialog progress;
+//
+//        private AsyncTaskSyncData(Context context) {
+//            progress = new ProgressDialog(context);
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String results;
+//
+//            try {
+//                String urlString = "http://76.179.97.182/getData.php?event=" + getTitle().toString().replace(" ", "%20");
+//
+//                // Do your long operations here and return the result
+//                URL url = new URL(urlString);
+//
+//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//
+//                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//
+//                results = CharStreams.toString(new InputStreamReader(
+//                        in, Charsets.UTF_8));
+//
+//                JSONArray remoteData = new JSONArray(results);
+//
+//                for (int i = 0; i < remoteData.length(); i++) {
+//                    JSONObject row = remoteData.getJSONObject(i);
+//                    dbHelper.updateStandInfo(row);
+//                }
+//
+//                JSONArray localData = dbHelper.getDataAllStand(0);
+//
+//                String insertResult;
+//
+//                for (int i = 0; i < localData.length(); i++) {
+//                    JSONObject row = localData.getJSONObject(i);
+//
+//                    try {
+//                        String insertString = "http://76.179.97.182/insertData.php?" +
+//                                "event=" + encode(row.getString("event")) +
+//                                "&match_no=" + row.getInt("match_no") +
+//                                "&team=" + row.getInt("team") +
+//                                "&auto_high=" + row.getInt("auto_high") +
+//                                "&auto_low=" + row.getInt("auto_low") +
+//                                "&auto_cross=" + row.getInt("auto_cross") +
+//                                "&tele_high=" + row.getInt("tele_high") +
+//                                "&tele_low=" + row.getInt("tele_low") +
+//                                "&tele_cross=" + row.getInt("tele_cross") +
+//                                "&endgame=" + row.getInt("endgame") +
+//                                "&comment=" + encode(row.getString("comment"));
+//
+//                        // Do your long operations here and return the result
+//
+//                        URL insertUrl = new URL(insertString);
+//
+//                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
+//
+//                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
+//
+//                        insertResult = CharStreams.toString(new InputStreamReader(
+//                                insertIn, Charsets.UTF_8));
+//
+//                    } catch (Exception e) {
+//                        return "Error";
+//                    }
+//                }
+//            } catch (Exception e) {
+//                return "Error";
+//            }
+//
+//            return "Success";
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//            progress.setTitle("Syncing");
+//            progress.setMessage("Please wait...");
+//            progress.show();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            //mStatisticsFragment.populateList();
+//
+//            progress.dismiss();
+//
+//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    public void openExportDataDialog(final View view) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Export data to Documents folder?");
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                String result;
+                try {
+                    // stand info
+                    JSONObject standInfo = new JSONObject();
+                    standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+                    JSONArray currStandInfoArray = dbHelper.getDataAllStand(0);
+                    standInfo.put("stand_data", currStandInfoArray);
+                    String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
+                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_stand.json";
+                    ExportData.ExportData(standOutFilename, standInfo);
+                    // pit info
+                    JSONObject pitInfo = new JSONObject();
+                    pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+                    JSONArray currPitInfoArray = dbHelper.getDataAllPit();
+                    pitInfo.put("pit_data", currPitInfoArray);
+                    String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
+                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_pit.json";
+                    ExportData.ExportData(pitOutFilename, pitInfo);
+                    result = "Export done!";
+                } catch (Exception e) {
+                    result = "Error during export";
+                }
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                Toast toast = Toast.makeText(context, result, duration);
+                toast.show();
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 
     public void openClearDataDialog(final View view) {
 
@@ -540,13 +540,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             tempScoutName = " - " + ScoutName;
         }
-        try {
-            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
-            String title = ExportData.ImportData(titleFilename);
-            setTitle(GetKindleName() + tempScoutName);
-        } catch (Exception e) {
-            setTitle(GetKindleName() + tempScoutName);
-        }
+        setTitle(GetKindleName() + tempScoutName);
     }
 
     public static String GetKindleName() {

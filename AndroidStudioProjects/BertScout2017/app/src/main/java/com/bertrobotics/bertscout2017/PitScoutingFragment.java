@@ -46,10 +46,6 @@ public class PitScoutingFragment extends Fragment {
         // default constructor
     }
 
-//    public PitScoutingFragment(StatisticsFragment statisticsFragment) {
-//        mStatisticsFragment = statisticsFragment;
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -132,10 +128,11 @@ public class PitScoutingFragment extends Fragment {
 
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH, false);
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW, false);
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL, false);
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER, false);
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM, false);
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR, false);
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR, false);
 
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB, false);
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE, false);
@@ -844,15 +841,15 @@ public class PitScoutingFragment extends Fragment {
             }
         });
 
-        final ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
-        pit_floor_pickup_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton pit_floor_pickup_fuel_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup_fuel);
+        pit_floor_pickup_fuel_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currPitInfoIndex >= 0) {
                     try {
-                        boolean tempValue = pit_floor_pickup_Button.isChecked();
-                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP) != tempValue) {
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP, tempValue);
+                        boolean tempValue = pit_floor_pickup_fuel_Button.isChecked();
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL) != tempValue) {
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL, tempValue);
                             if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
@@ -910,6 +907,25 @@ public class PitScoutingFragment extends Fragment {
                         boolean tempValue = pit_can_carry_gear_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR) != tempValue) {
                             currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR, tempValue);
+                            if (!fillingPitInfo) {
+                                dbHelper.updatePitInfo(currTeam);
+                            }
+                        }
+                    } catch (JSONException e) {
+                    }
+                }
+            }
+        });
+
+        final ToggleButton pit_floor_pickup_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup_gear);
+        pit_floor_pickup_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (currPitInfoIndex >= 0) {
+                    try {
+                        boolean tempValue = pit_floor_pickup_gear_Button.isChecked();
+                        if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR) != tempValue) {
+                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR, tempValue);
                             if (!fillingPitInfo) {
                                 dbHelper.updatePitInfo(currTeam);
                             }
@@ -1277,8 +1293,8 @@ public class PitScoutingFragment extends Fragment {
             ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
             pit_can_shoot_low_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW));
 
-            ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
-            pit_floor_pickup_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP));
+            ToggleButton pit_floor_pickup_fuel_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup_fuel);
+            pit_floor_pickup_fuel_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL));
 
             ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
             pit_top_loader_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER));
@@ -1288,6 +1304,9 @@ public class PitScoutingFragment extends Fragment {
 
             ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
             pit_can_carry_gear_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR));
+
+            ToggleButton pit_floor_pickup_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup_gear);
+            pit_floor_pickup_gear_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR));
 
             ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
             pit_can_climb_Button.setChecked(currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB));
@@ -1397,8 +1416,8 @@ public class PitScoutingFragment extends Fragment {
             ToggleButton pit_can_shoot_low_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_shoot_low);
             pit_can_shoot_low_Button.setChecked(false);
 
-            ToggleButton pit_floor_pickup_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup);
-            pit_floor_pickup_Button.setChecked(false);
+            ToggleButton pit_floor_pickup_fuel_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup_fuel);
+            pit_floor_pickup_fuel_Button.setChecked(false);
 
             ToggleButton pit_top_loader_Button = (ToggleButton) mRootView.findViewById(R.id.pit_top_loader);
             pit_top_loader_Button.setChecked(false);
@@ -1408,6 +1427,9 @@ public class PitScoutingFragment extends Fragment {
 
             ToggleButton pit_can_carry_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_carry_gear);
             pit_can_carry_gear_Button.setChecked(false);
+
+            ToggleButton pit_floor_pickup_gear_Button = (ToggleButton) mRootView.findViewById(R.id.pit_floor_pickup_gear);
+            pit_floor_pickup_gear_Button.setChecked(false);
 
             ToggleButton pit_can_climb_Button = (ToggleButton) mRootView.findViewById(R.id.pit_can_climb);
             pit_can_climb_Button.setChecked(false);

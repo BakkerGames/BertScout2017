@@ -134,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_period_label"
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="5sp"
         android:text="Score High Goal"
         android:textSize="30sp" />
 
@@ -181,7 +181,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_score_high_label"
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="5sp"
         android:text="Score Low Goal"
         android:textSize="30sp" />
 
@@ -229,7 +229,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_score_low_label"
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="5sp"
         android:text="Cross Baseline"
         android:textSize="30sp" />
 
@@ -251,7 +251,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_cross_baseline_label"
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="5sp"
         android:text="Place Gear"
         android:textSize="30sp" />
 
@@ -273,7 +273,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_place_gear_label"
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="5sp"
         android:text="Open Hopper"
         android:textSize="30sp" />
 
@@ -354,7 +354,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_teleop_score_high_label"
-        android:layout_marginTop="0sp"
+        android:layout_marginTop="5sp"
         android:text="Score Low Goal"
         android:textSize="30sp" />
 
@@ -395,53 +395,53 @@
         android:text="+"
         android:textSize="30sp" />
 
-    <!-- teleop_gears_received -->
+    <!--&lt;!&ndash; teleop_gears_received &ndash;&gt;-->
 
-    <TextView
-        android:id="@+id/stand_teleop_gears_received_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stand_teleop_score_low_label"
-        android:layout_marginTop="0sp"
-        android:text="Gears Received"
-        android:textSize="30sp" />
+    <!--<TextView-->
+        <!--android:id="@+id/stand_teleop_gears_received_label"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/stand_teleop_score_low_label"-->
+        <!--android:layout_marginTop="5sp"-->
+        <!--android:text="Gears Received"-->
+        <!--android:textSize="30sp" />-->
 
-    <TextView
-        android:id="@+id/stand_teleop_gears_received_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stand_teleop_gears_received_label"
-        android:layout_alignLeft="@id/stand_auto_score_high_number"
-        android:layout_alignStart="@id/stand_auto_score_high_number"
-        android:minWidth="100sp"
-        android:text="0"
-        android:textSize="30sp" />
+    <!--<TextView-->
+        <!--android:id="@+id/stand_teleop_gears_received_number"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBaseline="@+id/stand_teleop_gears_received_label"-->
+        <!--android:layout_alignLeft="@id/stand_auto_score_high_number"-->
+        <!--android:layout_alignStart="@id/stand_auto_score_high_number"-->
+        <!--android:minWidth="100sp"-->
+        <!--android:text="0"-->
+        <!--android:textSize="30sp" />-->
 
-    <Button
-        android:id="@+id/stand_teleop_gears_received_minus_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stand_teleop_gears_received_label"
-        android:layout_marginLeft="10sp"
-        android:layout_toRightOf="@+id/stand_teleop_gears_received_number"
-        android:minWidth="54dp"
-        android:paddingBottom="0sp"
-        android:paddingTop="0sp"
-        android:text="—"
-        android:textSize="30sp" />
+    <!--<Button-->
+        <!--android:id="@+id/stand_teleop_gears_received_minus_btn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBaseline="@+id/stand_teleop_gears_received_label"-->
+        <!--android:layout_marginLeft="10sp"-->
+        <!--android:layout_toRightOf="@+id/stand_teleop_gears_received_number"-->
+        <!--android:minWidth="54dp"-->
+        <!--android:paddingBottom="0sp"-->
+        <!--android:paddingTop="0sp"-->
+        <!--android:text="—"-->
+        <!--android:textSize="30sp" />-->
 
-    <Button
-        android:id="@+id/stand_teleop_gears_received_plus_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stand_teleop_gears_received_minus_btn"
-        android:layout_marginLeft="10sp"
-        android:layout_toRightOf="@+id/stand_teleop_gears_received_minus_btn"
-        android:minWidth="54dp"
-        android:paddingBottom="0sp"
-        android:paddingTop="0sp"
-        android:text="+"
-        android:textSize="30sp" />
+    <!--<Button-->
+        <!--android:id="@+id/stand_teleop_gears_received_plus_btn"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBaseline="@+id/stand_teleop_gears_received_minus_btn"-->
+        <!--android:layout_marginLeft="10sp"-->
+        <!--android:layout_toRightOf="@+id/stand_teleop_gears_received_minus_btn"-->
+        <!--android:minWidth="54dp"-->
+        <!--android:paddingBottom="0sp"-->
+        <!--android:paddingTop="0sp"-->
+        <!--android:text="+"-->
+        <!--android:textSize="30sp" />-->
 
     <!-- teleop_gears_placed -->
 
@@ -449,8 +449,8 @@
         android:id="@+id/stand_teleop_gears_placed_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/stand_teleop_gears_received_label"
-        android:layout_marginTop="0sp"
+        android:layout_below="@+id/stand_teleop_score_low_label"
+        android:layout_marginTop="5sp"
         android:text="Gears Placed"
         android:textSize="30sp" />
 
@@ -491,14 +491,58 @@
         android:text="+"
         android:textSize="30sp" />
 
+    <!-- teleop_climb -->
+
+    <TextView
+        android:id="@+id/stand_teleop_climb_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stand_teleop_gears_placed_label"
+        android:layout_marginTop="5sp"
+        android:text="Climb Rope"
+        android:textSize="30sp" />
+
+    <ToggleButton
+        android:id="@+id/stand_teleop_climb_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stand_teleop_climb_label"
+        android:layout_alignLeft="@id/stand_auto_score_high_number"
+        android:layout_alignStart="@id/stand_auto_score_high_number"
+        android:textOff=" "
+        android:textOn="yes"
+        android:textSize="24sp" />
+
+    <!-- teleop_touchpad_scored -->
+
+    <TextView
+        android:id="@+id/stand_teleop_touchpad_scored_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stand_teleop_climb_label"
+        android:layout_marginTop="5sp"
+        android:text="Touchpad Scored"
+        android:textSize="30sp" />
+
+    <ToggleButton
+        android:id="@+id/stand_teleop_touchpad_scored_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/stand_teleop_touchpad_scored_label"
+        android:layout_alignLeft="@id/stand_auto_score_high_number"
+        android:layout_alignStart="@id/stand_auto_score_high_number"
+        android:textOff=" "
+        android:textOn="yes"
+        android:textSize="24sp" />
+
     <!-- penalties_incurred -->
 
     <TextView
         android:id="@+id/stand_penalties_incurred_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/stand_teleop_gears_placed_label"
-        android:layout_marginTop="0sp"
+        android:layout_below="@+id/stand_teleop_touchpad_scored_label"
+        android:layout_marginTop="5sp"
         android:text="Penalties Incurred"
         android:textSize="30sp" />
 
@@ -539,57 +583,13 @@
         android:text="+"
         android:textSize="30sp" />
 
-    <!-- teleop_climb -->
-
-    <TextView
-        android:id="@+id/stand_teleop_climb_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stand_penalties_incurred_label"
-        android:layout_marginTop="0sp"
-        android:text="Climb Rope"
-        android:textSize="30sp" />
-
-    <ToggleButton
-        android:id="@+id/stand_teleop_climb_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stand_teleop_climb_label"
-        android:layout_alignLeft="@id/stand_auto_score_high_number"
-        android:layout_alignStart="@id/stand_auto_score_high_number"
-        android:textOff=" "
-        android:textOn="yes"
-        android:textSize="24sp" />
-
-    <!-- teleop_touchpad_scored -->
-
-    <TextView
-        android:id="@+id/stand_teleop_touchpad_scored_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stand_teleop_climb_label"
-        android:layout_marginTop="0sp"
-        android:text="Touchpad Scored"
-        android:textSize="30sp" />
-
-    <ToggleButton
-        android:id="@+id/stand_teleop_touchpad_scored_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/stand_teleop_touchpad_scored_label"
-        android:layout_alignLeft="@id/stand_auto_score_high_number"
-        android:layout_alignStart="@id/stand_auto_score_high_number"
-        android:textOff=" "
-        android:textOn="yes"
-        android:textSize="24sp" />
-
     <!-- comments -->
 
     <TextView
         android:id="@+id/stand_comments_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/stand_teleop_touchpad_scored_label"
+        android:layout_below="@+id/stand_penalties_incurred_label"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10sp"
         android:text="Comments"

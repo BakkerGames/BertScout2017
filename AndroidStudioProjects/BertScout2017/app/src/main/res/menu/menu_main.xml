@@ -2,28 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bertrobotics.bertscout.MainActivity">
-    <!--<item-->
-    <!--android:id="@+id/north_shore"-->
-    <!--android:orderInCategory="101"-->
-    <!--android:title="@string/north_shore"/>-->
-    <!--<item-->
-    <!--android:title="@string/pine_tree"-->
-    <!--android:orderInCategory="102"-->
-    <!--android:id="@+id/pine_tree"/>-->
     <item
         android:id="@+id/enter_scout_name"
         android:orderInCategory="101"
         android:title="@string/enter_scout_name" />
-    <!--<item-->
-    <!--    android:id="@+id/export_data"-->
-    <!--    android:orderInCategory="102"-->
-    <!--    android:title="@string/export_data" />-->
-    <!--<item-->-->
-        <!--android:id="@+id/sync_data"-->
-        <!--android:orderInCategory="103"-->
-        <!--android:title="@string/sync_data" />-->
-    <!--<item-->
-    <!--    android:id="@+id/clear_data"-->
-    <!--    android:orderInCategory="104"-->
-    <!--    android:title="@string/clear_data" />-->
+    <item
+        android:id="@+id/export_data"
+        android:orderInCategory="102"
+        android:title="@string/export_data" />
+    <item
+        android:id="@+id/clear_data"
+        android:orderInCategory="103"
+        android:title="@string/clear_data" />
 </menu>

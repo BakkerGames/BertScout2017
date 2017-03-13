@@ -13,7 +13,7 @@ import org.json.JSONException;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "bert_scout.db";
-    public static final int DATABASE_VERSION = 24;
+    public static final int DATABASE_VERSION = 25;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -30,9 +30,13 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
         if (oldVersion < newVersion) {
-            db.execSQL(DBContract.TableStandInfo.SQL_QUERY_DELETE_TABLE);
+            if (oldVersion != 24) {
+                db.execSQL(DBContract.TableStandInfo.SQL_QUERY_DELETE_TABLE);
+                db.execSQL(DBContract.TableStandInfo.SQL_QUERY_CREATE_TABLE);
+            }
             db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
-            onCreate(db);
+            db.execSQL(DBContract.TablePitInfo.SQL_QUERY_CREATE_TABLE);
+//            onCreate(db);
             return;
         }
         return;
@@ -71,7 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
                             case DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW:
                             case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH:
                             case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW:
-                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED:
+//                            case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED:
                             case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED:
                             case DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES:
                                 rowObject.put(results.getColumnName(i), results.getInt(i));
@@ -125,7 +129,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH));
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW));
-            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED));
+//            contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED));
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED));
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES, standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES));
             contentValues.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED, standInfo.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED));
@@ -136,7 +140,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             Cursor results;
             String query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND + " WHERE match_no = " + standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) +
-                            " and team = " + standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM);
+                    " and team = " + standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM);
 
             results = db.rawQuery(query, null);
 
@@ -147,10 +151,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 );
             } else {
                 db.update(DBContract.TableStandInfo.TABLE_NAME_STAND,
-                          contentValues,
-                          "match_no = ? and team = ?",
-                          new String[]{String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH)),
-                                     String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM))}
+                        contentValues,
+                        "match_no = ? and team = ?",
+                        new String[]{String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH)),
+                                String.valueOf(standInfo.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM))}
                 );
             }
 
@@ -251,10 +255,11 @@ public class DBHelper extends SQLiteOpenHelper {
                                 break;
                             case DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH:
                             case DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW:
-                            case DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP:
+                            case DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL:
                             case DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER:
                             case DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM:
                             case DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR:
+                            case DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR:
                             case DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB:
                             case DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE:
                             case DBContract.TablePitInfo.COLNAME_PIT_START_LEFT:
@@ -312,10 +317,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH);
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW);
-            SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP);
+            SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL);
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER);
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM);
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR);
+            SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR);
 
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB);
             SetBooleanValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE);
@@ -338,7 +344,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             Cursor results;
             String query = "SELECT * FROM " + DBContract.TablePitInfo.TABLE_NAME_PIT +
-                            " WHERE team = " + pitInfo.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM);
+                    " WHERE team = " + pitInfo.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM);
 
             results = db.rawQuery(query, null);
 
