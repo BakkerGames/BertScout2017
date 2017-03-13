@@ -612,13 +612,13 @@
                 android:id="@+id/pit_can_shoot_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_can_shoot_high_label"
-                android:layout_alignLeft="@+id/pit_shoot_location"
-                android:layout_alignStart="@+id/pit_shoot_location"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:layout_alignBottom="@+id/pit_can_shoot_high_label"
+                android:layout_alignLeft="@+id/pit_shoot_location"
+                android:layout_alignStart="@+id/pit_shoot_location" />
 
             <!-- can_shoot_low -->
 
@@ -643,22 +643,22 @@
                 android:textOn="yes"
                 android:textSize="24sp" />
 
-            <!-- floor_pickup -->
+            <!-- floor_pickup_fuel -->
 
             <TextView
-                android:id="@+id/pit_floor_pickup_label"
+                android:id="@+id/pit_floor_pickup_fuel_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pit_can_shoot_low_label"
                 android:layout_marginBottom="0sp"
-                android:text="Floor Pickup?"
+                android:text="Floor Pickup Fuel?"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/pit_floor_pickup"
+                android:id="@+id/pit_floor_pickup_fuel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_floor_pickup_label"
+                android:layout_alignBottom="@+id/pit_floor_pickup_fuel_label"
                 android:layout_alignLeft="@+id/pit_team_years"
                 android:layout_alignStart="@+id/pit_team_years"
                 android:ems="4"
@@ -672,7 +672,7 @@
                 android:id="@+id/pit_top_loader_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_floor_pickup_label"
+                android:layout_below="@id/pit_floor_pickup_fuel_label"
                 android:layout_marginBottom="0sp"
                 android:text="Top Loader?"
                 android:textSize="36sp" />
@@ -735,13 +735,36 @@
                 android:textOn="yes"
                 android:textSize="24sp" />
 
+            <!-- floor_pickup_gear -->
+
+            <TextView
+                android:id="@+id/pit_floor_pickup_gear_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pit_can_carry_gear_label"
+                android:layout_marginBottom="0sp"
+                android:text="Floor Pickup Gear?"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_floor_pickup_gear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_floor_pickup_gear_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="4"
+                android:textOff=" "
+                android:textOn="yes"
+                android:textSize="24sp" />
+
             <!-- can_climb -->
 
             <TextView
                 android:id="@+id/pit_can_climb_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_can_carry_gear_label"
+                android:layout_below="@id/pit_floor_pickup_gear_label"
                 android:layout_marginBottom="0sp"
                 android:text="Can Climb?"
                 android:textSize="36sp" />
@@ -814,7 +837,7 @@
                 android:layout_toLeftOf="@id/pit_start_center"
                 android:ems="6"
                 android:textOff=" "
-                android:textOn="Left"
+                android:textOn="Boiler"
                 android:textSize="24sp" />
 
             <ToggleButton
@@ -826,7 +849,7 @@
                 android:layout_toRightOf="@+id/pit_start_center"
                 android:ems="6"
                 android:textOff=" "
-                android:textOn="right"
+                android:textOn="Non-Boiler"
                 android:textSize="24sp" />
 
             <!-- autonomous -->

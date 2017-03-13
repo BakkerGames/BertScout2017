@@ -95,10 +95,11 @@ public final class DBContract {
 
         public static final String COLNAME_PIT_CAN_SHOOT_HIGH = "can_shoot_high";
         public static final String COLNAME_PIT_CAN_SHOOT_LOW = "can_shoot_low";
-        public static final String COLNAME_PIT_FLOOR_PICKUP = "floor_pickup";
+        public static final String COLNAME_PIT_FLOOR_PICKUP_FUEL = "floor_pickup_fuel";
         public static final String COLNAME_PIT_TOP_LOADER = "top_loader";
         public static final String COLNAME_PIT_AUTO_AIM = "auto_aim";
         public static final String COLNAME_PIT_CAN_CARRY_GEAR = "can_carry_gear";
+        public static final String COLNAME_PIT_FLOOR_PICKUP_GEAR = "floor_pickup_gear";
 
         public static final String COLNAME_PIT_CAN_CLIMB = "can_climb";
         public static final String COLNAME_PIT_OWN_ROPE = "own_rope";
@@ -141,10 +142,11 @@ public final class DBContract {
 
                         ", " + TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH + " INTEGER" +
                         ", " + TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW + " INTEGER" +
-                        ", " + TablePitInfo.COLNAME_PIT_FLOOR_PICKUP + " INTEGER" +
+                        ", " + TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL + " INTEGER" +
                         ", " + TablePitInfo.COLNAME_PIT_TOP_LOADER + " INTEGER" +
                         ", " + TablePitInfo.COLNAME_PIT_AUTO_AIM + " INTEGER" +
                         ", " + TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR + " INTEGER" +
+                        ", " + TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR + " INTEGER" +
 
                         ", " + TablePitInfo.COLNAME_PIT_CAN_CLIMB + " INTEGER" +
                         ", " + TablePitInfo.COLNAME_PIT_OWN_ROPE + " INTEGER" +
