@@ -12,6 +12,7 @@ import android.support.test.espresso.core.deps.guava.base.Charsets;
 import android.support.test.espresso.core.deps.guava.io.CharStreams;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +117,8 @@ public class ManageDataFragment extends Fragment {
                             try {
                                 PullData pullData = new PullData(mRootView.getContext());
                                 pullData.execute();
+
+
                             } catch (Exception e) {
 //                                result = "Error";
                             }
@@ -666,9 +669,6 @@ public class ManageDataFragment extends Fragment {
             } catch (Exception e) {
                 return "Error";
             }
-
-
-
 
             return "Success";
         }

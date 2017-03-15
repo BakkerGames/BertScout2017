@@ -98,7 +98,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         SetMainTitle();
+        enterScoutNameDialog(mRootView);
 
+        getSupportFragmentManager();
     }
 
     @Override
@@ -211,124 +213,124 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openSyncDataDialog(final View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Sync data for " + getTitle() + "?");
-
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                AsyncTaskSyncData syncData = new AsyncTaskSyncData(view.getContext());
-                syncData.execute();
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private class AsyncTaskSyncData extends AsyncTask<String, Void, String> {
-
-        ProgressDialog progress;
-
-        private AsyncTaskSyncData(Context context) {
-            progress = new ProgressDialog(context);
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String results;
-
-            try {
-                String urlString = "http://76.179.97.182/getData.php?event=" + getTitle().toString().replace(" ", "%20");
-
-                // Do your long operations here and return the result
-                URL url = new URL(urlString);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                results = CharStreams.toString(new InputStreamReader(
-                        in, Charsets.UTF_8));
-
-                JSONArray remoteData = new JSONArray(results);
-
-                for (int i = 0; i < remoteData.length(); i++) {
-                    JSONObject row = remoteData.getJSONObject(i);
-                    dbHelper.updateStandInfo(row);
-                }
-
-                JSONArray localData = dbHelper.getDataAllStand(0);
-
-                String insertResult;
-
-                for (int i = 0; i < localData.length(); i++) {
-                    JSONObject row = localData.getJSONObject(i);
-
-                    try {
-                        String insertString = "http://76.179.97.182/insertData.php?" +
-                                "event=" + encode(row.getString("event")) +
-                                "&match_no=" + row.getInt("match_no") +
-                                "&team=" + row.getInt("team") +
-                                "&auto_high=" + row.getInt("auto_high") +
-                                "&auto_low=" + row.getInt("auto_low") +
-                                "&auto_cross=" + row.getInt("auto_cross") +
-                                "&tele_high=" + row.getInt("tele_high") +
-                                "&tele_low=" + row.getInt("tele_low") +
-                                "&tele_cross=" + row.getInt("tele_cross") +
-                                "&endgame=" + row.getInt("endgame") +
-                                "&comment=" + encode(row.getString("comment"));
-
-                        // Do your long operations here and return the result
-
-                        URL insertUrl = new URL(insertString);
-
-                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
-
-                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
-
-                        insertResult = CharStreams.toString(new InputStreamReader(
-                                insertIn, Charsets.UTF_8));
-
-                    } catch (Exception e) {
-                        return "Error";
-                    }
-                }
-            } catch (Exception e) {
-                return "Error";
-            }
-
-            return "Success";
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            progress.setTitle("Syncing");
-            progress.setMessage("Please wait...");
-            progress.show();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            mStatisticsFragment.populateList();
-
-            progress.dismiss();
-
-            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-        }
-    }
+//    public void openSyncDataDialog(final View view) {
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage("Sync data for " + getTitle() + "?");
+//
+//        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface arg0, int arg1) {
+//                AsyncTaskSyncData syncData = new AsyncTaskSyncData(view.getContext());
+//                syncData.execute();
+//            }
+//        });
+//
+//        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+//
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
+//    }
+//
+//    private class AsyncTaskSyncData extends AsyncTask<String, Void, String> {
+//
+//        ProgressDialog progress;
+//
+//        private AsyncTaskSyncData(Context context) {
+//            progress = new ProgressDialog(context);
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String results;
+//
+//            try {
+//                String urlString = "http://76.179.97.182/getData.php?event=" + getTitle().toString().replace(" ", "%20");
+//
+//                // Do your long operations here and return the result
+//                URL url = new URL(urlString);
+//
+//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//
+//                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//
+//                results = CharStreams.toString(new InputStreamReader(
+//                        in, Charsets.UTF_8));
+//
+//                JSONArray remoteData = new JSONArray(results);
+//
+//                for (int i = 0; i < remoteData.length(); i++) {
+//                    JSONObject row = remoteData.getJSONObject(i);
+//                    dbHelper.updateStandInfo(row);
+//                }
+//
+//                JSONArray localData = dbHelper.getDataAllStand(0);
+//
+//                String insertResult;
+//
+//                for (int i = 0; i < localData.length(); i++) {
+//                    JSONObject row = localData.getJSONObject(i);
+//
+//                    try {
+//                        String insertString = "http://76.179.97.182/insertData.php?" +
+//                                "event=" + encode(row.getString("event")) +
+//                                "&match_no=" + row.getInt("match_no") +
+//                                "&team=" + row.getInt("team") +
+//                                "&auto_high=" + row.getInt("auto_high") +
+//                                "&auto_low=" + row.getInt("auto_low") +
+//                                "&auto_cross=" + row.getInt("auto_cross") +
+//                                "&tele_high=" + row.getInt("tele_high") +
+//                                "&tele_low=" + row.getInt("tele_low") +
+//                                "&tele_cross=" + row.getInt("tele_cross") +
+//                                "&endgame=" + row.getInt("endgame") +
+//                                "&comment=" + encode(row.getString("comment"));
+//
+//                        // Do your long operations here and return the result
+//
+//                        URL insertUrl = new URL(insertString);
+//
+//                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
+//
+//                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
+//
+//                        insertResult = CharStreams.toString(new InputStreamReader(
+//                                insertIn, Charsets.UTF_8));
+//
+//                    } catch (Exception e) {
+//                        return "Error";
+//                    }
+//                }
+//            } catch (Exception e) {
+//                return "Error";
+//            }
+//
+//            return "Success";
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//
+//            progress.setTitle("Syncing");
+//            progress.setMessage("Please wait...");
+//            progress.show();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            mStatisticsFragment.populateList();
+//
+//            progress.dismiss();
+//
+//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 //    public void openExportDataDialog(final View view) {
 //
@@ -378,71 +380,71 @@ public class MainActivity extends AppCompatActivity {
 //        alertDialog.show();
 //    }
 
-    public void openClearDataDialog(final View view) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter Password");
-        final String realPassword = "3.14";
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Do you want to *** ERASE *** ALL *** DATA *** ???");
-
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                String result;
-                try {
-                    dbHelper.deleteStandScouting();
-                    dbHelper.deletePitInfo();
-                    result = "Clear done! Please exit app!";
-                } catch (Exception e) {
-                    result = "Error during clear";
-                }
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_LONG;
-                Toast toast = Toast.makeText(context, result, duration);
-                toast.show();
-            }
-        });
-
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // Set up the input
-        final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String clearPassword = input.getText().toString();
-                if (clearPassword.equals(realPassword)) {
-                    alertDialog.show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-
-    }
+//    public void openClearDataDialog(final View view) {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Enter Password");
+//        final String realPassword = "3.14";
+//
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage("Do you want to *** ERASE *** ALL *** DATA *** ???");
+//
+//        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface arg0, int arg1) {
+//                String result;
+//                try {
+//                    dbHelper.deleteStandScouting();
+//                    dbHelper.deletePitInfo();
+//                    result = "Clear done! Please exit app!";
+//                } catch (Exception e) {
+//                    result = "Error during clear";
+//                }
+//                Context context = getApplicationContext();
+//                int duration = Toast.LENGTH_LONG;
+//                Toast toast = Toast.makeText(context, result, duration);
+//                toast.show();
+//            }
+//        });
+//
+//        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        final AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//        // Set up the input
+//        final EditText input = new EditText(this);
+//        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+//        input.setInputType(InputType.TYPE_CLASS_TEXT);
+//        builder.setView(input);
+//
+//        // Set up the buttons
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                String clearPassword = input.getText().toString();
+//                if (clearPassword.equals(realPassword)) {
+//                    alertDialog.show();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//
+//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        builder.show();
+//
+//    }
 
     public void enterScoutNameDialog(final View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
