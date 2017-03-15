@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     StandScoutingFragment mStandScoutingFragment;
     PitScoutingFragment mPitScoutingFragment;
-//    StatisticsFragment mStatisticsFragment;
-//    ManageDataFragment mManageDataFragment;
+    StatisticsFragment mStatisticsFragment;
+    ManageDataFragment mManageDataFragment;
 
     View mRootView;
 
@@ -61,16 +61,16 @@ public class MainActivity extends AppCompatActivity {
 
         mStandScoutingFragment = new StandScoutingFragment();
         mPitScoutingFragment = new PitScoutingFragment();
-//        mStatisticsFragment = new StatisticsFragment();
-//        mManageDataFragment = new ManageDataFragment();
+        mStatisticsFragment = new StatisticsFragment();
+        mManageDataFragment = new ManageDataFragment();
 
         dbHelper = new DBHelper(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Stand Scouting"));
-        tabLayout.addTab(tabLayout.newTab().setText("Pit Scouting"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Statistics"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Data"));
+        tabLayout.addTab(tabLayout.newTab().setText("Stand"));
+        tabLayout.addTab(tabLayout.newTab().setText("Pit"));
+        tabLayout.addTab(tabLayout.newTab().setText("Statistics"));
+        tabLayout.addTab(tabLayout.newTab().setText("Data"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
         SetMainTitle();
 
+        getSupportFragmentManager();
     }
 
     @Override
@@ -196,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
                     return mStandScoutingFragment;
                 case 1:
                     return mPitScoutingFragment;
-//                case 2:
-//                    return mStatisticsFragment;
-//                case 3:
-//                    return mManageDataFragment;
+                case 2:
+                    return mStatisticsFragment;
+                case 3:
+                    return mManageDataFragment;
                 default:
                     return null;
             }

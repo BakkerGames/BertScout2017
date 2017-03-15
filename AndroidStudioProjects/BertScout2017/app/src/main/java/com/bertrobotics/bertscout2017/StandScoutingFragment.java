@@ -162,7 +162,7 @@ public class StandScoutingFragment extends Fragment {
         score_highMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_highText = (TextView) mRootView.findViewById(R.id.stand_auto_score_high_number);
                     score_highText.requestFocus();
                     int tempValue;
@@ -192,7 +192,7 @@ public class StandScoutingFragment extends Fragment {
         score_highPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_highText = (TextView) mRootView.findViewById(R.id.stand_auto_score_high_number);
                     score_highText.requestFocus();
                     int tempValue;
@@ -219,7 +219,7 @@ public class StandScoutingFragment extends Fragment {
         score_lowMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_lowText = (TextView) mRootView.findViewById(R.id.stand_auto_score_low_number);
                     score_lowText.requestFocus();
                     int tempValue;
@@ -249,7 +249,7 @@ public class StandScoutingFragment extends Fragment {
         score_lowPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_lowText = (TextView) mRootView.findViewById(R.id.stand_auto_score_low_number);
                     score_lowText.requestFocus();
                     int tempValue;
@@ -276,7 +276,7 @@ public class StandScoutingFragment extends Fragment {
         stand_auto_cross_baseline_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = stand_auto_cross_baseline_Button.isChecked();
                         currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE, tempValue);
@@ -293,7 +293,7 @@ public class StandScoutingFragment extends Fragment {
         stand_auto_place_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = stand_auto_place_gear_Button.isChecked();
                         currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR, tempValue);
@@ -310,7 +310,7 @@ public class StandScoutingFragment extends Fragment {
         stand_auto_open_hopper_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = stand_auto_open_hopper_Button.isChecked();
                         currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER, tempValue);
@@ -327,7 +327,7 @@ public class StandScoutingFragment extends Fragment {
         teleop_score_highMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_highText = (TextView) mRootView.findViewById(R.id.stand_teleop_score_high_number);
                     score_highText.requestFocus();
                     int tempValue;
@@ -357,7 +357,7 @@ public class StandScoutingFragment extends Fragment {
         teleop_score_highPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_highText = (TextView) mRootView.findViewById(R.id.stand_teleop_score_high_number);
                     score_highText.requestFocus();
                     int tempValue;
@@ -412,7 +412,7 @@ public class StandScoutingFragment extends Fragment {
         teleop_score_lowPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView score_lowText = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_number);
                     score_lowText.requestFocus();
                     int tempValue;
@@ -439,7 +439,7 @@ public class StandScoutingFragment extends Fragment {
 //        teleop_gears_receviedMinusButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                if (currStandInfoIndex >= 0) {
+//                if (currStandInfoIndex >= 0 && currTeam != null) {
 //                    TextView gears_receivedText = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
 //                    gears_receivedText.requestFocus();
 //                    int tempValue;
@@ -469,7 +469,7 @@ public class StandScoutingFragment extends Fragment {
 //        teleop_gears_receivedPlusButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                if (currStandInfoIndex >= 0) {
+//                if (currStandInfoIndex >= 0 && currTeam != null) {
 //                    TextView gears_receivedText = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
 //
 //                    gears_receivedText.requestFocus();
@@ -497,7 +497,7 @@ public class StandScoutingFragment extends Fragment {
         teleop_gears_placedMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView gears_placedText = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_number);
 
                     gears_placedText.requestFocus();
@@ -528,7 +528,7 @@ public class StandScoutingFragment extends Fragment {
         teleop_gears_placedPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView gears_placedText = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_number);
 
                     gears_placedText.requestFocus();
@@ -556,7 +556,7 @@ public class StandScoutingFragment extends Fragment {
         penalties_incurredMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView penalties_incurredText = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_number);
                     penalties_incurredText.requestFocus();
                     int tempValue;
@@ -586,7 +586,7 @@ public class StandScoutingFragment extends Fragment {
         penalties_incurredPlusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     TextView penalties_incurredText = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_number);
                     penalties_incurredText.requestFocus();
                     int tempValue;
@@ -613,7 +613,7 @@ public class StandScoutingFragment extends Fragment {
         stand_teleop_climbed_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = stand_teleop_climbed_Button.isChecked();
                         currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED, tempValue);
@@ -630,7 +630,7 @@ public class StandScoutingFragment extends Fragment {
         stand_teleop_touchpad_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = stand_teleop_touchpad_Button.isChecked();
                         currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD, tempValue);
@@ -655,7 +655,7 @@ public class StandScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currStandInfoIndex >= 0) {
+                if (currStandInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = stand_comments_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TableStandInfo.COLNAME_STAND_COMMENT) != tempValue) {

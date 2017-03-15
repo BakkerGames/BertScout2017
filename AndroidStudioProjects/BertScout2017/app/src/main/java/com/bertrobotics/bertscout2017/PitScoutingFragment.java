@@ -191,7 +191,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_team_name_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME) != tempValue) {
@@ -218,7 +218,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_team_years_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_YEARS) != tempValue) {
@@ -282,7 +282,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_team_members_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_MEMBERS) != tempValue) {
@@ -346,7 +346,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_height_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_HEIGHT) != tempValue) {
@@ -412,7 +412,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_weight_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_WEIGHT) != tempValue) {
@@ -478,7 +478,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_num_cims_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_NUM_CIMS) != tempValue) {
@@ -542,7 +542,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_max_speed_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_SPEED) != tempValue) {
@@ -606,7 +606,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_wheel_type_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE) != tempValue) {
@@ -633,7 +633,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_wheel_layout_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT) != tempValue) {
@@ -660,7 +660,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_max_fuel_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_MAX_FUEL) != tempValue) {
@@ -724,7 +724,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_shoot_speed_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_SPEED) != tempValue) {
@@ -788,7 +788,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_shoot_location_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION) != tempValue) {
@@ -807,7 +807,7 @@ public class PitScoutingFragment extends Fragment {
         pit_can_shoot_high_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_can_shoot_high_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH) != tempValue) {
@@ -826,7 +826,7 @@ public class PitScoutingFragment extends Fragment {
         pit_can_shoot_low_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_can_shoot_low_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW) != tempValue) {
@@ -845,7 +845,7 @@ public class PitScoutingFragment extends Fragment {
         pit_floor_pickup_fuel_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_floor_pickup_fuel_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL) != tempValue) {
@@ -864,7 +864,7 @@ public class PitScoutingFragment extends Fragment {
         pit_top_loader_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_top_loader_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER) != tempValue) {
@@ -883,7 +883,7 @@ public class PitScoutingFragment extends Fragment {
         pit_auto_aim_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_auto_aim_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM) != tempValue) {
@@ -902,7 +902,7 @@ public class PitScoutingFragment extends Fragment {
         pit_can_carry_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_can_carry_gear_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR) != tempValue) {
@@ -921,7 +921,7 @@ public class PitScoutingFragment extends Fragment {
         pit_floor_pickup_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_floor_pickup_gear_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR) != tempValue) {
@@ -940,7 +940,7 @@ public class PitScoutingFragment extends Fragment {
         pit_can_climb_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_can_climb_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB) != tempValue) {
@@ -959,7 +959,7 @@ public class PitScoutingFragment extends Fragment {
         pit_own_rope_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_own_rope_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE) != tempValue) {
@@ -978,7 +978,7 @@ public class PitScoutingFragment extends Fragment {
         pit_start_left_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_start_left_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_LEFT) != tempValue) {
@@ -997,7 +997,7 @@ public class PitScoutingFragment extends Fragment {
         pit_start_center_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_start_center_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_CENTER) != tempValue) {
@@ -1016,7 +1016,7 @@ public class PitScoutingFragment extends Fragment {
         pit_start_right_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_start_right_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT) != tempValue) {
@@ -1043,7 +1043,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = Integer.parseInt(pit_auto_num_modes_Textbox.getText().toString());
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_AUTO_NUM_MODES) != tempValue) {
@@ -1099,7 +1099,7 @@ public class PitScoutingFragment extends Fragment {
         pit_auto_base_line_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_auto_base_line_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE) != tempValue) {
@@ -1118,7 +1118,7 @@ public class PitScoutingFragment extends Fragment {
         pit_auto_place_gear_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_auto_place_gear_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR) != tempValue) {
@@ -1137,7 +1137,7 @@ public class PitScoutingFragment extends Fragment {
         pit_auto_high_goal_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_auto_high_goal_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL) != tempValue) {
@@ -1156,7 +1156,7 @@ public class PitScoutingFragment extends Fragment {
         pit_auto_low_goal_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_auto_low_goal_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL) != tempValue) {
@@ -1175,7 +1175,7 @@ public class PitScoutingFragment extends Fragment {
         pit_auto_hopper_Button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         boolean tempValue = pit_auto_hopper_Button.isChecked();
                         if (currTeam.getBoolean(DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER) != tempValue) {
@@ -1194,7 +1194,7 @@ public class PitScoutingFragment extends Fragment {
         pit_team_rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar pit_team_rating_Bar, float rating, boolean fromUser) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         int tempValue = (int) pit_team_rating_Bar.getRating();
                         if (currTeam.getInt(DBContract.TablePitInfo.COLNAME_PIT_TEAM_RATING) != tempValue) {
@@ -1221,7 +1221,7 @@ public class PitScoutingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (currPitInfoIndex >= 0) {
+                if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_comments_Textbox.getText().toString();
                         if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_COMMENT) != tempValue) {

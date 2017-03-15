@@ -12,6 +12,7 @@ import android.support.test.espresso.core.deps.guava.base.Charsets;
 import android.support.test.espresso.core.deps.guava.io.CharStreams;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +52,6 @@ public class ManageDataFragment extends Fragment {
     private final String IP_ADDRESS = "76.179.97.182";
 
     public DBHelper dbHelper;
-
-    public ManageDataFragment() {
-        // default constructor
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -120,6 +117,8 @@ public class ManageDataFragment extends Fragment {
                             try {
                                 PullData pullData = new PullData(mRootView.getContext());
                                 pullData.execute();
+
+
                             } catch (Exception e) {
 //                                result = "Error";
                             }
@@ -671,9 +670,6 @@ public class ManageDataFragment extends Fragment {
                 return "Error";
             }
 
-
-
-
             return "Success";
         }
 
@@ -744,14 +740,14 @@ public class ManageDataFragment extends Fragment {
         }
     }
 
-//    public String GetKindleName() {
-//        try {
-//            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
-//            String title = ExportData.ImportData(titleFilename);
-//            return title;
-//        } catch (Exception e) {
-//            return "Scouting 2017";
-//        }
-//    }
+    public String GetKindleName() {
+        try {
+            String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
+            String title = ExportData.ImportData(titleFilename);
+            return title;
+        } catch (Exception e) {
+            return "Scouting 2017";
+        }
+    }
 
 }
