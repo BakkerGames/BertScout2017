@@ -30,13 +30,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
         if (oldVersion < newVersion) {
-            if (oldVersion != 24) {
+            if (oldVersion < 24) {
                 db.execSQL(DBContract.TableStandInfo.SQL_QUERY_DELETE_TABLE);
                 db.execSQL(DBContract.TableStandInfo.SQL_QUERY_CREATE_TABLE);
             }
             db.execSQL(DBContract.TablePitInfo.SQL_QUERY_DELETE_TABLE);
             db.execSQL(DBContract.TablePitInfo.SQL_QUERY_CREATE_TABLE);
-//            onCreate(db);
             return;
         }
         return;
