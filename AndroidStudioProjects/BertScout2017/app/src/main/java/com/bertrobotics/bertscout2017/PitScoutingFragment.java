@@ -194,10 +194,12 @@ public class PitScoutingFragment extends Fragment {
                 if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_team_name_Textbox.getText().toString();
-                        if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME) != tempValue) {
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME, tempValue);
-                            if (!fillingPitInfo) {
-                                dbHelper.updatePitInfo(currTeam);
+                        if (currTeam != null) {
+                            if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME) != tempValue) {
+                                currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_TEAM_NAME, tempValue);
+                                if (!fillingPitInfo) {
+                                    dbHelper.updatePitInfo(currTeam);
+                                }
                             }
                         }
                     } catch (JSONException e) {
@@ -609,10 +611,12 @@ public class PitScoutingFragment extends Fragment {
                 if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_wheel_type_Textbox.getText().toString();
-                        if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE) != tempValue) {
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE, tempValue);
-                            if (!fillingPitInfo) {
-                                dbHelper.updatePitInfo(currTeam);
+                        if (currTeam != null) {
+                            if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE) != tempValue) {
+                                currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_TYPE, tempValue);
+                                if (!fillingPitInfo) {
+                                    dbHelper.updatePitInfo(currTeam);
+                                }
                             }
                         }
                     } catch (JSONException e) {
@@ -636,10 +640,12 @@ public class PitScoutingFragment extends Fragment {
                 if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_wheel_layout_Textbox.getText().toString();
-                        if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT) != tempValue) {
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT, tempValue);
-                            if (!fillingPitInfo) {
-                                dbHelper.updatePitInfo(currTeam);
+                        if (currTeam != null) {
+                            if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT) != tempValue) {
+                                currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_WHEEL_LAYOUT, tempValue);
+                                if (!fillingPitInfo) {
+                                    dbHelper.updatePitInfo(currTeam);
+                                }
                             }
                         }
                     } catch (JSONException e) {
@@ -791,10 +797,12 @@ public class PitScoutingFragment extends Fragment {
                 if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_shoot_location_Textbox.getText().toString();
-                        if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION) != tempValue) {
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION, tempValue);
-                            if (!fillingPitInfo) {
-                                dbHelper.updatePitInfo(currTeam);
+                        if (currTeam != null) {
+                            if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION) != tempValue) {
+                                currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_SHOOT_LOCATION, tempValue);
+                                if (!fillingPitInfo) {
+                                    dbHelper.updatePitInfo(currTeam);
+                                }
                             }
                         }
                     } catch (JSONException e) {
@@ -1224,10 +1232,12 @@ public class PitScoutingFragment extends Fragment {
                 if (currPitInfoIndex >= 0 && currTeam != null) {
                     try {
                         String tempValue = pit_comments_Textbox.getText().toString();
-                        if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_COMMENT) != tempValue) {
-                            currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_COMMENT, tempValue);
-                            if (!fillingPitInfo) {
-                                dbHelper.updatePitInfo(currTeam);
+                        if (currTeam != null) {
+                            if (currTeam.getString(DBContract.TablePitInfo.COLNAME_PIT_COMMENT) != tempValue) {
+                                currTeam.put(DBContract.TablePitInfo.COLNAME_PIT_COMMENT, tempValue);
+                                if (!fillingPitInfo) {
+                                    dbHelper.updatePitInfo(currTeam);
+                                }
                             }
                         }
                     } catch (JSONException e) {
