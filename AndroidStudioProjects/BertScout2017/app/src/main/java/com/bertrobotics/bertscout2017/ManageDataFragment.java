@@ -117,8 +117,6 @@ public class ManageDataFragment extends Fragment {
                             try {
                                 PullData pullData = new PullData(mRootView.getContext());
                                 pullData.execute();
-
-
                             } catch (Exception e) {
 //                                result = "Error";
                             }
@@ -157,36 +155,33 @@ public class ManageDataFragment extends Fragment {
                     alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
-                        String result;
-                        try {
-                            // stand info
-                            JSONObject standInfo = new JSONObject();
-                            standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
-                            JSONArray currStandInfoArray = dbHelper.getDataAllStand(0);
-                            standInfo.put("stand_data", currStandInfoArray);
-
-                            String kindleName = "Scouting 2017";
-
-                            String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
-                                    kindleName.toLowerCase().replaceAll(" ", "_") + "_stand.json";
-
-                            ExportData.ExportData(standOutFilename, standInfo);
-                            // pit info
-                            JSONObject pitInfo = new JSONObject();
-                            pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
-                            JSONArray currPitInfoArray = dbHelper.getDataAllPit();
-                            pitInfo.put("pit_data", currPitInfoArray);
-                            String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
-                                    kindleName.toLowerCase().replaceAll(" ", "_") + "_pit.json";
-                            ExportData.ExportData(pitOutFilename, pitInfo);
-                            result = "Export done!";
-                        } catch (Exception e) {
-                            result = "Error during export";
-                        }
-                        Context context = mRootView.getContext();
-                        int duration = Toast.LENGTH_LONG;
-                        Toast toast = Toast.makeText(context, result, duration);
-                        toast.show();
+                            String result;
+                            try {
+                                String kindleName = GetKindleName();
+                                // stand info
+                                JSONObject standInfo = new JSONObject();
+                                standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+                                JSONArray currStandInfoArray = dbHelper.getDataAllStand(0);
+                                standInfo.put("stand_data", currStandInfoArray);
+                                String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
+                                        kindleName.toLowerCase().replaceAll(" ", "_") + "_stand.json";
+                                ExportData.ExportData(standOutFilename, standInfo);
+                                // pit info
+                                JSONObject pitInfo = new JSONObject();
+                                pitInfo.put("dbversion", DBHelper.DATABASE_VERSION);
+                                JSONArray currPitInfoArray = dbHelper.getDataAllPit();
+                                pitInfo.put("pit_data", currPitInfoArray);
+                                String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
+                                        kindleName.toLowerCase().replaceAll(" ", "_") + "_pit.json";
+                                ExportData.ExportData(pitOutFilename, pitInfo);
+                                result = "Export done!";
+                            } catch (Exception e) {
+                                result = "Error during export";
+                            }
+                            Context context = mRootView.getContext();
+                            int duration = Toast.LENGTH_LONG;
+                            Toast toast = Toast.makeText(context, result, duration);
+                            toast.show();
                         }
                     });
 
@@ -292,7 +287,7 @@ public class ManageDataFragment extends Fragment {
 
 
         return mRootView;
-    };
+    }
 
     @Override
     public void onResume() {
@@ -309,6 +304,8 @@ public class ManageDataFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+            if (android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             try {
                 JSONArray standData = dbHelper.getDataAllStand(0);
 
@@ -319,90 +316,26 @@ public class ManageDataFragment extends Fragment {
 
                     try {
                         String insertString = "http://" + IP_ADDRESS + "/insertStandData.php?" +
-                                "&match_no=" + row.getInt("match_no") +
-                                "&team=" + row.getInt("team") +
-                                "&alliance_red_blue=" + encode(row.getString("alliance_red_blue")) +
-                                "&auto_score_high=" + row.getInt("auto_score_high") +
-                                "&auto_score_low=" + row.getInt("auto_score_low") +
-                                "&auto_base_line=" + row.getBoolean("auto_base_line") +
-                                "&auto_place_gear=" + row.getBoolean("auto_place_gear") +
-                                "&auto_open_hopper=" + row.getBoolean("auto_open_hopper") +
-                                "&tele_score_high=" + row.getInt("tele_score_high") +
-                                "&tele_score_low=" + row.getInt("tele_score_low") +
-                                "&tele_gears_received=" + row.getInt("tele_gears_received") +
-                                "&tele_gears_placed=" + row.getInt("tele_gears_placed") +
-                                "&tele_penalties=" + row.getInt("tele_penalties") +
-                                "&tele_climbed=" + row.getBoolean("tele_climbed") +
-                                "&tele_touchpad=" + row.getBoolean("tele_touchpad") +
-                                "&stand_comment=" + encode(row.getString("stand_comment")) +
-                                "&scout_name=" + encode(row.getString("scout_name"));
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_MATCH + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TEAM + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_COMMENT + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_COMMENT);
 
-                        // Do your long operations here and return the result
+                                // Do your long operations here and return the result
 
-                        URL insertUrl = new URL(insertString);
-
-                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
-
-                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
-
-                        insertResult = CharStreams.toString(new InputStreamReader(
-                                insertIn, Charsets.UTF_8));
-
-                    } catch (Exception e) {
-                        return "Error";
-                    }
-                }
-            } catch (Exception e) {
-                return "Error";
-            }
-
-            try {
-                JSONArray pitData = dbHelper.getDataAllPit();
-
-                String insertResult;
-
-                for (int i = 0; i < pitData.length(); i++) {
-                    JSONObject row = pitData.getJSONObject(i);
-
-                    try {
-                        String insertString = "http://" + IP_ADDRESS + "/insertPitData.php?" +
-                                "&team=" + row.getInt("team") +
-                                "&team_name=" + encode(row.getString("team_name")) +
-                                "&team_years=" + row.getInt("team_years") +
-                                "&team_members=" + row.getInt("team_members") +
-                                "&height=" + row.getInt("height") +
-                                "&weight=" + row.getInt("weight") +
-                                "&num_cims=" + row.getInt("num_cims") +
-                                "&max_speed=" + row.getInt("max_speed") +
-                                "&wheel_type=" + encode(row.getString("wheel_type")) +
-                                "&wheel_layout=" + encode(row.getString("wheel_layout")) +
-                                "&max_fuel=" + row.getInt("max_fuel") +
-                                "&shoot_speed=" + row.getInt("shoot_speed") +
-                                "&shoot_location=" + encode(row.getString("shoot_location")) +
-                                "&can_shoot_high=" + row.getBoolean("can_shoot_high") +
-                                "&can_shoot_low=" + row.getBoolean("can_shoot_low") +
-                                "&floor_pickup=" + row.getBoolean("floor_pickup") +
-                                "&top_loader=" + row.getBoolean("top_loader") +
-                                "&auto_aim=" + row.getBoolean("auto_aim") +
-                                "&can_carry_gear=" + row.getBoolean("can_carry_gear") +
-                                "&can_climb=" + row.getBoolean("can_climb") +
-                                "&own_rope=" + row.getBoolean("own_rope") +
-                                "&start_left=" + row.getBoolean("start_left") +
-                                "&start_center=" + row.getBoolean("start_center") +
-                                "&start_right=" + row.getBoolean("start_right") +
-                                "&auto_num_modes=" + row.getInt("auto_num_modes") +
-                                "&auto_base_line=" + row.getBoolean("auto_base_line") +
-                                "&auto_place_gear=" + row.getBoolean("auto_place_gear") +
-                                "&auto_high_goal=" + row.getBoolean("auto_high_goal") +
-                                "&auto_low_goal=" + row.getBoolean("auto_low_goal") +
-                                "&auto_hopper=" + row.getBoolean("auto_hopper") +
-                                "&team_rating=" + row.getInt("team_rating") +
-                                "&comment=" + encode(row.getString("comment")) +
-                                "&scout_name=" + encode(row.getString("scout_name"));
-
-                        // Do your long operations here and return the result
-
-                        URL insertUrl = new URL(insertString);
+                                URL insertUrl = new URL(insertString);
 
                         HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
 
@@ -418,6 +351,69 @@ public class ManageDataFragment extends Fragment {
             } catch (Exception e) {
                 return "Error";
             }
+
+//            try {
+//                JSONArray pitData = dbHelper.getDataAllPit();
+//
+//                String insertResult;
+//
+//                for (int i = 0; i < pitData.length(); i++) {
+//                    JSONObject row = pitData.getJSONObject(i);
+//
+//                    try {
+//                        String insertString = "http://" + IP_ADDRESS + "/insertPitData.php?" +
+//                                "&team=" + row.getInt("team") +
+//                                "&team_name=" + encode(row.getString("team_name")) +
+//                                "&team_years=" + row.getInt("team_years") +
+//                                "&team_members=" + row.getInt("team_members") +
+//                                "&height=" + row.getInt("height") +
+//                                "&weight=" + row.getInt("weight") +
+//                                "&num_cims=" + row.getInt("num_cims") +
+//                                "&max_speed=" + row.getInt("max_speed") +
+//                                "&wheel_type=" + encode(row.getString("wheel_type")) +
+//                                "&wheel_layout=" + encode(row.getString("wheel_layout")) +
+//                                "&max_fuel=" + row.getInt("max_fuel") +
+//                                "&shoot_speed=" + row.getInt("shoot_speed") +
+//                                "&shoot_location=" + encode(row.getString("shoot_location")) +
+//                                "&can_shoot_high=" + row.getBoolean("can_shoot_high") +
+//                                "&can_shoot_low=" + row.getBoolean("can_shoot_low") +
+//                                "&floor_pickup_fuel=" + row.getBoolean("floor_pickup_fuel") +
+//                                "&top_loader=" + row.getBoolean("top_loader") +
+//                                "&auto_aim=" + row.getBoolean("auto_aim") +
+//                                "&can_carry_gear=" + row.getBoolean("can_carry_gear") +
+//                                "&floor_pickup_gear=" + row.getBoolean("floor_pickup_gear") +
+//                                "&can_climb=" + row.getBoolean("can_climb") +
+//                                "&own_rope=" + row.getBoolean("own_rope") +
+//                                "&start_left=" + row.getBoolean("start_left") +
+//                                "&start_center=" + row.getBoolean("start_center") +
+//                                "&start_right=" + row.getBoolean("start_right") +
+//                                "&auto_num_modes=" + row.getInt("auto_num_modes") +
+//                                "&auto_base_line=" + row.getBoolean("auto_base_line") +
+//                                "&auto_place_gear=" + row.getBoolean("auto_place_gear") +
+//                                "&auto_high_goal=" + row.getBoolean("auto_high_goal") +
+//                                "&auto_low_goal=" + row.getBoolean("auto_low_goal") +
+//                                "&auto_hopper=" + row.getBoolean("auto_hopper") +
+//                                "&team_rating=" + row.getInt("team_rating") +
+//                                "&comment=" + encode(row.getString("comment")) +
+//                                "&scout_name=" + encode(row.getString("scout_name"));
+//
+//                        // Do your long operations here and return the result
+//
+//                        URL insertUrl = new URL(insertString);
+//
+//                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
+//
+//                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
+//
+//                        insertResult = CharStreams.toString(new InputStreamReader(insertIn, Charsets.UTF_8));
+//
+//                    } catch (Exception e) {
+//                        return "Error";
+//                    }
+//                }
+//            } catch (Exception e) {
+//                return "Error";
+//            }
 
             return "Success";
         }
@@ -451,6 +447,8 @@ public class ManageDataFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+            if (android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             String results;
 
             try {
@@ -464,53 +462,19 @@ public class ManageDataFragment extends Fragment {
 
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 
-                results = CharStreams.toString(new InputStreamReader(
-                        in, Charsets.UTF_8));
+                results = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
 
                 JSONArray remoteData = new JSONArray(results);
 
                 for (int i = 0; i < remoteData.length(); i++) {
+
                     JSONObject row = remoteData.getJSONObject(i);
 
-                    if (row.has("auto_base_line")) {
-                        if (row.getInt("auto_base_line") == 1) {
-                            row.put("auto_base_line", true);
-                        } else {
-                            row.put("auto_base_line", false);
-                        }
-                    }
-
-                    if (row.has("auto_place_gear")) {
-                        if (row.getInt("auto_place_gear") == 1) {
-                            row.put("auto_place_gear", true);
-                        } else {
-                            row.put("auto_place_gear", false);
-                        }
-                    }
-
-                    if (row.has("auto_open_hopper")) {
-                        if (row.getInt("auto_open_hopper") == 1) {
-                            row.put("auto_open_hopper", true);
-                        } else {
-                            row.put("auto_open_hopper", false);
-                        }
-                    }
-
-                    if (row.has("tele_climbed")) {
-                        if (row.getInt("tele_climbed") == 1) {
-                            row.put("tele_climbed", true);
-                        } else {
-                            row.put("tele_climbed", false);
-                        }
-                    }
-
-                    if (row.has("tele_touchpad")) {
-                        if (row.getInt("tele_touchpad") == 1) {
-                            row.put("tele_touchpad", true);
-                        } else {
-                            row.put("tele_touchpad", false);
-                        }
-                    }
+                    FixRowBoolean(row, DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE);
+                    FixRowBoolean(row, DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR);
+                    FixRowBoolean(row, DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER);
+                    FixRowBoolean(row, DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED);
+                    FixRowBoolean(row, DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD);
 
                     dbHelper.updateStandInfo(row);
                 }
@@ -518,157 +482,50 @@ public class ManageDataFragment extends Fragment {
                 return "Error";
             }
 
-            try {
-                // Update Pit Data
-                String urlString = "http://" + IP_ADDRESS + "/getPitData.php";
-
-                // Do your long operations here and return the result
-                URL url = new URL(urlString);
-
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-
-                results = CharStreams.toString(new InputStreamReader(
-                        in, Charsets.UTF_8));
-
-                JSONArray remoteData = new JSONArray(results);
-
-                for (int i = 0; i < remoteData.length(); i++) {
-                    JSONObject row = remoteData.getJSONObject(i);
-
-                    if (row.has("can_shoot_high")) {
-                        if (row.getInt("can_shoot_high") == 1) {
-                            row.put("can_shoot_high", true);
-                        } else {
-                            row.put("can_shoot_high", false);
-                        }
-                    }
-
-                    if (row.has("can_shoot_low")) {
-                        if (row.getInt("can_shoot_low") == 1) {
-                            row.put("can_shoot_low", true);
-                        } else {
-                            row.put("can_shoot_low", false);
-                        }
-                    }
-
-                    if (row.has("floor_pickup")) {
-                        if (row.getInt("floor_pickup") == 1) {
-                            row.put("floor_pickup", true);
-                        } else {
-                            row.put("floor_pickup", false);
-                        }
-                    }
-
-                    if (row.has("top_loader")) {
-                        if (row.getInt("top_loader") == 1) {
-                            row.put("top_loader", true);
-                        } else {
-                            row.put("top_loader", false);
-                        }
-                    }
-
-                    if (row.has("auto_aim")) {
-                        if (row.getInt("auto_aim") == 1) {
-                            row.put("auto_aim", true);
-                        } else {
-                            row.put("auto_aim", false);
-                        }
-                    }
-
-                    if (row.has("can_carry_gear")) {
-                        if (row.getInt("can_carry_gear") == 1) {
-                            row.put("can_carry_gear", true);
-                        } else {
-                            row.put("can_carry_gear", false);
-                        }
-                    }
-                    if (row.has("can_climb")) {
-                        if (row.getInt("can_climb") == 1) {
-                            row.put("can_climb", true);
-                        } else {
-                            row.put("can_climb", false);
-                        }
-                    }
-
-                    if (row.has("own_rope")) {
-                        if (row.getInt("own_rope") == 1) {
-                            row.put("own_rope", true);
-                        } else {
-                            row.put("own_rope", false);
-                        }
-                    }
-
-                    if (row.has("start_left")) {
-                        if (row.getInt("start_left") == 1) {
-                            row.put("start_left", true);
-                        } else {
-                            row.put("start_left", false);
-                        }
-                    }
-
-                    if (row.has("start_center")) {
-                        if (row.getInt("start_center") == 1) {
-                            row.put("start_center", true);
-                        } else {
-                            row.put("start_center", false);
-                        }
-                    }
-
-                    if (row.has("start_right")) {
-                        if (row.getInt("start_right") == 1) {
-                            row.put("start_right", true);
-                        } else {
-                            row.put("start_right", false);
-                        }
-                    }
-
-                    if (row.has("auto_base_line")) {
-                        if (row.getInt("auto_base_line") == 1) {
-                            row.put("auto_base_line", true);
-                        } else {
-                            row.put("auto_base_line", false);
-                        }
-                    }
-
-                    if (row.has("auto_place_gear")) {
-                        if (row.getInt("auto_place_gear") == 1) {
-                            row.put("auto_place_gear", true);
-                        } else {
-                            row.put("auto_place_gear", false);
-                        }
-                    }
-
-                    if (row.has("auto_high_goal")) {
-                        if (row.getInt("auto_high_goal") == 1) {
-                            row.put("auto_high_goal", true);
-                        } else {
-                            row.put("auto_high_goal", false);
-                        }
-                    }
-
-                    if (row.has("auto_low_goal")) {
-                        if (row.getInt("auto_low_goal") == 1) {
-                            row.put("auto_low_goal", true);
-                        } else {
-                            row.put("auto_low_goal", false);
-                        }
-                    }
-
-                    if (row.has("auto_hopper")) {
-                        if (row.getInt("auto_hopper") == 1) {
-                            row.put("auto_hopper", true);
-                        } else {
-                            row.put("auto_hopper", false);
-                        }
-                    }
-
-                    dbHelper.updatePitInfo(row);
-                }
-            } catch (Exception e) {
-                return "Error";
-            }
+//            try {
+//                // Update Pit Data
+//                String urlString = "http://" + IP_ADDRESS + "/getPitData.php";
+//
+//                // Do your long operations here and return the result
+//                URL url = new URL(urlString);
+//
+//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//
+//                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+//
+//                results = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
+//
+//                JSONArray remoteData = new JSONArray(results);
+//
+//                for (int i = 0; i < remoteData.length(); i++) {
+//
+//                    JSONObject row = remoteData.getJSONObject(i);
+//
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_LEFT);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_CENTER);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_LEFT);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_CENTER);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_RIGHT);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL);
+//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER);
+//
+//                    dbHelper.updatePitInfo(row);
+//                }
+//            } catch (Exception e) {
+//                return "Error";
+//            }
 
             return "Success";
         }
@@ -702,6 +559,8 @@ public class ManageDataFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
+            if (android.os.Debug.isDebuggerConnected())
+                android.os.Debug.waitForDebugger();
             String results;
 
             try {
@@ -740,13 +599,24 @@ public class ManageDataFragment extends Fragment {
         }
     }
 
-    public String GetKindleName() {
+    public static String GetKindleName() {
         try {
             String titleFilename = ExportData.getDocumentStorageDir() + "/kindlename.txt";
             String title = ExportData.ImportData(titleFilename);
             return title;
         } catch (Exception e) {
-            return "Scouting 2017";
+            return "Kindle NoName";
+        }
+    }
+
+    public static void FixRowBoolean(JSONObject row, String fieldName) {
+        try {
+            if (row.has(fieldName)) {
+                boolean value = (row.getString(fieldName) == "1");
+                row.put(fieldName, value);
+            }
+        } catch (JSONException e) {
+            String result = e.toString();
         }
     }
 

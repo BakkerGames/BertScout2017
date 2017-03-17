@@ -30,6 +30,7 @@ public class StandScoutingFragment extends Fragment {
     public String currEvent;
     public JSONArray currStandInfoArray;
     public int currStandInfoIndex = -1;
+    public int currStandMatchNum = -1;
     public JSONObject currTeam;
     public boolean lastAllianceBlue = true;
     private boolean fillingStandInfo = false;
@@ -38,15 +39,16 @@ public class StandScoutingFragment extends Fragment {
         // default constructor
     }
 
-//    public StandScoutingFragment(StatisticsFragment statisticsFragment) {
-//        mStatisticsFragment = statisticsFragment;
-//    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mRootView = inflater.inflate(R.layout.stand_scouting, container, false);
         dbHelper = new DBHelper(mRootView.getContext());
+
+        if (currStandMatchNum > 0) {
+            TextView matchText = (TextView) mRootView.findViewById(R.id.stand_match_number);
+            matchText.setText(Integer.toString(currStandMatchNum));
+        }
 
         final Button standOKButton = (Button) mRootView.findViewById(R.id.stand_ok_btn);
         standOKButton.setOnClickListener(new View.OnClickListener() {
@@ -106,9 +108,11 @@ public class StandScoutingFragment extends Fragment {
                     }
                     tempValue--;
                     matchText.setText(Integer.toString(tempValue));
+                    currStandMatchNum = tempValue;
                 } catch (Exception e) {
                     tempValue = 1;
                     matchText.setText(Integer.toString(tempValue));
+                    currStandMatchNum = tempValue;
                 }
                 TextView teamText = (TextView) mRootView.findViewById(R.id.stand_team_number);
                 teamText.setText("");
@@ -129,9 +133,11 @@ public class StandScoutingFragment extends Fragment {
                     tempValue = Integer.parseInt(matchText.getText().toString());
                     tempValue++;
                     matchText.setText(Integer.toString(tempValue));
+                    currStandMatchNum = tempValue;
                 } catch (Exception e) {
                     tempValue = 1;
                     matchText.setText(Integer.toString(tempValue));
+                    currStandMatchNum = tempValue;
                 }
                 TextView teamText = (TextView) mRootView.findViewById(R.id.stand_team_number);
                 teamText.setText("");
@@ -435,64 +441,6 @@ public class StandScoutingFragment extends Fragment {
             }
         });
 
-//        Button teleop_gears_receviedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_minus_btn);
-//        teleop_gears_receviedMinusButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (currStandInfoIndex >= 0 && currTeam != null) {
-//                    TextView gears_receivedText = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
-//                    gears_receivedText.requestFocus();
-//                    int tempValue;
-//                    try {
-//                        tempValue = Integer.parseInt(gears_receivedText.getText().toString());
-//                        if (tempValue <= 0) {
-//                            return;
-//                        }
-//                        tempValue--;
-//                        gears_receivedText.setText(Integer.toString(tempValue));
-//                    } catch (Exception e) {
-//                        tempValue = 0;
-//                        gears_receivedText.setText(Integer.toString(tempValue));
-//                    }
-//                    try {
-//                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, tempValue);
-//                        if (!fillingStandInfo) {
-//                            dbHelper.updateStandInfo(currTeam);
-//                        }
-//                    } catch (JSONException e) {
-//                    }
-//                }
-//            }
-//        });
-//
-//        Button teleop_gears_receivedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_plus_btn);
-//        teleop_gears_receivedPlusButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (currStandInfoIndex >= 0 && currTeam != null) {
-//                    TextView gears_receivedText = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
-//
-//                    gears_receivedText.requestFocus();
-//                    int tempValue;
-//                    try {
-//                        tempValue = Integer.parseInt(gears_receivedText.getText().toString());
-//                        tempValue++;
-//                        gears_receivedText.setText(Integer.toString(tempValue));
-//                    } catch (Exception e) {
-//                        tempValue = 0;
-//                        gears_receivedText.setText(Integer.toString(tempValue));
-//                    }
-//                    try {
-//                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, tempValue);
-//                        if (!fillingStandInfo) {
-//                            dbHelper.updateStandInfo(currTeam);
-//                        }
-//                    } catch (JSONException e) {
-//                    }
-//                }
-//            }
-//        });
-
         Button teleop_gears_placedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_minus_btn);
         teleop_gears_placedMinusButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -725,7 +673,6 @@ public class StandScoutingFragment extends Fragment {
         if (currStandInfoIndex < 0) {
             currTeam = new JSONObject();
             try {
-//                        currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_EVENT, currEvent);
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_MATCH, currMatch);
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TEAM, teamNumber);
                 if (lastAllianceBlue) {
@@ -742,7 +689,6 @@ public class StandScoutingFragment extends Fragment {
 
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH, 0);
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW, 0);
-//                currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED, 0);
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED, 0);
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES, 0);
                 currTeam.put(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED, false);
@@ -810,10 +756,6 @@ public class StandScoutingFragment extends Fragment {
             teleop_score_low_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW)));
             teleop_score_low_number_Textview.setVisibility(View.VISIBLE);
 
-//            TextView teleop_gears_received_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
-//            teleop_gears_received_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_RECEIVED)));
-//            teleop_gears_received_number_Textview.setVisibility(View.VISIBLE);
-
             TextView teleop_gears_placed_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_number);
             teleop_gears_placed_number_Textview.setText(Integer.toString(currTeam.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED)));
             teleop_gears_placed_number_Textview.setVisibility(View.VISIBLE);
@@ -853,10 +795,6 @@ public class StandScoutingFragment extends Fragment {
             teleop_score_lowMinusButton.setVisibility(View.VISIBLE);
             Button teleop_score_lowPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_low_plus_btn);
             teleop_score_lowPlusButton.setVisibility(View.VISIBLE);
-//            Button teleop_gears_receviedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_minus_btn);
-//            teleop_gears_receviedMinusButton.setVisibility(View.VISIBLE);
-//            Button teleop_gears_receivedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_plus_btn);
-//            teleop_gears_receivedPlusButton.setVisibility(View.VISIBLE);
             Button teleop_gears_placedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_minus_btn);
             teleop_gears_placedMinusButton.setVisibility(View.VISIBLE);
             Button teleop_gears_placedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_plus_btn);
@@ -884,8 +822,6 @@ public class StandScoutingFragment extends Fragment {
             stand_teleop_score_high_label_Text.setVisibility(View.VISIBLE);
             TextView stand_teleop_score_low_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_label);
             stand_teleop_score_low_label_Text.setVisibility(View.VISIBLE);
-//            TextView stand_teleop_gears_received_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_label);
-//            stand_teleop_gears_received_label_Text.setVisibility(View.VISIBLE);
             TextView stand_teleop_gears_placed_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_label);
             stand_teleop_gears_placed_label_Text.setVisibility(View.VISIBLE);
             TextView stand_penalties_incurred_label_Text = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_label);
@@ -949,10 +885,6 @@ public class StandScoutingFragment extends Fragment {
             teleop_score_low_number_Textview.setText("0");
             teleop_score_low_number_Textview.setVisibility(View.INVISIBLE);
 
-//            TextView teleop_gears_received_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_number);
-//            teleop_gears_received_number_Textview.setText("0");
-//            teleop_gears_received_number_Textview.setVisibility(View.INVISIBLE);
-
             TextView teleop_gears_placed_number_Textview = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_number);
             teleop_gears_placed_number_Textview.setText("0");
             teleop_gears_placed_number_Textview.setVisibility(View.INVISIBLE);
@@ -989,10 +921,6 @@ public class StandScoutingFragment extends Fragment {
             teleop_score_lowMinusButton.setVisibility(View.INVISIBLE);
             Button teleop_score_lowPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_score_low_plus_btn);
             teleop_score_lowPlusButton.setVisibility(View.INVISIBLE);
-//            Button teleop_gears_receviedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_minus_btn);
-//            teleop_gears_receviedMinusButton.setVisibility(View.INVISIBLE);
-//            Button teleop_gears_receivedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_received_plus_btn);
-//            teleop_gears_receivedPlusButton.setVisibility(View.INVISIBLE);
             Button teleop_gears_placedMinusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_minus_btn);
             teleop_gears_placedMinusButton.setVisibility(View.INVISIBLE);
             Button teleop_gears_placedPlusButton = (Button) mRootView.findViewById(R.id.stand_teleop_gears_placed_plus_btn);
@@ -1020,8 +948,6 @@ public class StandScoutingFragment extends Fragment {
             stand_teleop_score_high_label_Text.setVisibility(View.INVISIBLE);
             TextView stand_teleop_score_low_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_score_low_label);
             stand_teleop_score_low_label_Text.setVisibility(View.INVISIBLE);
-//            TextView stand_teleop_gears_received_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_received_label);
-//            stand_teleop_gears_received_label_Text.setVisibility(View.INVISIBLE);
             TextView stand_teleop_gears_placed_label_Text = (TextView) mRootView.findViewById(R.id.stand_teleop_gears_placed_label);
             stand_teleop_gears_placed_label_Text.setVisibility(View.INVISIBLE);
             TextView stand_penalties_incurred_label_Text = (TextView) mRootView.findViewById(R.id.stand_penalties_incurred_label);

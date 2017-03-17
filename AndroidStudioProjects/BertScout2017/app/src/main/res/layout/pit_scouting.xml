@@ -27,41 +27,41 @@
         android:id="@+id/pit_team_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15sp"
         android:layout_alignBaseline="@+id/pit_team_label"
+        android:layout_marginLeft="15sp"
         android:layout_toEndOf="@+id/pit_team_label"
         android:layout_toRightOf="@+id/pit_team_label"
         android:ems="3"
         android:inputType="number"
         android:text=""
-        android:visibility="visible"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/pit_team_number_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15sp"
         android:layout_alignBaseline="@+id/pit_team_label"
+        android:layout_marginLeft="15sp"
         android:layout_toEndOf="@+id/pit_team_label"
         android:layout_toRightOf="@+id/pit_team_label"
         android:ems="3"
         android:inputType="number"
         android:text=""
-        android:visibility="invisible"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/stand_ok_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@+id/pit_team_number"
-        android:layout_toEndOf="@+id/pit_team_number"
         android:layout_alignBaseline="@+id/pit_team_number"
+        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@+id/pit_team_number"
+        android:layout_toRightOf="@+id/pit_team_number"
         android:minWidth="110dp"
-        android:paddingLeft="10sp"
         android:paddingBottom="0sp"
+        android:paddingLeft="10sp"
         android:paddingTop="0sp"
         android:text="LOAD"
         android:textSize="30sp" />
@@ -72,7 +72,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/pit_team_label"
+        android:layout_below="@+id/pit_team_label"
         android:fillViewport="true">
 
         <RelativeLayout
@@ -108,8 +108,8 @@
                 android:layout_marginLeft="10sp"
                 android:layout_toEndOf="@+id/pit_team_name_label"
                 android:layout_toRightOf="@+id/pit_team_name_label"
-                android:inputType="textCapWords"
                 android:ems="12"
+                android:inputType="textCapWords"
                 android:textSize="36sp" />
 
             <!-- team_years -->
@@ -118,7 +118,7 @@
                 android:id="@+id/pit_team_years_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_team_name_label"
+                android:layout_below="@+id/pit_team_name_label"
                 android:layout_marginBottom="0sp"
                 android:text="Team Years"
                 android:textSize="36sp" />
@@ -139,7 +139,7 @@
                 android:id="@+id/pit_team_years_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_team_years"
+                android:layout_alignBaseline="@+id/pit_team_years"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_team_years"
                 android:minWidth="54dp"
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_team_years_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_team_years_minus_btn"
+                android:layout_toRightOf="@+id/pit_team_years_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -167,7 +167,7 @@
                 android:id="@+id/pit_team_members_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_team_years_label"
+                android:layout_below="@+id/pit_team_years_label"
                 android:layout_marginBottom="0sp"
                 android:text="Team Members"
                 android:textSize="36sp" />
@@ -188,7 +188,7 @@
                 android:id="@+id/pit_team_members_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_team_members"
+                android:layout_alignBaseline="@+id/pit_team_members"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_team_members"
                 android:minWidth="54dp"
@@ -203,7 +203,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_team_members_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_team_members_minus_btn"
+                android:layout_toRightOf="@+id/pit_team_members_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -216,7 +216,7 @@
                 android:id="@+id/pit_robot_info_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_team_members_label"
+                android:layout_below="@+id/pit_team_members_label"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="0sp"
                 android:layout_marginTop="0sp"
@@ -229,7 +229,7 @@
                 android:id="@+id/pit_height_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_robot_info_label"
+                android:layout_below="@+id/pit_robot_info_label"
                 android:layout_marginBottom="0sp"
                 android:layout_marginTop="0sp"
                 android:text="Height (inches)"
@@ -251,7 +251,7 @@
                 android:id="@+id/pit_height_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_height"
+                android:layout_alignBaseline="@+id/pit_height"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_height"
                 android:minWidth="54dp"
@@ -266,7 +266,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_height_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_height_minus_btn"
+                android:layout_toRightOf="@+id/pit_height_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -279,7 +279,7 @@
                 android:id="@+id/pit_weight_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_height_label"
+                android:layout_below="@+id/pit_height_label"
                 android:layout_marginBottom="0sp"
                 android:text="Weight (pounds)"
                 android:textSize="36sp" />
@@ -300,7 +300,7 @@
                 android:id="@+id/pit_weight_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_weight"
+                android:layout_alignBaseline="@+id/pit_weight"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_weight"
                 android:minWidth="54dp"
@@ -315,7 +315,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_weight_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_weight_minus_btn"
+                android:layout_toRightOf="@+id/pit_weight_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -328,7 +328,7 @@
                 android:id="@+id/pit_num_cims_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_weight_label"
+                android:layout_below="@+id/pit_weight_label"
                 android:layout_marginBottom="0sp"
                 android:text="Number of CIMs"
                 android:textSize="36sp" />
@@ -349,7 +349,7 @@
                 android:id="@+id/pit_num_cims_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_num_cims"
+                android:layout_alignBaseline="@+id/pit_num_cims"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_num_cims"
                 android:minWidth="54dp"
@@ -364,7 +364,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_num_cims_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_num_cims_minus_btn"
+                android:layout_toRightOf="@+id/pit_num_cims_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -377,7 +377,7 @@
                 android:id="@+id/pit_max_speed_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_num_cims_label"
+                android:layout_below="@+id/pit_num_cims_label"
                 android:layout_marginBottom="0sp"
                 android:text="Max Speed (feet/s)"
                 android:textSize="36sp" />
@@ -398,7 +398,7 @@
                 android:id="@+id/pit_max_speed_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_max_speed"
+                android:layout_alignBaseline="@+id/pit_max_speed"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_max_speed"
                 android:minWidth="54dp"
@@ -413,7 +413,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_max_speed_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_max_speed_minus_btn"
+                android:layout_toRightOf="@+id/pit_max_speed_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -426,7 +426,7 @@
                 android:id="@+id/pit_wheel_type_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_max_speed_label"
+                android:layout_below="@+id/pit_max_speed_label"
                 android:layout_marginBottom="0sp"
                 android:text="Wheel Type"
                 android:textSize="36sp" />
@@ -451,7 +451,7 @@
                 android:id="@+id/pit_wheel_layout_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_wheel_type_label"
+                android:layout_below="@+id/pit_wheel_type_label"
                 android:layout_marginBottom="0sp"
                 android:text="Wheel Layout"
                 android:textSize="36sp" />
@@ -500,7 +500,7 @@
                 android:id="@+id/pit_max_fuel_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_max_fuel"
+                android:layout_alignBaseline="@+id/pit_max_fuel"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_max_fuel"
                 android:minWidth="54dp"
@@ -515,11 +515,36 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_max_fuel_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_max_fuel_minus_btn"
+                android:layout_toRightOf="@+id/pit_max_fuel_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
                 android:text="+"
+                android:textSize="36sp" />
+
+            <!-- shooter_type -->
+
+            <TextView
+                android:id="@+id/pit_shooter_type_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_max_fuel_label"
+                android:layout_marginBottom="0sp"
+                android:text="Shooter Type"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/pit_shooter_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_shooter_type_label"
+                android:layout_alignBottom="@+id/pit_shooter_type_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
                 android:textSize="36sp" />
 
             <!-- shoot_speed -->
@@ -528,7 +553,7 @@
                 android:id="@+id/pit_shoot_speed_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_max_fuel_label"
+                android:layout_below="@+id/pit_shooter_type_label"
                 android:layout_marginBottom="0sp"
                 android:text="Shoot Speed (balls/s)"
                 android:textSize="36sp" />
@@ -550,7 +575,7 @@
                 android:id="@+id/pit_shoot_speed_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_shoot_speed"
+                android:layout_alignBaseline="@+id/pit_shoot_speed"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_shoot_speed"
                 android:minWidth="54dp"
@@ -565,7 +590,57 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_shoot_speed_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_shoot_speed_minus_btn"
+                android:layout_toRightOf="@+id/pit_shoot_speed_minus_btn"
+                android:minWidth="54dp"
+                android:paddingBottom="0sp"
+                android:paddingTop="0sp"
+                android:text="+"
+                android:textSize="36sp" />
+
+            <!-- shoot_percentage -->
+
+            <TextView
+                android:id="@+id/pit_shoot_percentage_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_shoot_speed_label"
+                android:layout_marginBottom="0sp"
+                android:text="Shoot Percentage"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/pit_shoot_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_shoot_percentage_label"
+                android:layout_alignBottom="@+id/pit_shoot_percentage_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="2"
+                android:inputType="number"
+                android:maxLines="1"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/pit_shoot_percentage_minus_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_shoot_percentage"
+                android:layout_marginLeft="10sp"
+                android:layout_toRightOf="@+id/pit_shoot_percentage"
+                android:minWidth="54dp"
+                android:paddingBottom="0sp"
+                android:paddingTop="0sp"
+                android:text="—"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/pit_shoot_percentage_plus_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_shoot_percentage_minus_btn"
+                android:layout_marginLeft="10sp"
+                android:layout_toRightOf="@+id/pit_shoot_percentage_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -578,7 +653,7 @@
                 android:id="@+id/pit_shoot_location_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_shoot_speed_label"
+                android:layout_below="@+id/pit_shoot_percentage_label"
                 android:layout_marginBottom="0sp"
                 android:text="Shoot Location"
                 android:textSize="36sp" />
@@ -603,7 +678,7 @@
                 android:id="@+id/pit_can_shoot_high_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_shoot_location_label"
+                android:layout_below="@+id/pit_shoot_location_label"
                 android:layout_marginBottom="0sp"
                 android:text="Can Shoot High?"
                 android:textSize="36sp" />
@@ -612,13 +687,13 @@
                 android:id="@+id/pit_can_shoot_high"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_can_shoot_high_label"
+                android:layout_alignLeft="@+id/pit_shoot_location"
+                android:layout_alignStart="@+id/pit_shoot_location"
                 android:ems="4"
                 android:textOff=" "
                 android:textOn="yes"
-                android:textSize="24sp"
-                android:layout_alignBottom="@+id/pit_can_shoot_high_label"
-                android:layout_alignLeft="@+id/pit_shoot_location"
-                android:layout_alignStart="@+id/pit_shoot_location" />
+                android:textSize="24sp" />
 
             <!-- can_shoot_low -->
 
@@ -626,7 +701,7 @@
                 android:id="@+id/pit_can_shoot_low_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_can_shoot_high_label"
+                android:layout_below="@+id/pit_can_shoot_high_label"
                 android:layout_marginBottom="0sp"
                 android:text="Can Shoot Low?"
                 android:textSize="36sp" />
@@ -649,7 +724,7 @@
                 android:id="@+id/pit_floor_pickup_fuel_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_can_shoot_low_label"
+                android:layout_below="@+id/pit_can_shoot_low_label"
                 android:layout_marginBottom="0sp"
                 android:text="Floor Pickup Fuel?"
                 android:textSize="36sp" />
@@ -672,7 +747,7 @@
                 android:id="@+id/pit_top_loader_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_floor_pickup_fuel_label"
+                android:layout_below="@+id/pit_floor_pickup_fuel_label"
                 android:layout_marginBottom="0sp"
                 android:text="Top Loader?"
                 android:textSize="36sp" />
@@ -695,7 +770,7 @@
                 android:id="@+id/pit_auto_aim_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_top_loader_label"
+                android:layout_below="@+id/pit_top_loader_label"
                 android:layout_marginBottom="0sp"
                 android:text="Vision Sensor?"
                 android:textSize="36sp" />
@@ -718,7 +793,7 @@
                 android:id="@+id/pit_can_carry_gear_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_aim_label"
+                android:layout_below="@+id/pit_auto_aim_label"
                 android:layout_marginBottom="0sp"
                 android:text="Can Carry Gear?"
                 android:textSize="36sp" />
@@ -741,7 +816,7 @@
                 android:id="@+id/pit_floor_pickup_gear_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_can_carry_gear_label"
+                android:layout_below="@+id/pit_can_carry_gear_label"
                 android:layout_marginBottom="0sp"
                 android:text="Floor Pickup Gear?"
                 android:textSize="36sp" />
@@ -764,7 +839,7 @@
                 android:id="@+id/pit_can_climb_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_floor_pickup_gear_label"
+                android:layout_below="@+id/pit_floor_pickup_gear_label"
                 android:layout_marginBottom="0sp"
                 android:text="Can Climb?"
                 android:textSize="36sp" />
@@ -787,7 +862,7 @@
                 android:id="@+id/pit_own_rope_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_can_climb_label"
+                android:layout_below="@+id/pit_can_climb_label"
                 android:layout_marginBottom="0sp"
                 android:text="Use Own Rope?"
                 android:textSize="36sp" />
@@ -832,9 +907,9 @@
                 android:id="@+id/pit_start_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/pit_start_center"
+                android:layout_alignBottom="@+id/pit_start_center"
                 android:layout_marginRight="30sp"
-                android:layout_toLeftOf="@id/pit_start_center"
+                android:layout_toLeftOf="@+id/pit_start_center"
                 android:ems="6"
                 android:textOff=" "
                 android:textOn="Boiler"
@@ -871,7 +946,7 @@
                 android:id="@+id/pit_auto_num_modes_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_autonomous_label"
+                android:layout_below="@+id/pit_autonomous_label"
                 android:layout_marginBottom="0sp"
                 android:text="Number of Modes"
                 android:textSize="36sp" />
@@ -892,7 +967,7 @@
                 android:id="@+id/pit_auto_num_modes_minus_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/pit_auto_num_modes"
+                android:layout_alignBaseline="@+id/pit_auto_num_modes"
                 android:layout_marginLeft="10sp"
                 android:layout_toRightOf="@+id/pit_auto_num_modes"
                 android:minWidth="54dp"
@@ -908,7 +983,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/pit_auto_num_modes_minus_btn"
                 android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@id/pit_auto_num_modes_minus_btn"
+                android:layout_toRightOf="@+id/pit_auto_num_modes_minus_btn"
                 android:minWidth="54dp"
                 android:paddingBottom="0sp"
                 android:paddingTop="0sp"
@@ -921,7 +996,7 @@
                 android:id="@+id/pit_auto_base_line_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_num_modes_label"
+                android:layout_below="@+id/pit_auto_num_modes_label"
                 android:layout_marginBottom="0sp"
                 android:text="Cross Base Line?"
                 android:textSize="36sp" />
@@ -944,21 +1019,45 @@
                 android:id="@+id/pit_auto_place_gear_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_base_line_label"
+                android:layout_below="@+id/pit_auto_base_line_label"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="0sp"
                 android:text="Auto Place Gear?"
                 android:textSize="36sp" />
 
             <ToggleButton
-                android:id="@+id/pit_auto_place_gear"
+                android:id="@+id/pit_auto_place_gear_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_place_gear_label"
-                android:layout_alignLeft="@+id/pit_team_years"
-                android:layout_alignStart="@+id/pit_team_years"
-                android:ems="4"
+                android:layout_below="@+id/pit_auto_place_gear_label"
+                android:layout_centerHorizontal="true"
+                android:ems="6"
                 android:textOff=" "
-                android:textOn="yes"
+                android:textOn="Center"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_place_gear_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_place_gear_center"
+                android:layout_marginRight="30sp"
+                android:layout_toLeftOf="@+id/pit_auto_place_gear_center"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Left"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_place_gear_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_place_gear_center"
+                android:layout_marginLeft="30sp"
+                android:layout_toRightOf="@+id/pit_auto_place_gear_center"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Right"
                 android:textSize="24sp" />
 
             <!-- auto_high_goal -->
@@ -967,7 +1066,7 @@
                 android:id="@+id/pit_auto_high_goal_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_place_gear_label"
+                android:layout_below="@+id/pit_auto_place_gear_center"
                 android:layout_marginBottom="0sp"
                 android:text="Auto High Goal?"
                 android:textSize="36sp" />
@@ -990,7 +1089,7 @@
                 android:id="@+id/pit_auto_low_goal_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_high_goal_label"
+                android:layout_below="@+id/pit_auto_high_goal_label"
                 android:layout_marginBottom="0sp"
                 android:text="Auto Low Goal?"
                 android:textSize="36sp" />
@@ -1013,7 +1112,7 @@
                 android:id="@+id/pit_auto_hopper_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_low_goal_label"
+                android:layout_below="@+id/pit_auto_low_goal_label"
                 android:layout_marginBottom="0sp"
                 android:text="Auto Open Hopper?"
                 android:textSize="36sp" />
@@ -1030,13 +1129,38 @@
                 android:textOn="yes"
                 android:textSize="24sp" />
 
+            <!-- strategy -->
+
+            <TextView
+                android:id="@+id/pit_strategy_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_hopper_label"
+                android:layout_marginBottom="0sp"
+                android:text="Strategy"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/pit_strategy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_strategy_label"
+                android:layout_alignBottom="@+id/pit_strategy_label"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@+id/pit_strategy_label"
+                android:layout_marginRight="10sp"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:textSize="36sp" />
+
             <!-- pit_team_rating -->
 
             <RatingBar
                 android:id="@+id/pit_team_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_auto_hopper_label"
+                android:layout_below="@+id/pit_strategy_label"
                 android:layout_centerHorizontal="true"
                 android:stepSize="1" />
 
@@ -1046,7 +1170,7 @@
                 android:id="@+id/pit_comments_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pit_team_rating"
+                android:layout_below="@+id/pit_team_rating"
                 android:layout_centerHorizontal="true"
                 android:text="Comments"
                 android:textSize="36sp" />
@@ -1058,8 +1182,8 @@
                 android:layout_below="@+id/pit_comments_label"
                 android:ems="20"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="36sp"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textSize="36sp" />
 
         </RelativeLayout>
 

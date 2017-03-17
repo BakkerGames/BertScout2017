@@ -1,0 +1,16 @@
+COLNAME_STAND_MATCH = "match_no";
+COLNAME_STAND_TEAM = "team";
+COLNAME_STAND_ALLIANCE = "alliance_red_blue";
+COLNAME_STAND_SCOUT_NAME = "scout_name";
+COLNAME_STAND_AUTO_SCORE_HIGH = "auto_score_high";
+COLNAME_STAND_AUTO_SCORE_LOW = "auto_score_low";
+COLNAME_STAND_AUTO_BASE_LINE = "auto_base_line";
+COLNAME_STAND_AUTO_PLACE_GEAR = "auto_place_gear";
+COLNAME_STAND_AUTO_OPEN_HOPPER = "auto_open_hopper";
+COLNAME_STAND_TELEOP_SCORE_HIGH = "tele_score_high";
+COLNAME_STAND_TELEOP_SCORE_LOW = "tele_score_low";
+COLNAME_STAND_TELEOP_GEARS_PLACED = "tele_gears_placed";
+COLNAME_STAND_TELEOP_PENALTIES = "tele_penalties";
+COLNAME_STAND_TELEOP_CLIMBED = "tele_climbed";
+COLNAME_STAND_TELEOP_TOUCHPAD = "tele_touchpad";
+COLNAME_STAND_COMMENT = "stand_comment";

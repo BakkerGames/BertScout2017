@@ -341,13 +341,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface arg0, int arg1) {
                 String result;
                 try {
+                    String kindleName = GetKindleName();
                     // stand info
                     JSONObject standInfo = new JSONObject();
                     standInfo.put("dbversion", DBHelper.DATABASE_VERSION);
                     JSONArray currStandInfoArray = dbHelper.getDataAllStand(0);
                     standInfo.put("stand_data", currStandInfoArray);
                     String standOutFilename = ExportData.getDocumentStorageDir() + "/" +
-                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_stand.json";
+                            kindleName.toLowerCase().replaceAll(" ", "_") + "_stand.json";
                     ExportData.ExportData(standOutFilename, standInfo);
                     // pit info
                     JSONObject pitInfo = new JSONObject();
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONArray currPitInfoArray = dbHelper.getDataAllPit();
                     pitInfo.put("pit_data", currPitInfoArray);
                     String pitOutFilename = ExportData.getDocumentStorageDir() + "/" +
-                            GetKindleName().toLowerCase().replaceAll(" ", "_") + "_pit.json";
+                            kindleName.toLowerCase().replaceAll(" ", "_") + "_pit.json";
                     ExportData.ExportData(pitOutFilename, pitInfo);
                     result = "Export done!";
                 } catch (Exception e) {
@@ -550,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
             String title = ExportData.ImportData(titleFilename);
             return title;
         } catch (Exception e) {
-            return "Scouting 2017";
+            return "Kindle NoName";
         }
     }
 }
