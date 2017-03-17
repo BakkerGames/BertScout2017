@@ -349,17 +349,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
             SetStringValue(pitInfo, contentValues, DBContract.TablePitInfo.COLNAME_PIT_COMMENT);
 
-            if (pitInfo.has(DBContract.TablePitInfo._ID)) {
-
-                db.update(
-                        DBContract.TablePitInfo.TABLE_NAME_PIT,
-                        contentValues,
-                        "_id = ?",
-                        new String[]{String.valueOf(pitInfo.getInt(DBContract.TablePitInfo._ID))}
-                );
-                return true;
-
-            } else {
+//            if (pitInfo.has(DBContract.TablePitInfo._ID)) {
+//
+//                db.update(
+//                        DBContract.TablePitInfo.TABLE_NAME_PIT,
+//                        contentValues,
+//                        "_id = ?",
+//                        new String[]{String.valueOf(pitInfo.getInt(DBContract.TablePitInfo._ID))}
+//                );
+//                return true;
+//
+//            } else {
 
                 // see if there might already be a record like this
                 Cursor results;
@@ -392,7 +392,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     );
 
                 }
-            }
+//            }
 
         } catch (JSONException e) {
             return false;

@@ -352,68 +352,73 @@ public class ManageDataFragment extends Fragment {
                 return "Error";
             }
 
-//            try {
-//                JSONArray pitData = dbHelper.getDataAllPit();
-//
-//                String insertResult;
-//
-//                for (int i = 0; i < pitData.length(); i++) {
-//                    JSONObject row = pitData.getJSONObject(i);
-//
-//                    try {
-//                        String insertString = "http://" + IP_ADDRESS + "/insertPitData.php?" +
-//                                "&team=" + row.getInt("team") +
-//                                "&team_name=" + encode(row.getString("team_name")) +
-//                                "&team_years=" + row.getInt("team_years") +
-//                                "&team_members=" + row.getInt("team_members") +
-//                                "&height=" + row.getInt("height") +
-//                                "&weight=" + row.getInt("weight") +
-//                                "&num_cims=" + row.getInt("num_cims") +
-//                                "&max_speed=" + row.getInt("max_speed") +
-//                                "&wheel_type=" + encode(row.getString("wheel_type")) +
-//                                "&wheel_layout=" + encode(row.getString("wheel_layout")) +
-//                                "&max_fuel=" + row.getInt("max_fuel") +
-//                                "&shoot_speed=" + row.getInt("shoot_speed") +
-//                                "&shoot_location=" + encode(row.getString("shoot_location")) +
-//                                "&can_shoot_high=" + row.getBoolean("can_shoot_high") +
-//                                "&can_shoot_low=" + row.getBoolean("can_shoot_low") +
-//                                "&floor_pickup_fuel=" + row.getBoolean("floor_pickup_fuel") +
-//                                "&top_loader=" + row.getBoolean("top_loader") +
-//                                "&auto_aim=" + row.getBoolean("auto_aim") +
-//                                "&can_carry_gear=" + row.getBoolean("can_carry_gear") +
-//                                "&floor_pickup_gear=" + row.getBoolean("floor_pickup_gear") +
-//                                "&can_climb=" + row.getBoolean("can_climb") +
-//                                "&own_rope=" + row.getBoolean("own_rope") +
-//                                "&start_left=" + row.getBoolean("start_left") +
-//                                "&start_center=" + row.getBoolean("start_center") +
-//                                "&start_right=" + row.getBoolean("start_right") +
-//                                "&auto_num_modes=" + row.getInt("auto_num_modes") +
-//                                "&auto_base_line=" + row.getBoolean("auto_base_line") +
-//                                "&auto_place_gear=" + row.getBoolean("auto_place_gear") +
-//                                "&auto_high_goal=" + row.getBoolean("auto_high_goal") +
-//                                "&auto_low_goal=" + row.getBoolean("auto_low_goal") +
-//                                "&auto_hopper=" + row.getBoolean("auto_hopper") +
-//                                "&team_rating=" + row.getInt("team_rating") +
-//                                "&comment=" + encode(row.getString("comment")) +
-//                                "&scout_name=" + encode(row.getString("scout_name"));
-//
-//                        // Do your long operations here and return the result
-//
-//                        URL insertUrl = new URL(insertString);
-//
-//                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
-//
-//                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
-//
-//                        insertResult = CharStreams.toString(new InputStreamReader(insertIn, Charsets.UTF_8));
-//
-//                    } catch (Exception e) {
-//                        return "Error";
-//                    }
-//                }
-//            } catch (Exception e) {
-//                return "Error";
-//            }
+            try {
+                JSONArray pitData = dbHelper.getDataAllPit();
+
+                String insertResult;
+
+                for (int i = 0; i < pitData.length(); i++) {
+                    JSONObject row = pitData.getJSONObject(i);
+
+                    try {
+                        String insertString = "http://" + IP_ADDRESS + "/insertPitData.php?" +
+                                "&team=" + row.getInt("team") +
+                                "&team_name=" + encode(row.getString("team_name")) +
+                                "&team_years=" + row.getInt("team_years") +
+                                "&team_members=" + row.getInt("team_members") +
+                                "&height=" + row.getInt("height") +
+                                "&weight=" + row.getInt("weight") +
+                                "&num_cims=" + row.getInt("num_cims") +
+                                "&max_speed=" + row.getInt("max_speed") +
+                                "&wheel_type=" + encode(row.getString("wheel_type")) +
+                                "&wheel_layout=" + encode(row.getString("wheel_layout")) +
+                                "&max_fuel=" + row.getInt("max_fuel") +
+                                "&shooter_type=" + encode(row.getString("shooter_type")) +
+                                "&shoot_speed=" + row.getInt("shoot_speed") +
+                                "&shoot_percentage=" + row.getInt("shoot_percentage") +
+                                "&shoot_location=" + encode(row.getString("shoot_location")) +
+                                "&can_shoot_high=" + row.getBoolean("can_shoot_high") +
+                                "&can_shoot_low=" + row.getBoolean("can_shoot_low") +
+                                "&floor_pickup_fuel=" + row.getBoolean("floor_pickup_fuel") +
+                                "&top_loader=" + row.getBoolean("top_loader") +
+                                "&auto_aim=" + row.getBoolean("auto_aim") +
+                                "&can_carry_gear=" + row.getBoolean("can_carry_gear") +
+                                "&floor_pickup_gear=" + row.getBoolean("floor_pickup_gear") +
+                                "&can_climb=" + row.getBoolean("can_climb") +
+                                "&own_rope=" + row.getBoolean("own_rope") +
+                                "&start_left=" + row.getBoolean("start_left") +
+                                "&start_center=" + row.getBoolean("start_center") +
+                                "&start_right=" + row.getBoolean("start_right") +
+                                "&auto_num_modes=" + row.getInt("auto_num_modes") +
+                                "&auto_base_line=" + row.getBoolean("auto_base_line") +
+                                "&auto_place_gear_left=" + row.getBoolean("auto_place_gear_left") +
+                                "&auto_place_gear_center=" + row.getBoolean("auto_place_gear_center") +
+                                "&auto_place_gear_right=" + row.getBoolean("auto_place_gear_right") +
+                                "&auto_high_goal=" + row.getBoolean("auto_high_goal") +
+                                "&auto_low_goal=" + row.getBoolean("auto_low_goal") +
+                                "&auto_hopper=" + row.getBoolean("auto_hopper") +
+                                "&strategy=" + encode(row.getString("strategy")) +
+                                "&team_rating=" + row.getInt("team_rating") +
+                                "&comment=" + encode(row.getString("comment")) +
+                                "&scout_name=" + encode(row.getString("scout_name"));
+
+                        // Do your long operations here and return the result
+
+                        URL insertUrl = new URL(insertString);
+
+                        HttpURLConnection insertUrlConnection = (HttpURLConnection) insertUrl.openConnection();
+
+                        InputStream insertIn = new BufferedInputStream(insertUrlConnection.getInputStream());
+
+                        insertResult = CharStreams.toString(new InputStreamReader(insertIn, Charsets.UTF_8));
+
+                    } catch (Exception e) {
+                        return "Error";
+                    }
+                }
+            } catch (Exception e) {
+                return "Error";
+            }
 
             return "Success";
         }
@@ -482,50 +487,50 @@ public class ManageDataFragment extends Fragment {
                 return "Error";
             }
 
-//            try {
-//                // Update Pit Data
-//                String urlString = "http://" + IP_ADDRESS + "/getPitData.php";
-//
-//                // Do your long operations here and return the result
-//                URL url = new URL(urlString);
-//
-//                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//
-//                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-//
-//                results = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
-//
-//                JSONArray remoteData = new JSONArray(results);
-//
-//                for (int i = 0; i < remoteData.length(); i++) {
-//
-//                    JSONObject row = remoteData.getJSONObject(i);
-//
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_LEFT);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_CENTER);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_LEFT);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_CENTER);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_RIGHT);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL);
-//                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER);
-//
-//                    dbHelper.updatePitInfo(row);
-//                }
-//            } catch (Exception e) {
-//                return "Error";
-//            }
+            try {
+                // Update Pit Data
+                String urlString = "http://" + IP_ADDRESS + "/getPitData.php";
+
+                // Do your long operations here and return the result
+                URL url = new URL(urlString);
+
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+                results = CharStreams.toString(new InputStreamReader(in, Charsets.UTF_8));
+
+                JSONArray remoteData = new JSONArray(results);
+
+                for (int i = 0; i < remoteData.length(); i++) {
+
+                    JSONObject row = remoteData.getJSONObject(i);
+
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_HIGH);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_SHOOT_LOW);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_FUEL);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_TOP_LOADER);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_AIM);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_CARRY_GEAR);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_FLOOR_PICKUP_GEAR);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_CAN_CLIMB);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_OWN_ROPE);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_LEFT);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_CENTER);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_START_RIGHT);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_BASE_LINE);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_LEFT);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_CENTER);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_PLACE_GEAR_RIGHT);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_HIGH_GOAL);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_LOW_GOAL);
+                    FixRowBoolean(row, DBContract.TablePitInfo.COLNAME_PIT_AUTO_HOPPER);
+
+                    dbHelper.updatePitInfo(row);
+                }
+            } catch (Exception e) {
+                return "Error";
+            }
 
             return "Success";
         }
