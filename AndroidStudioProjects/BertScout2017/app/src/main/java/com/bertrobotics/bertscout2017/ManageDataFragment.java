@@ -318,20 +318,20 @@ public class ManageDataFragment extends Fragment {
                         String insertString = "http://" + IP_ADDRESS + "/insertStandData.php?" +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_MATCH + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_MATCH) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_TEAM + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TEAM) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE + "=" + encode(row.getString(DBContract.TableStandInfo.COLNAME_STAND_ALLIANCE)) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME + "=" + encode(row.getString(DBContract.TableStandInfo.COLNAME_STAND_SCOUT_NAME)) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_HIGH) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_SCORE_LOW) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE + "=" + row.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_BASE_LINE) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR + "=" + row.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_PLACE_GEAR) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER + "=" + row.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_AUTO_OPEN_HOPPER) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_HIGH) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_SCORE_LOW) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_GEARS_PLACED) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED + "=" + row.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_CLIMBED) +
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD + "=" + row.getBoolean(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_TOUCHPAD) +
                                 "&" + DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_TELEOP_PENALTIES) +
-                                "&" + DBContract.TableStandInfo.COLNAME_STAND_COMMENT + "=" + row.getInt(DBContract.TableStandInfo.COLNAME_STAND_COMMENT);
+                                "&" + DBContract.TableStandInfo.COLNAME_STAND_COMMENT + "=" + encode(row.getString(DBContract.TableStandInfo.COLNAME_STAND_COMMENT));
 
                                 // Do your long operations here and return the result
 
