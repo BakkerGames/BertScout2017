@@ -59,27 +59,29 @@ public class TeamDetails extends AppCompatActivity {
                 Integer autoLowGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_low"));
                 Integer teleopHighGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_high"));
                 Integer teleopLowGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_low"));
-                Integer teleopGearsReceived = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_received"));
+//                Integer teleopGearsReceived = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_received"));
                 Integer teleopGearsPlaced = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_placed"));
                 Integer teleopPenalties = Integer.parseInt(data.getJSONObject(i).getString("tele_penalties"));
 
-                if (data.getJSONObject(i).getString("auto_base_line") == "true") {
+                if (data.getJSONObject(i).getString("auto_base_line").equals("true")) {
                     autoBaseLine = "Yes";
                 }
 
-                if (data.getJSONObject(i).getString("auto_place_gear") == "true") {
+                if (data.getJSONObject(i).getString("auto_place_gear").equals("true")) {
                     autoPlaceGear = "Yes";
                 }
 
-                if (data.getJSONObject(i).getString("auto_open_hopper") == "true") {
+                if (data.getJSONObject(i).getString("auto_open_hopper").equals("true")) {
                     autoOpenHopper = "Yes";
                 }
 
-                if (data.getJSONObject(i).getString("tele_climbed") == "true") {
+                String temp = data.getJSONObject(i).getString("tele_climbed");
+
+                if (data.getJSONObject(i).getString("tele_climbed").equals("true")) {
                     teleopClimbed = "Yes";
                 }
 
-                if (data.getJSONObject(i).getString("tele_touchpad") == "true") {
+                if (data.getJSONObject(i).getString("tele_touchpad").equals("true")) {
                     teleopTouchpad = "Yes";
                 }
 
@@ -92,7 +94,7 @@ public class TeamDetails extends AppCompatActivity {
                         "\nAuto Low Goal: " + String.valueOf(autoLowGoal) + "                            " +
                         "Teleop Low Goal: " + String.valueOf(teleopLowGoal) +
                         "\nAuto Baseline: " + String.valueOf(autoBaseLine) + "                           " +
-                        "Teleop Gears Received: " + String.valueOf(teleopGearsReceived) +
+                   //     "Teleop Gears Received: " + String.valueOf(teleopGearsReceived) +
                         "\nAuto Gear Placed: " + String.valueOf(autoPlaceGear) + "                     " +
                         "Teleop Gears Placed: " + String.valueOf(teleopGearsPlaced) +
                         "\nAuto Open Hopper: " + String.valueOf(autoOpenHopper) + "                   " +

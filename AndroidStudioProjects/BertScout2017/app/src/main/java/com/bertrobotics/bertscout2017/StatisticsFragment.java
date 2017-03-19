@@ -142,15 +142,15 @@ public class StatisticsFragment extends Fragment {
                 Integer teleopGearsPlaced = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_placed"));
                 Integer teleopPenalties = Integer.parseInt(data.getJSONObject(i).getString("tele_penalties"));
 
-                if (data.getJSONObject(i).getString("auto_base_line") == "true") {
+                if (data.getJSONObject(i).getString("auto_base_line").equals("true")) {
                     autoBaseLine = 1;
                 }
 
-                if (data.getJSONObject(i).getString("auto_place_gear") == "true") {
+                if (data.getJSONObject(i).getString("auto_place_gear").equals("true")) {
                     autoPlaceGear = 1;
                 }
 
-                if (data.getJSONObject(i).getString("tele_touchpad") == "true") {
+                if (data.getJSONObject(i).getString("tele_touchpad").equals("true")) {
                     teleopTouchpad = 1;
                 }
 

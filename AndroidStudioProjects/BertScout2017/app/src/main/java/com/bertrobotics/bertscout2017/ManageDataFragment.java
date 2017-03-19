@@ -617,7 +617,7 @@ public class ManageDataFragment extends Fragment {
     public static void FixRowBoolean(JSONObject row, String fieldName) {
         try {
             if (row.has(fieldName)) {
-                boolean value = (row.getString(fieldName) == "1");
+                boolean value = (row.getString(fieldName).equals("1"));
                 row.put(fieldName, value);
             }
         } catch (JSONException e) {
