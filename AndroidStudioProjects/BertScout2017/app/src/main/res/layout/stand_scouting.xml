@@ -230,7 +230,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_score_low_label"
         android:layout_marginTop="5sp"
-        android:text="Cross Baseline"
+        android:text="Crossed Baseline"
         android:textSize="30sp" />
 
     <ToggleButton
@@ -252,7 +252,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_cross_baseline_label"
         android:layout_marginTop="5sp"
-        android:text="Place Gear"
+        android:text="Placed Gear"
         android:textSize="30sp" />
 
     <ToggleButton
@@ -274,7 +274,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_place_gear_label"
         android:layout_marginTop="5sp"
-        android:text="Open Hopper"
+        android:text="Opened Hopper"
         android:textSize="30sp" />
 
     <ToggleButton
@@ -499,7 +499,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_teleop_gears_placed_label"
         android:layout_marginTop="5sp"
-        android:text="Climb Rope"
+        android:text="Started Climbing"
         android:textSize="30sp" />
 
     <ToggleButton
@@ -521,7 +521,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_teleop_climb_label"
         android:layout_marginTop="5sp"
-        android:text="Touchpad Scored"
+        android:text="Scored Touchpad"
         android:textSize="30sp" />
 
     <ToggleButton

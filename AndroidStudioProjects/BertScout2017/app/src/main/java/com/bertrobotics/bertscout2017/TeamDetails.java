@@ -36,7 +36,6 @@ public class TeamDetails extends AppCompatActivity {
         dbHelper = new DBHelper(mRootView.getContext());
 
         Intent intent = getIntent();
-//        String event = intent.getStringExtra("event");
         int team = intent.getIntExtra("team", 0);
 
         Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.toolbar2);
@@ -59,7 +58,6 @@ public class TeamDetails extends AppCompatActivity {
                 Integer autoLowGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_low"));
                 Integer teleopHighGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_high"));
                 Integer teleopLowGoal = Integer.parseInt(data.getJSONObject(i).getString("tele_score_low"));
-//                Integer teleopGearsReceived = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_received"));
                 Integer teleopGearsPlaced = Integer.parseInt(data.getJSONObject(i).getString("tele_gears_placed"));
                 Integer teleopPenalties = Integer.parseInt(data.getJSONObject(i).getString("tele_penalties"));
 
@@ -93,14 +91,13 @@ public class TeamDetails extends AppCompatActivity {
                         "Teleop High Goal: " + String.valueOf(teleopHighGoal) +
                         "\nAuto Low Goal: " + String.valueOf(autoLowGoal) + "                            " +
                         "Teleop Low Goal: " + String.valueOf(teleopLowGoal) +
-                        "\nAuto Baseline: " + String.valueOf(autoBaseLine) + "                           " +
-                   //     "Teleop Gears Received: " + String.valueOf(teleopGearsReceived) +
-                        "\nAuto Gear Placed: " + String.valueOf(autoPlaceGear) + "                     " +
+                        "\nAuto Baseline: " + String.valueOf(autoBaseLine) + "                          " +
                         "Teleop Gears Placed: " + String.valueOf(teleopGearsPlaced) +
-                        "\nAuto Open Hopper: " + String.valueOf(autoOpenHopper) + "                   " +
+                        "\nAuto Gear Placed: " + String.valueOf(autoPlaceGear) + "                    " +
                         "Teleop Climbed: " + String.valueOf(teleopClimbed) +
-                        "\nPenalties: " + String.valueOf(teleopPenalties) + "                                      " +
+                        "\nAuto Open Hopper: " + String.valueOf(autoOpenHopper) + "                  " +
                         "Teleop Touchpad: " + String.valueOf(teleopTouchpad) +
+                        "\nPenalties: " + String.valueOf(teleopPenalties) + "                                      " +
                         "\n\nComment(" + scoutName + "): " + comment + "\n");
 
             } catch (JSONException e) {

@@ -45,7 +45,6 @@ public class StatisticsFragment extends Fragment {
                                     long id) {
 
                 Intent intent = new Intent(mRootView.getContext(), TeamDetails.class);
-//                intent.putExtra("event", mActivity.getTitle().toString());
                 intent.putExtra("team", sortedTeamData[position].team);
                 startActivityForResult(intent, 1);
             }
@@ -114,8 +113,6 @@ public class StatisticsFragment extends Fragment {
         if (mActivity == null) {
             return;
         }
-
-//        String event = mActivity.getTitle().toString();
 
         JSONArray data = dbHelper.getDataAllStand(0);
 

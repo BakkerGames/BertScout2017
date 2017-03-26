@@ -210,26 +210,13 @@
                 android:text="+"
                 android:textSize="32sp" />
 
-            <!-- robot_info -->
-
-            <TextView
-                android:id="@+id/pit_robot_info_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_team_members_label"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="0sp"
-                android:layout_marginTop="0sp"
-                android:text="Robot Information"
-                android:textSize="36sp" />
-
             <!-- height -->
 
             <TextView
                 android:id="@+id/pit_height_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_robot_info_label"
+                android:layout_below="@+id/pit_team_members_label"
                 android:layout_marginBottom="0sp"
                 android:layout_marginTop="0sp"
                 android:text="Height (inches)"
@@ -597,13 +584,249 @@
                 android:text="+"
                 android:textSize="36sp" />
 
+            <!-- starting_posision -->
+
+            <TextView
+                android:id="@+id/pit_starting_position_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_shoot_speed_label"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="0sp"
+                android:layout_marginTop="0sp"
+                android:text="Starting Positions"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_start_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_starting_position_label"
+                android:layout_centerHorizontal="true"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Center"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_start_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_start_center"
+                android:layout_marginRight="30sp"
+                android:layout_toLeftOf="@+id/pit_start_center"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Boiler"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_start_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_start_center"
+                android:layout_marginLeft="30sp"
+                android:layout_toRightOf="@+id/pit_start_center"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Non-Boiler"
+                android:textSize="24sp" />
+
+            <!-- auto_num_modes -->
+
+            <TextView
+                android:id="@+id/pit_auto_num_modes_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_start_center"
+                android:layout_marginBottom="0sp"
+                android:text="Number Auto Modes"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@+id/pit_auto_num_modes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_auto_num_modes_label"
+                android:layout_alignBottom="@+id/pit_auto_num_modes_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="2"
+                android:inputType="number"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/pit_auto_num_modes_minus_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_auto_num_modes"
+                android:layout_marginLeft="10sp"
+                android:layout_toRightOf="@+id/pit_auto_num_modes"
+                android:minWidth="54dp"
+                android:paddingBottom="0sp"
+                android:paddingTop="0sp"
+                android:text="—"
+                android:textSize="36sp" />
+
+            <Button
+                android:id="@+id/pit_auto_num_modes_plus_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/pit_auto_num_modes_minus_btn"
+                android:layout_marginLeft="10sp"
+                android:layout_toRightOf="@+id/pit_auto_num_modes_minus_btn"
+                android:minWidth="54dp"
+                android:paddingBottom="0sp"
+                android:paddingTop="0sp"
+                android:text="+"
+                android:textSize="36sp" />
+
+            <!-- auto_base_line -->
+
+            <TextView
+                android:id="@+id/pit_auto_base_line_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_num_modes_label"
+                android:layout_marginBottom="0sp"
+                android:text="Auto Base Line?"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_base_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_base_line_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="4"
+                android:textOff=" "
+                android:textOn="yes"
+                android:textSize="24sp" />
+
+            <!-- auto_high_goal -->
+
+            <TextView
+                android:id="@+id/pit_auto_high_goal_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_base_line_label"
+                android:layout_marginBottom="0sp"
+                android:text="Auto High Goal?"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_high_goal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_high_goal_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="4"
+                android:textOff=" "
+                android:textOn="yes"
+                android:textSize="24sp" />
+
+            <!-- auto_low_goal -->
+
+            <TextView
+                android:id="@+id/pit_auto_low_goal_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_high_goal_label"
+                android:layout_marginBottom="0sp"
+                android:text="Auto Low Goal?"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_low_goal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_low_goal_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="4"
+                android:textOff=" "
+                android:textOn="yes"
+                android:textSize="24sp" />
+
+            <!-- auto_open_hopper -->
+
+            <TextView
+                android:id="@+id/pit_auto_hopper_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_low_goal_label"
+                android:layout_marginBottom="0sp"
+                android:text="Auto Open Hopper?"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_hopper"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_hopper_label"
+                android:layout_alignLeft="@+id/pit_team_years"
+                android:layout_alignStart="@+id/pit_team_years"
+                android:ems="4"
+                android:textOff=" "
+                android:textOn="yes"
+                android:textSize="24sp" />
+
+            <!-- auto_place_gear -->
+
+            <TextView
+                android:id="@+id/pit_auto_place_gear_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_hopper_label"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="0sp"
+                android:text="Auto Place Gear?"
+                android:textSize="36sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_place_gear_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pit_auto_place_gear_label"
+                android:layout_centerHorizontal="true"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Center"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_place_gear_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_place_gear_center"
+                android:layout_marginRight="30sp"
+                android:layout_toLeftOf="@+id/pit_auto_place_gear_center"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Left"
+                android:textSize="24sp" />
+
+            <ToggleButton
+                android:id="@+id/pit_auto_place_gear_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/pit_auto_place_gear_center"
+                android:layout_marginLeft="30sp"
+                android:layout_toRightOf="@+id/pit_auto_place_gear_center"
+                android:ems="6"
+                android:textOff=" "
+                android:textOn="Right"
+                android:textSize="24sp" />
+
             <!-- shoot_percentage -->
 
             <TextView
                 android:id="@+id/pit_shoot_percentage_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_shoot_speed_label"
+                android:layout_below="@+id/pit_auto_place_gear_center"
                 android:layout_marginBottom="0sp"
                 android:text="Shoot Percentage"
                 android:textSize="36sp" />
@@ -879,263 +1102,13 @@
                 android:textOn="yes"
                 android:textSize="24sp" />
 
-            <!-- starting_posision -->
-
-            <TextView
-                android:id="@+id/pit_starting_position_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_own_rope_label"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="0sp"
-                android:layout_marginTop="0sp"
-                android:text="Starting Positions"
-                android:textSize="36sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_start_center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_starting_position_label"
-                android:layout_centerHorizontal="true"
-                android:ems="6"
-                android:textOff=" "
-                android:textOn="Center"
-                android:textSize="24sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_start_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_start_center"
-                android:layout_marginRight="30sp"
-                android:layout_toLeftOf="@+id/pit_start_center"
-                android:ems="6"
-                android:textOff=" "
-                android:textOn="Boiler"
-                android:textSize="24sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_start_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_start_center"
-                android:layout_marginLeft="30sp"
-                android:layout_toRightOf="@+id/pit_start_center"
-                android:ems="6"
-                android:textOff=" "
-                android:textOn="Non-Boiler"
-                android:textSize="24sp" />
-
-            <!-- autonomous -->
-
-            <TextView
-                android:id="@+id/pit_autonomous_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_start_right"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="0sp"
-                android:layout_marginTop="0sp"
-                android:text="Autonomous"
-                android:textSize="36sp" />
-
-            <!-- auto_num_modes -->
-
-            <TextView
-                android:id="@+id/pit_auto_num_modes_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_autonomous_label"
-                android:layout_marginBottom="0sp"
-                android:text="Number of Modes"
-                android:textSize="36sp" />
-
-            <EditText
-                android:id="@+id/pit_auto_num_modes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/pit_auto_num_modes_label"
-                android:layout_alignBottom="@+id/pit_auto_num_modes_label"
-                android:layout_alignLeft="@+id/pit_team_years"
-                android:layout_alignStart="@+id/pit_team_years"
-                android:ems="2"
-                android:inputType="number"
-                android:textSize="36sp" />
-
-            <Button
-                android:id="@+id/pit_auto_num_modes_minus_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/pit_auto_num_modes"
-                android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/pit_auto_num_modes"
-                android:minWidth="54dp"
-                android:paddingBottom="0sp"
-                android:paddingTop="0sp"
-                android:text="—"
-
-                android:textSize="36sp" />
-
-            <Button
-                android:id="@+id/pit_auto_num_modes_plus_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/pit_auto_num_modes_minus_btn"
-                android:layout_marginLeft="10sp"
-                android:layout_toRightOf="@+id/pit_auto_num_modes_minus_btn"
-                android:minWidth="54dp"
-                android:paddingBottom="0sp"
-                android:paddingTop="0sp"
-                android:text="+"
-                android:textSize="36sp" />
-
-            <!-- auto_base_line -->
-
-            <TextView
-                android:id="@+id/pit_auto_base_line_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_num_modes_label"
-                android:layout_marginBottom="0sp"
-                android:text="Cross Base Line?"
-                android:textSize="36sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_base_line"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_base_line_label"
-                android:layout_alignLeft="@+id/pit_team_years"
-                android:layout_alignStart="@+id/pit_team_years"
-                android:ems="4"
-                android:textOff=" "
-                android:textOn="yes"
-                android:textSize="24sp" />
-
-            <!-- auto_place_gear -->
-
-            <TextView
-                android:id="@+id/pit_auto_place_gear_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_base_line_label"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="0sp"
-                android:text="Auto Place Gear?"
-                android:textSize="36sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_place_gear_center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_place_gear_label"
-                android:layout_centerHorizontal="true"
-                android:ems="6"
-                android:textOff=" "
-                android:textOn="Center"
-                android:textSize="24sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_place_gear_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_place_gear_center"
-                android:layout_marginRight="30sp"
-                android:layout_toLeftOf="@+id/pit_auto_place_gear_center"
-                android:ems="6"
-                android:textOff=" "
-                android:textOn="Left"
-                android:textSize="24sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_place_gear_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_place_gear_center"
-                android:layout_marginLeft="30sp"
-                android:layout_toRightOf="@+id/pit_auto_place_gear_center"
-                android:ems="6"
-                android:textOff=" "
-                android:textOn="Right"
-                android:textSize="24sp" />
-
-            <!-- auto_high_goal -->
-
-            <TextView
-                android:id="@+id/pit_auto_high_goal_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_place_gear_center"
-                android:layout_marginBottom="0sp"
-                android:text="Auto High Goal?"
-                android:textSize="36sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_high_goal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_high_goal_label"
-                android:layout_alignLeft="@+id/pit_team_years"
-                android:layout_alignStart="@+id/pit_team_years"
-                android:ems="4"
-                android:textOff=" "
-                android:textOn="yes"
-                android:textSize="24sp" />
-
-            <!-- auto_low_goal -->
-
-            <TextView
-                android:id="@+id/pit_auto_low_goal_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_high_goal_label"
-                android:layout_marginBottom="0sp"
-                android:text="Auto Low Goal?"
-                android:textSize="36sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_low_goal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_low_goal_label"
-                android:layout_alignLeft="@+id/pit_team_years"
-                android:layout_alignStart="@+id/pit_team_years"
-                android:ems="4"
-                android:textOff=" "
-                android:textOn="yes"
-                android:textSize="24sp" />
-
-            <!-- auto_open_hopper -->
-
-            <TextView
-                android:id="@+id/pit_auto_hopper_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_low_goal_label"
-                android:layout_marginBottom="0sp"
-                android:text="Auto Open Hopper?"
-                android:textSize="36sp" />
-
-            <ToggleButton
-                android:id="@+id/pit_auto_hopper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/pit_auto_hopper_label"
-                android:layout_alignLeft="@+id/pit_team_years"
-                android:layout_alignStart="@+id/pit_team_years"
-                android:ems="4"
-                android:textOff=" "
-                android:textOn="yes"
-                android:textSize="24sp" />
-
             <!-- strategy -->
 
             <TextView
                 android:id="@+id/pit_strategy_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/pit_auto_hopper_label"
+                android:layout_below="@+id/pit_own_rope_label"
                 android:layout_marginBottom="0sp"
                 android:text="Strategy"
                 android:textSize="36sp" />

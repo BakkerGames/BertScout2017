@@ -136,15 +136,15 @@ public class MainActivity extends AppCompatActivity {
             case R.id.enter_scout_name:
                 enterScoutNameDialog(mRootView);
                 break;
-            case R.id.export_data:
-                openExportDataDialog(mRootView);
-                break;
+//            case R.id.export_data:
+//                openExportDataDialog(mRootView);
+//                break;
 //            case R.id.sync_data:
 //                openSyncDataDialog(mRootView);
 //                break;
-            case R.id.clear_data:
-                openClearDataDialog(mRootView);
-                break;
+//            case R.id.clear_data:
+//                openClearDataDialog(mRootView);
+//                break;
         }
 
         return super.onOptionsItemSelected(item);
