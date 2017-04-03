@@ -237,17 +237,21 @@ public class StatisticsFragment extends Fragment {
             }
 
             teams.add(String.valueOf(i + 1) + ")  " + teamSpaces + Integer.toString(sortedTeamData[i].team) + spaces +
-                    "                                                                                 " +
-                    "   Matches Played: " + String.valueOf(sortedTeamData[i].numMatches) +
-                    "\n\nAH: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoHigh / (double) sortedTeamData[i].numMatches) +
-                    "  AL: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoLow / (double) sortedTeamData[i].numMatches) +
-                    "  AB: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoBaseLine / (double) sortedTeamData[i].numMatches) +
-                    "  AG: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoPlaceGear / (double) sortedTeamData[i].numMatches) +
-                    "  TH: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopHigh / (double) sortedTeamData[i].numMatches) +
-                    "  TL: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopLow / (double) sortedTeamData[i].numMatches) +
-                    "  TG: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopGearsPlaced / (double) sortedTeamData[i].numMatches) +
-                    "  TT: " + String.format("%.1f", (double) sortedTeamData[i].totalTouchpad / (double) sortedTeamData[i].numMatches) +
-                    "  TP: " + String.format("%.1f", (double) sortedTeamData[i].totalPenalties / (double) sortedTeamData[i].numMatches));
+                    "                          " +
+                    "Matches Played: " + String.valueOf(sortedTeamData[i].numMatches) +
+                    "                          " +
+                    "Avg Score: " + String.format("%.1f", AvgScore(sortedTeamData[i])) +
+                    "\n\n" +
+                    "Auto:" +
+                    "  Base: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoBaseLine / (double) sortedTeamData[i].numMatches) +
+                    "  High: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoHigh / (double) sortedTeamData[i].numMatches) +
+                    "  Gear: " + String.format("%.1f", (double) sortedTeamData[i].totalAutoPlaceGear / (double) sortedTeamData[i].numMatches) +
+                    "      " +
+                    "Tele:" +
+                    "  High: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopHigh / (double) sortedTeamData[i].numMatches) +
+                    "  Gear: " + String.format("%.1f", (double) sortedTeamData[i].totalTeleopGearsPlaced / (double) sortedTeamData[i].numMatches) +
+                    "  Touch: " + String.format("%.1f", (double) sortedTeamData[i].totalTouchpad / (double) sortedTeamData[i].numMatches) +
+                    "");
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mRootView.getContext(),
@@ -408,9 +412,33 @@ public class StatisticsFragment extends Fragment {
                     } else {
                         return Double.compare((double) td.totalPenalties / (double) td.numMatches, (double) this.totalPenalties / (double) this.numMatches);
                     }
+                case "Avg Score": {
+                    double thisScore = AvgScore(this);
+                    double tdScore = AvgScore(td);
+                    if (sortOrderField.equals("Asc")) {
+                        return Double.compare(thisScore, tdScore);
+                    } else {
+                        return Double.compare(tdScore, thisScore);
+                    }
+                }
             }
 
             return 0;
         }
+
     }
+
+    double AvgScore(TeamData td) {
+        double tdScore = 0;
+        if (td.numMatches > 0) {
+            tdScore += ((double) td.totalAutoBaseLine * 5) / (double) td.numMatches;
+            tdScore += ((double) td.totalAutoHigh * 1) / (double) td.numMatches;
+            tdScore += ((double) td.totalAutoPlaceGear * 30) / (double) td.numMatches;
+            tdScore += ((double) td.totalTeleopHigh * 1) / (double) td.numMatches;
+            tdScore += ((double) td.totalTeleopGearsPlaced * 10) / (double) td.numMatches;
+            tdScore += ((double) td.totalTouchpad * 50) / (double) td.numMatches;
+        }
+        return tdScore;
+    }
+
 }

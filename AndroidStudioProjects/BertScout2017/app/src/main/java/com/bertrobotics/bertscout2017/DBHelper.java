@@ -48,10 +48,12 @@ public class DBHelper extends SQLiteOpenHelper {
         String query;
 
         if (teamNumber == 0) {
-            query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND + " ORDER BY match_no";
+            query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND +
+                    " ORDER BY CAST(match_no AS INTEGER)";
         } else {
             query = "SELECT * FROM " + DBContract.TableStandInfo.TABLE_NAME_STAND +
-                    " WHERE team = " + teamNumber + " ORDER BY match_no";
+                    " WHERE team = " + teamNumber +
+                    " ORDER BY CAST(match_no AS INTEGER)";
         }
 
         results = db.rawQuery(query, null);

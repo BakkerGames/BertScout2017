@@ -14,6 +14,7 @@
     <!--</string-array>-->
 
     <string-array name="sorts">
+        <item>Avg Score</item>
         <item>Team Number</item>
         <item>Avg Auto High</item>
         <item>Avg Auto Low</item>
@@ -27,8 +28,8 @@
     </string-array>
 
     <string-array name="sort_order">
-        <item>Asc</item>
         <item>Desc</item>
+        <item>Asc</item>
     </string-array>
 
 </resources>

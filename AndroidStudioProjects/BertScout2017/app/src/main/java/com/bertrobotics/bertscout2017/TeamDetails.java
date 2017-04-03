@@ -47,11 +47,11 @@ public class TeamDetails extends AppCompatActivity {
 
         for (int i = 0; i < data.length(); i++) {
             try {
-                String autoBaseLine = "No";
-                String autoPlaceGear = "No";
-                String autoOpenHopper = "No";
-                String teleopClimbed = "No";
-                String teleopTouchpad = "No";
+                String autoBaseLine = "No ";
+                String autoPlaceGear = "No ";
+                String autoOpenHopper = "No ";
+                String teleopClimbed = "No ";
+                String teleopTouchpad = "No ";
 
                 Integer match = Integer.parseInt(data.getJSONObject(i).getString("match_no"));
                 Integer autoHighGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_high"));
@@ -85,20 +85,42 @@ public class TeamDetails extends AppCompatActivity {
 
                 String comment = data.getJSONObject(i).getString("stand_comment");
                 String scoutName = data.getJSONObject(i).getString("scout_name");
+                int approxScore = 0;
+                if (autoBaseLine.equals("Yes")) {
+                    approxScore += 5;
+                }
+                approxScore += autoHighGoal;
+                if (autoPlaceGear.equals("Yes")) {
+                    approxScore += 30;
+                }
+                approxScore += teleopHighGoal;
+                approxScore += teleopGearsPlaced * 10;
+                if (teleopTouchpad.equals("Yes")) {
+                    approxScore += 50;
+                }
 
-                teamDetailsArray.add(String.valueOf(i + 1) + ")  Match: " + Integer.toString(match) + "\n\n" +
+                teamDetailsArray.add(String.valueOf(i + 1) + ")  Match: " + Integer.toString(match) +
+                        "                                   " +
+                        "Aproximate Score: " + String.format("%1d", approxScore) +
+                        "\n\n" +
                         "Auto High Goal: " + String.valueOf(autoHighGoal) + "                           " +
                         "Teleop High Goal: " + String.valueOf(teleopHighGoal) +
-                        "\nAuto Low Goal: " + String.valueOf(autoLowGoal) + "                            " +
+                        "\n" +
+                        "Auto Low Goal: " + String.valueOf(autoLowGoal) + "                            " +
                         "Teleop Low Goal: " + String.valueOf(teleopLowGoal) +
-                        "\nAuto Baseline: " + String.valueOf(autoBaseLine) + "                          " +
+                        "\n" +
+                        "Auto Baseline: " + String.valueOf(autoBaseLine) + "                          " +
                         "Teleop Gears Placed: " + String.valueOf(teleopGearsPlaced) +
-                        "\nAuto Gear Placed: " + String.valueOf(autoPlaceGear) + "                    " +
+                        "\n" +
+                        "Auto Gear Placed: " + String.valueOf(autoPlaceGear) + "                    " +
                         "Teleop Climbed: " + String.valueOf(teleopClimbed) +
-                        "\nAuto Open Hopper: " + String.valueOf(autoOpenHopper) + "                  " +
+                        "\n" +
+                        "Auto Open Hopper: " + String.valueOf(autoOpenHopper) + "                  " +
                         "Teleop Touchpad: " + String.valueOf(teleopTouchpad) +
-                        "\nPenalties: " + String.valueOf(teleopPenalties) + "                                      " +
-                        "\n\nComment(" + scoutName + "): " + comment + "\n");
+                        "\n" +
+                        "Penalties: " + String.valueOf(teleopPenalties) + "                                      " +
+                        "\n\n" +
+                        "Comment(" + scoutName + "): " + comment + "\n");
 
             } catch (JSONException e) {
 
@@ -129,7 +151,7 @@ public class TeamDetails extends AppCompatActivity {
 //                viewPager.setCurrentItem(0);
 
                 Integer matchNo = 1;
-                Integer team = 58;
+                Integer team = 133;
 
                 try {
                     matchNo = Integer.parseInt(data.getJSONObject(position).getString("match_no"));
@@ -139,10 +161,10 @@ public class TeamDetails extends AppCompatActivity {
                 }
 
 
-                Intent intent=new Intent();
+                Intent intent = new Intent();
                 intent.putExtra("match_no", matchNo);
                 intent.putExtra("team", team);
-                setResult(2,intent);
+                setResult(2, intent);
 
 
                 finish();

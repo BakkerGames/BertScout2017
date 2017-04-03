@@ -135,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_period_label"
         android:layout_marginTop="5sp"
-        android:text="Score High Goal"
+        android:text="High Goal Points"
         android:textSize="30sp" />
 
     <TextView
@@ -182,7 +182,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_auto_score_high_label"
         android:layout_marginTop="5sp"
-        android:text="Score Low Goal"
+        android:text="Low Goal Points"
         android:textSize="30sp" />
 
     <TextView
@@ -307,7 +307,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_teleop_period_label"
-        android:text="Score High Goal"
+        android:text="High Goal Points"
         android:textSize="30sp" />
 
     <TextView
@@ -355,7 +355,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/stand_teleop_score_high_label"
         android:layout_marginTop="5sp"
-        android:text="Score Low Goal"
+        android:text="Low Goal Points"
         android:textSize="30sp" />
 
     <TextView
