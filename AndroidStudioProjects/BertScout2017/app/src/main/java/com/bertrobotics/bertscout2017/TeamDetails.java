@@ -47,11 +47,11 @@ public class TeamDetails extends AppCompatActivity {
 
         for (int i = 0; i < data.length(); i++) {
             try {
-                String autoBaseLine = "No ";
-                String autoPlaceGear = "No ";
-                String autoOpenHopper = "No ";
-                String teleopClimbed = "No ";
-                String teleopTouchpad = "No ";
+                String autoBaseLine = "     ";
+                String autoPlaceGear = "     ";
+                String autoOpenHopper = "     ";
+                String teleopClimbed = "     ";
+                String teleopTouchpad = "     ";
 
                 Integer match = Integer.parseInt(data.getJSONObject(i).getString("match_no"));
                 Integer autoHighGoal = Integer.parseInt(data.getJSONObject(i).getString("auto_score_high"));
@@ -91,36 +91,40 @@ public class TeamDetails extends AppCompatActivity {
                 }
                 approxScore += autoHighGoal;
                 if (autoPlaceGear.equals("Yes")) {
-                    approxScore += 30;
+                    approxScore += 40;
                 }
                 approxScore += teleopHighGoal;
-                approxScore += teleopGearsPlaced * 10;
+                if (teleopGearsPlaced < 2) {
+                    approxScore += teleopGearsPlaced * 20;
+                } else {
+                    approxScore += teleopGearsPlaced * 15;
+                }
                 if (teleopTouchpad.equals("Yes")) {
                     approxScore += 50;
                 }
 
-                teamDetailsArray.add(String.valueOf(i + 1) + ")  Match: " + Integer.toString(match) +
+                teamDetailsArray.add(String.valueOf(i + 1) + ")  Match:  " + Integer.toString(match) +
                         "                                   " +
-                        "Aproximate Score: " + String.format("%1d", approxScore) +
+                        "Aproximate Score:  " + String.format("%1d", approxScore) +
                         "\n\n" +
-                        "Auto High Goal: " + String.valueOf(autoHighGoal) + "                           " +
-                        "Teleop High Goal: " + String.valueOf(teleopHighGoal) +
+                        "Auto High Goal:  " + IntToString(autoHighGoal) + "                           " +
+                        "Teleop High Goal:  " + IntToString(teleopHighGoal) +
                         "\n" +
-                        "Auto Low Goal: " + String.valueOf(autoLowGoal) + "                            " +
-                        "Teleop Low Goal: " + String.valueOf(teleopLowGoal) +
+                        "Auto Low Goal:  " + IntToString(autoLowGoal) + "                            " +
+                        "Teleop Low Goal:  " + IntToString(teleopLowGoal) +
                         "\n" +
-                        "Auto Baseline: " + String.valueOf(autoBaseLine) + "                          " +
-                        "Teleop Gears Placed: " + String.valueOf(teleopGearsPlaced) +
+                        "Auto Baseline:  " + String.valueOf(autoBaseLine) + "                          " +
+                        "Teleop Gears Placed:  " + IntToString(teleopGearsPlaced) +
                         "\n" +
-                        "Auto Gear Placed: " + String.valueOf(autoPlaceGear) + "                    " +
-                        "Teleop Climbed: " + String.valueOf(teleopClimbed) +
+                        "Auto Gear Placed:  " + String.valueOf(autoPlaceGear) + "                    " +
+                        "Teleop Climbed:  " + String.valueOf(teleopClimbed) +
                         "\n" +
-                        "Auto Open Hopper: " + String.valueOf(autoOpenHopper) + "                  " +
-                        "Teleop Touchpad: " + String.valueOf(teleopTouchpad) +
+                        "Auto Open Hopper:  " + String.valueOf(autoOpenHopper) + "                  " +
+                        "Teleop Touchpad:  " + String.valueOf(teleopTouchpad) +
                         "\n" +
-                        "Penalties: " + String.valueOf(teleopPenalties) + "                                      " +
+                        "Penalties:  " + IntToString(teleopPenalties) + "                                      " +
                         "\n\n" +
-                        "Comment(" + scoutName + "): " + comment + "\n");
+                        "Comment (" + scoutName + "):  " + comment + "\n");
 
             } catch (JSONException e) {
 
@@ -172,5 +176,13 @@ public class TeamDetails extends AppCompatActivity {
         });
 
         listView.setAdapter(adapter);
+    }
+
+    protected String IntToString(int value) {
+        if (value == 0) {
+            return "  ";
+        } else {
+            return String.valueOf(value);
+        }
     }
 }

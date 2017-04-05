@@ -433,9 +433,13 @@ public class StatisticsFragment extends Fragment {
         if (td.numMatches > 0) {
             tdScore += ((double) td.totalAutoBaseLine * 5) / (double) td.numMatches;
             tdScore += ((double) td.totalAutoHigh * 1) / (double) td.numMatches;
-            tdScore += ((double) td.totalAutoPlaceGear * 30) / (double) td.numMatches;
+            tdScore += ((double) td.totalAutoPlaceGear * 40) / (double) td.numMatches;
             tdScore += ((double) td.totalTeleopHigh * 1) / (double) td.numMatches;
-            tdScore += ((double) td.totalTeleopGearsPlaced * 10) / (double) td.numMatches;
+            if (td.totalTeleopGearsPlaced < 2) {
+                tdScore += ((double) td.totalTeleopGearsPlaced * 20) / (double) td.numMatches;
+            } else {
+                tdScore += ((double) td.totalTeleopGearsPlaced * 15) / (double) td.numMatches;
+            }
             tdScore += ((double) td.totalTouchpad * 50) / (double) td.numMatches;
         }
         return tdScore;
